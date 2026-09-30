@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ප්‍රශ්නාවලි | අකුරු මංසල</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand: { navy: '#0F2C59', gold: '#D4A017', gold2: '#E8B923' } }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Serif Sinhala', sans-serif; background: #F8F9FC; }
+        .container-wide { width: 100%; padding-left: 2rem; padding-right: 2rem; }
+        @media (min-width: 768px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
+        @media (min-width: 1280px) { .container-wide { padding-left: 5rem; padding-right: 5rem; } }
+        @media (max-width: 640px) { .container-wide { padding-left: 1.25rem; padding-right: 1.25rem; } }
+        .page-header { background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; padding: 3rem 0; }
+        .quiz-card { background: white; border-radius: 1rem; padding: 1.75rem; box-shadow: 0 4px 20px rgba(15, 44, 89, 0.08); transition: all 0.3s; display: flex; flex-direction: column; height: 100%; }
+        .quiz-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(15, 44, 89, 0.15); }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container-wide h-20 flex items-center justify-between">
+            <a href="/" class="flex items-center space-x-3">
+                <div class="w-14 h-14 bg-white rounded-2xl shadow-lg border-2 border-brand-gold/30 flex items-center justify-center p-1">
+                    <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-brand-navy">අකුරු මංසල</h1>
+                    <p class="text-xs text-brand-gold font-bold">ඉගෙනුමට නව මඟක්</p>
+                </div>
+            </a>
+            <nav class="hidden lg:flex items-center space-x-1">
+                <a href="/" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">මුල් පිටුව</a>
+                <a href="/resources.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">සම්පත්</a>
+                <a href="/papers.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">ප්‍රශ්න පත්‍ර</a>
+                <a href="/videos.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">වීඩියෝ</a>
+                <a href="/quizzes.html" class="px-4 py-2 text-brand-gold font-bold text-sm uppercase">ප්‍රශ්නාවලි</a>
+            </nav>
+            <a href="/admin.html" class="bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy px-5 py-2.5 rounded-xl font-bold text-sm">
+                <i class="fa-solid fa-shield-halved mr-2"></i>Admin
+            </a>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container-wide">
+            <p class="text-brand-gold font-bold text-sm tracking-wider uppercase mb-2">ONLINE QUIZZES</p>
+            <h1 class="text-4xl md:text-5xl font-black mb-3">ප්‍රශ්නාවලි</h1>
+            <p class="text-white/80">ඔබේ දැනුම පරීක්ෂා කරන්න</p>
+        </div>
+    </section>
+
+    <section class="py-12">
+        <div class="container-wide">
+            <div id="quizzesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="col-span-3 text-center py-12">
+                    <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-brand-navy text-white py-12">
+        <div class="container-wide text-center">
+            <p class="text-sm text-white/70">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = '/api';
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            const grid = document.getElementById('quizzesGrid');
+            
+            try {
+                const quizzes = await fetch(`${API_BASE}/quizzes`).then(r => r.json());
+                
+                if (quizzes.length === 0) {
+                    grid.innerHTML = `<div class="col-span-3 text-center py-16">
+                        <i class="fa-solid fa-bullseye text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500 text-lg">ප්‍රශ්නාවලි නොමැත</p>
+                        <p class="text-gray-400 text-sm mt-2">ඉක්මනින් ප්‍රශ්නාවලි එකතු වේවි</p>
+                    </div>`;
+                    return;
+                }
+                
+                grid.innerHTML = quizzes.map(q => `
+                    <div class="quiz-card">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-teal-500 text-white flex items-center justify-center text-2xl mb-4">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-brand-navy mb-2">${q.title}</h3>
+                        <p class="text-sm text-gray-500 mb-4 flex-1">${q.description || ''}</p>
+                        <div class="flex items-center justify-between pt-4 border-t">
+                            <span class="text-xs font-bold text-green-600 bg-green-100 px-3 py-1 rounded-full">
+                                ${q.question_count || 0} ප්‍රශ්න
+                            </span>
+                            <a href="/quiz.html?id=${q.id}" class="text-brand-gold font-bold text-sm hover:underline">
+                                ක්‍රීඩා කරන්න →
+                            </a>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                grid.innerHTML = `<div class="col-span-3 text-center py-12 text-red-500">දෝෂයක්: ${err.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>

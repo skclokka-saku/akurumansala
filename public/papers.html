@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ප්‍රශ්න පත්‍ර | අකුරු මංසල</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { navy: '#0F2C59', gold: '#D4A017', gold2: '#E8B923' }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; background: #F8F9FC; }
+        
+        .container-wide {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .container-wide { padding-left: 3rem; padding-right: 3rem; }
+        }
+        @media (min-width: 1280px) {
+            .container-wide { padding-left: 5rem; padding-right: 5rem; }
+        }
+        @media (max-width: 640px) {
+            .container-wide { padding-left: 1.25rem; padding-right: 1.25rem; }
+        }
+        
+        .page-header {
+            background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+            color: white;
+            padding: 3rem 0;
+        }
+        
+        .paper-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(15, 44, 89, 0.08);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            border-left: 4px solid #D4A017;
+        }
+        
+        .paper-item:hover {
+            transform: translateX(8px);
+            box-shadow: 0 10px 30px rgba(15, 44, 89, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container-wide h-20 flex items-center justify-between">
+            <a href="/" class="flex items-center space-x-3">
+                <div class="w-14 h-14 bg-white rounded-2xl shadow-lg border-2 border-brand-gold/30 flex items-center justify-center p-1">
+                    <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-brand-navy">අකුරු මංසල</h1>
+                    <p class="text-xs text-brand-gold font-bold">ඉගෙනුමට නව මඟක්</p>
+                </div>
+            </a>
+            
+            <nav class="hidden lg:flex items-center space-x-1">
+                <a href="/" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">මුල් පිටුව</a>
+                <a href="/resources.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">සම්පත්</a>
+                <a href="/papers.html" class="px-4 py-2 text-brand-gold font-bold text-sm uppercase">ප්‍රශ්න පත්‍ර</a>
+                <a href="/videos.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">වීඩියෝ</a>
+                <a href="/quizzes.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">ප්‍රශ්නාවලි</a>
+            </nav>
+            
+            <a href="/admin.html" class="bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy px-5 py-2.5 rounded-xl font-bold text-sm">
+                <i class="fa-solid fa-shield-halved mr-2"></i>Admin
+            </a>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container-wide">
+            <p class="text-brand-gold font-bold text-sm tracking-wider uppercase mb-2">PRACTICE PAPERS</p>
+            <h1 class="text-4xl md:text-5xl font-black mb-3">ප්‍රශ්න පත්‍ර</h1>
+            <p class="text-white/80 text-base">පාසල් පරීක්ෂණ, වාර පරීක්ෂණ සහ පුහුණු ප්‍රශ්න පත්‍ර</p>
+        </div>
+    </section>
+
+    <section class="py-12">
+        <div class="container-wide">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <input type="text" id="searchInput" placeholder="සොයන්න..." 
+                       class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-brand-gold">
+                <select id="filterGrade" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-brand-gold">
+                    <option value="">සියලු ශ්‍රේණි</option>
+                </select>
+                <select id="filterSubject" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-brand-gold">
+                    <option value="">සියලු විෂය</option>
+                </select>
+                <select id="filterType" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-brand-gold">
+                    <option value="">සියලු වර්ග</option>
+                    <option value="term">වාර පරීක්ෂණ</option>
+                    <option value="school">පාසල් පරීක්ෂණ</option>
+                    <option value="practice">පුහුණු</option>
+                    <option value="exam">විභාග</option>
+                </select>
+            </div>
+            
+            <div id="papersList">
+                <div class="text-center py-12">
+                    <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-brand-navy text-white py-12">
+        <div class="container-wide text-center">
+            <p class="text-sm text-white/70">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = '/api';
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadGrades();
+            await loadSubjects();
+            await loadPapers();
+            
+            document.getElementById('searchInput')?.addEventListener('input', debounce(loadPapers, 500));
+            document.getElementById('filterGrade')?.addEventListener('change', loadPapers);
+            document.getElementById('filterSubject')?.addEventListener('change', loadPapers);
+            document.getElementById('filterType')?.addEventListener('change', loadPapers);
+        });
+        
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func(...args), wait);
+            };
+        }
+        
+        async function loadGrades() {
+            try {
+                const grades = await fetch(`${API_BASE}/grades`).then(r => r.json());
+                const select = document.getElementById('filterGrade');
+                grades.forEach(g => {
+                    select.innerHTML += `<option value="${g.id}">${g.grade_name}</option>`;
+                });
+            } catch (err) { console.error(err); }
+        }
+        
+        async function loadSubjects() {
+            try {
+                const subjects = await fetch(`${API_BASE}/subjects`).then(r => r.json());
+                const select = document.getElementById('filterSubject');
+                subjects.forEach(s => {
+                    select.innerHTML += `<option value="${s.id}">${s.subject_name}</option>`;
+                });
+            } catch (err) { console.error(err); }
+        }
+        
+        async function loadPapers() {
+            const container = document.getElementById('papersList');
+            container.innerHTML = `<div class="text-center py-12"><div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
+            
+            try {
+                const params = new URLSearchParams();
+                params.append('type', 'paper');
+                
+                const search = document.getElementById('searchInput')?.value;
+                const gradeId = document.getElementById('filterGrade')?.value;
+                const subjectId = document.getElementById('filterSubject')?.value;
+                const paperType = document.getElementById('filterType')?.value;
+                
+                if (search) params.append('search', search);
+                if (gradeId) params.append('grade_id', gradeId);
+                if (subjectId) params.append('subject_id', subjectId);
+                if (paperType) params.append('paper_type', paperType);
+                
+                const data = await fetch(`${API_BASE}/resources?${params}`).then(r => r.json());
+                const papers = data.papers || [];
+                
+                if (papers.length === 0) {
+                    container.innerHTML = `<div class="text-center py-16">
+                        <i class="fa-solid fa-file-lines text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500">ප්‍රශ්න පත්‍ර හමු නොවීය</p>
+                    </div>`;
+                    return;
+                }
+                
+                container.innerHTML = papers.map(p => `
+                    <div class="paper-item">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-14 h-14 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center">
+                                <i class="fa-solid fa-file-pdf text-2xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-brand-navy">${p.title}</h3>
+                                <p class="text-xs text-gray-500 mt-1">
+                                    ${p.grade_name || ''} ${p.subject_name ? '• ' + p.subject_name : ''} ${p.year ? '• ' + p.year : ''}
+                                </p>
+                            </div>
+                        </div>
+                        <button onclick="alert('ප්‍රශ්න පත්‍රය #${p.id}')" class="text-brand-gold font-bold text-sm">
+                            බලන්න <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                `).join('');
+            } catch (err) {
+                container.innerHTML = `<div class="text-center py-12 text-red-500">දෝෂයක්: ${err.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

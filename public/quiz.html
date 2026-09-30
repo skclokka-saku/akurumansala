@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ප්‍රශ්නාවලිය | අකුරු මංසල</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand: { navy: '#0F2C59', gold: '#D4A017', gold2: '#E8B923' } }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Serif Sinhala', sans-serif; background: #F8F9FC; }
+        .container-wide { width: 100%; padding-left: 2rem; padding-right: 2rem; max-width: 900px; margin: 0 auto; }
+        @media (max-width: 640px) { .container-wide { padding-left: 1rem; padding-right: 1rem; } }
+        
+        .option-btn {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.75rem;
+            font-family: inherit;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .option-btn:hover {
+            border-color: #D4A017;
+            background: #FFF8E7;
+        }
+        
+        .option-btn.selected {
+            border-color: #D4A017;
+            background: #FFF8E7;
+            box-shadow: 0 4px 15px rgba(212, 160, 23, 0.2);
+        }
+        
+        .option-btn.correct {
+            border-color: #10b981;
+            background: #d1fae5;
+        }
+        
+        .option-btn.wrong {
+            border-color: #dc2626;
+            background: #fee2e2;
+        }
+        
+        .option-letter {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #0F2C59;
+            flex-shrink: 0;
+        }
+        
+        .option-btn.selected .option-letter { background: #D4A017; color: white; }
+        .option-btn.correct .option-letter { background: #10b981; color: white; }
+        .option-btn.wrong .option-letter { background: #dc2626; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="container-wide py-8">
+        <div id="quizContent">
+            <div class="text-center py-20">
+                <div class="w-16 h-16 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <p class="text-gray-500">පූරණය වෙමින්...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '/api';
+        const urlParams = new URLSearchParams(window.location.search);
+        const quizId = urlParams.get('id');
+        
+        let quiz = null;
+        let currentQuestion = 0;
+        let answers = {};
+        let startTime = null;
+        let timerInterval = null;
+        let remainingTime = 0;
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!quizId) {
+                document.getElementById('quizContent').innerHTML = `
+                    <div class="text-center py-20">
+                        <i class="fa-solid fa-exclamation-triangle text-6xl text-red-300 mb-4"></i>
+                        <h2 class="text-2xl font-black text-brand-navy mb-3">ප්‍රශ්නාවලිය හමු නොවීය</h2>
+                        <a href="/quizzes.html" class="inline-block bg-brand-gold text-brand-navy px-6 py-3 rounded-xl font-bold">
+                            ← ප්‍රශ්නාවලි බලන්න
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            await loadQuiz();
+        });
+        
+        async function loadQuiz() {
+            try {
+                quiz = await fetch(`${API_BASE}/quizzes/${quizId}`).then(r => r.json());
+                
+                if (!quiz || !quiz.questions || quiz.questions.length === 0) {
+                    document.getElementById('quizContent').innerHTML = `
+                        <div class="text-center py-20">
+                            <i class="fa-solid fa-inbox text-6xl text-gray-300 mb-4"></i>
+                            <h2 class="text-2xl font-black text-brand-navy mb-3">ප්‍රශ්න නොමැත</h2>
+                            <a href="/quizzes.html" class="inline-block bg-brand-gold text-brand-navy px-6 py-3 rounded-xl font-bold">
+                                ← ප්‍රශ්නාවලි බලන්න
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                remainingTime = (quiz.duration_minutes || 30) * 60;
+                startTime = Date.now();
+                
+                renderStartScreen();
+            } catch (err) {
+                document.getElementById('quizContent').innerHTML = `
+                    <div class="text-center py-20 text-red-500">දෝෂයක්: ${err.message}</div>
+                `;
+            }
+        }
+        
+        function renderStartScreen() {
+            document.getElementById('quizContent').innerHTML = `
+                <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12 text-center">
+                    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-500 to-teal-500 text-white flex items-center justify-center text-3xl mx-auto mb-6">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-black text-brand-navy mb-4">${quiz.title}</h1>
+                    <p class="text-gray-500 mb-8">${quiz.description || ''}</p>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto">
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <div class="text-2xl font-black text-brand-navy">${quiz.questions.length}</div>
+                            <div class="text-xs text-gray-500 font-bold">ප්‍රශ්න</div>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <div class="text-2xl font-black text-brand-navy">${quiz.duration_minutes || 30}</div>
+                            <div class="text-xs text-gray-500 font-bold">මිනිත්තු</div>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <div class="text-2xl font-black text-brand-navy">${quiz.grade_name || '-'}</div>
+                            <div class="text-xs text-gray-500 font-bold">ශ්‍රේණිය</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold text-gray-600 mb-2">ඔබේ නම (අවශ්‍ය නැහැ)</label>
+                        <input id="userName" class="w-full max-w-md mx-auto px-4 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-brand-gold" placeholder="නම ඇතුළත් කරන්න">
+                    </div>
+                    
+                    <button onclick="startQuiz()" class="bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy px-8 py-4 rounded-xl font-black text-lg hover:shadow-xl transition">
+                        <i class="fa-solid fa-play mr-2"></i>ප්‍රශ්නාවලිය අරඹන්න
+                    </button>
+                </div>
+            `;
+        }
+        
+        function startQuiz() {
+            currentQuestion = 0;
+            answers = {};
+            startTime = Date.now();
+            
+            // Timer
+            timerInterval = setInterval(() => {
+                remainingTime--;
+                updateTimer();
+                
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    finishQuiz();
+                }
+            }, 1000);
+            
+            renderQuestion();
+        }
+        
+        function updateTimer() {
+            const timerEl = document.getElementById('timerDisplay');
+            if (timerEl) {
+                const min = Math.floor(remainingTime / 60);
+                const sec = remainingTime % 60;
+                timerEl.textContent = `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+                
+                if (remainingTime < 60) {
+                    timerEl.classList.add('text-red-500');
+                }
+            }
+        }
+        
+        function renderQuestion() {
+            const q = quiz.questions[currentQuestion];
+            const progress = ((currentQuestion + 1) / quiz.questions.length) * 100;
+            const selectedAnswer = answers[q.id];
+            
+            document.getElementById('quizContent').innerHTML = `
+                <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm font-bold text-gray-500">
+                            ප්‍රශ්නය ${currentQuestion + 1} / ${quiz.questions.length}
+                        </span>
+                        <div class="flex items-center space-x-2 bg-red-50 px-4 py-2 rounded-full">
+                            <i class="fa-solid fa-clock text-red-500"></i>
+                            <span id="timerDisplay" class="font-black text-red-500">
+                                ${Math.floor(remainingTime/60).toString().padStart(2, '0')}:${(remainingTime%60).toString().padStart(2, '0')}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress -->
+                    <div class="w-full h-2 bg-gray-200 rounded-full mb-6 overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-brand-gold to-brand-gold2 transition-all duration-500" style="width: ${progress}%"></div>
+                    </div>
+                    
+                    <!-- Question -->
+                    <h2 class="text-xl md:text-2xl font-black text-brand-navy mb-6">${q.question}</h2>
+                    
+                    <!-- Options -->
+                    <div class="mb-6">
+                        <button onclick="selectAnswer(${q.id}, 'A')" class="option-btn ${selectedAnswer === 'A' ? 'selected' : ''}">
+                            <span class="option-letter">A</span>
+                            <span>${q.option_a}</span>
+                        </button>
+                        <button onclick="selectAnswer(${q.id}, 'B')" class="option-btn ${selectedAnswer === 'B' ? 'selected' : ''}">
+                            <span class="option-letter">B</span>
+                            <span>${q.option_b}</span>
+                        </button>
+                        <button onclick="selectAnswer(${q.id}, 'C')" class="option-btn ${selectedAnswer === 'C' ? 'selected' : ''}">
+                            <span class="option-letter">C</span>
+                            <span>${q.option_c}</span>
+                        </button>
+                        <button onclick="selectAnswer(${q.id}, 'D')" class="option-btn ${selectedAnswer === 'D' ? 'selected' : ''}">
+                            <span class="option-letter">D</span>
+                            <span>${q.option_d}</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Navigation -->
+                    <div class="flex justify-between items-center pt-4 border-t">
+                        <button onclick="prevQuestion()" ${currentQuestion === 0 ? 'disabled' : ''} 
+                                class="px-6 py-3 rounded-xl font-bold ${currentQuestion === 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-gray-200 text-brand-navy hover:bg-gray-300'}">
+                            <i class="fa-solid fa-arrow-left mr-2"></i>පෙර
+                        </button>
+                        
+                        ${currentQuestion === quiz.questions.length - 1 ? `
+                            <button onclick="finishQuiz()" class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-8 py-3 rounded-xl font-black">
+                                අවසන් කරන්න <i class="fa-solid fa-check ml-2"></i>
+                            </button>
+                        ` : `
+                            <button onclick="nextQuestion()" class="bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy px-8 py-3 rounded-xl font-black">
+                                ඊළඟ <i class="fa-solid fa-arrow-right ml-2"></i>
+                            </button>
+                        `}
+                    </div>
+                </div>
+            `;
+        }
+        
+        function selectAnswer(qid, answer) {
+            answers[qid] = answer;
+            renderQuestion();
+        }
+        
+        function nextQuestion() {
+            if (currentQuestion < quiz.questions.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            }
+        }
+        
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+        
+        async function finishQuiz() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            const userName = document.getElementById('userName')?.value || 'Anonymous';
+            
+            document.getElementById('quizContent').innerHTML = `
+                <div class="text-center py-20">
+                    <div class="w-16 h-16 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                    <p class="text-gray-500">ප්‍රතිඵල ගණනය කරමින්...</p>
+                </div>
+            `;
+            
+            try {
+                const result = await fetch(`${API_BASE}/quizzes/${quizId}/submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_name: userName, answers })
+                }).then(r => r.json());
+                
+                renderResults(result);
+            } catch (err) {
+                document.getElementById('quizContent').innerHTML = `
+                    <div class="text-center py-20 text-red-500">දෝෂයක්: ${err.message}</div>
+                `;
+            }
+        }
+        
+        function renderResults(result) {
+            const percentage = result.percentage || 0;
+            const isPassed = percentage >= 50;
+            const color = percentage >= 80 ? 'green' : percentage >= 50 ? 'yellow' : 'red';
+            
+            document.getElementById('quizContent').innerHTML = `
+                <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12 text-center mb-6">
+                    <div class="w-32 h-32 rounded-full mx-auto mb-6 flex items-center justify-center" style="background: ${color === 'green' ? '#d1fae5' : color === 'yellow' ? '#fef3c7' : '#fee2e2'};">
+                        <div class="text-5xl font-black" style="color: ${color === 'green' ? '#10b981' : color === 'yellow' ? '#f59e0b' : '#dc2626'};">
+                            ${percentage}%
+                        </div>
+                    </div>
+                    
+                    <h1 class="text-3xl md:text-4xl font-black mb-3" style="color: ${color === 'green' ? '#10b981' : color === 'yellow' ? '#f59e0b' : '#dc2626'};">
+                        ${percentage >= 80 ? '🎉 සුපිරි!' : percentage >= 50 ? '👍 හොඳයි!' : '📚 තව උත්සාහ කරන්න'}
+                    </h1>
+                    
+                    <p class="text-gray-500 mb-6">ඔබේ ලකුණු</p>
+                    
+                    <div class="grid grid-cols-3 gap-4 max-w-md mx-auto mb-8">
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <div class="text-3xl font-black text-brand-navy">${result.score}</div>
+                            <div class="text-xs text-gray-500 font-bold">නිවැරදි</div>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <div class="text-3xl font-black text-brand-navy">${result.total_marks}</div>
+                            <div class="text-xs text-gray-500 font-bold">මුළු</div>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-xl">
+                            <div class="text-3xl font-black text-brand-navy">${percentage}%</div>
+                            <div class="text-xs text-gray-500 font-bold">ප්‍රතිශතය</div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-3 justify-center">
+                        <a href="/quizzes.html" class="bg-gray-200 text-brand-navy px-6 py-3 rounded-xl font-bold hover:bg-gray-300">
+                            ← ප්‍රශ්නාවලි
+                        </a>
+                        <button onclick="location.reload()" class="bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy px-6 py-3 rounded-xl font-bold">
+                            <i class="fa-solid fa-redo mr-2"></i>නැවත උත්සාහ
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Review -->
+                <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8">
+                    <h2 class="text-2xl font-black text-brand-navy mb-6">ප්‍රශ්න සමාලෝචනය</h2>
+                    ${result.review.map((r, i) => `
+                        <div class="mb-4 pb-4 border-b last:border-0">
+                            <div class="flex items-start gap-3 mb-3">
+                                <span class="w-8 h-8 rounded-full ${r.is_correct ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'} flex items-center justify-center font-bold text-sm flex-shrink-0">
+                                    ${r.is_correct ? '✓' : '✗'}
+                                </span>
+                                <div class="flex-1">
+                                    <p class="font-bold text-brand-navy mb-2">${i + 1}. ${r.question}</p>
+                                    <p class="text-sm text-gray-600">
+                                        ඔබේ පිළිතුර: <span class="${r.is_correct ? 'text-green-600' : 'text-red-600'} font-bold">${r.user_answer || 'පිළිතුරු දී නැහැ'}</span>
+                                    </p>
+                                    ${!r.is_correct ? `
+                                        <p class="text-sm text-green-600 font-bold">නිවැරදි: ${r.correct_answer}</p>
+                                    ` : ''}
+                                    ${r.explanation ? `<p class="text-xs text-gray-500 mt-2 italic">${r.explanation}</p>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

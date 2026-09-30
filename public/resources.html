@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>අධ්‍යාපනික සම්පත් | අකුරු මංසල</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sinhala: ['"Noto Serif Sinhala"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            navy: '#0F2C59',
+                            navy2: '#1B3A6B',
+                            gold: '#D4A017',
+                            gold2: '#E8B923',
+                            light: '#F8F9FC',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; background: #F8F9FC; }
+        
+        .container-wide {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        
+        @media (min-width: 768px) {
+            .container-wide { padding-left: 3rem; padding-right: 3rem; }
+        }
+        @media (min-width: 1280px) {
+            .container-wide { padding-left: 5rem; padding-right: 5rem; }
+        }
+        @media (max-width: 640px) {
+            .container-wide { padding-left: 1.25rem; padding-right: 1.25rem; }
+        }
+        
+        .header-nav { background: white; box-shadow: 0 2px 20px rgba(15, 44, 89, 0.08); }
+        
+        .page-header {
+            background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+            color: white;
+            padding: 3rem 0;
+        }
+        
+        .resource-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.75rem;
+            box-shadow: 0 4px 20px rgba(15, 44, 89, 0.08);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(15, 44, 89, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #D4A017, #E8B923);
+            color: #0F2C59;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 800;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header-nav sticky top-0 z-50">
+        <div class="container-wide">
+            <div class="h-20 flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-3">
+                    <div class="w-14 h-14 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border-2 border-brand-gold/30 flex items-center justify-center p-1">
+                        <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-black text-brand-navy">අකුරු මංසල</h1>
+                        <p class="text-xs text-brand-gold font-bold">ඉගෙනුමට නව මඟක්</p>
+                    </div>
+                </a>
+                
+                <nav class="hidden lg:flex items-center space-x-1">
+                    <a href="/" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">මුල් පිටුව</a>
+                    <a href="/resources.html" class="px-4 py-2 text-brand-gold font-bold text-sm uppercase">සම්පත්</a>
+                    <a href="/papers.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">ප්‍රශ්න පත්‍ර</a>
+                    <a href="/videos.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">වීඩියෝ</a>
+                    <a href="/quizzes.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">ප්‍රශ්නාවලි</a>
+                </nav>
+                
+                <a href="/admin.html" class="btn-primary">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Admin</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+        <div class="container-wide">
+            <p class="text-brand-gold font-bold text-sm tracking-wider uppercase mb-2">LEARNING LIBRARY</p>
+            <h1 class="text-4xl md:text-5xl font-black mb-3">අධ්‍යාපනික සම්පත්</h1>
+            <p class="text-white/80 text-base">පාඩම්, විෂය සටහන්, ලිපි සහ තවත් බොහෝ දේ</p>
+        </div>
+    </section>
+
+    <!-- FILTERS -->
+    <section class="py-8 bg-white border-b">
+        <div class="container-wide">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="relative">
+                    <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="searchInput" placeholder="සොයන්න..." 
+                           class="w-full pl-12 pr-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-brand-gold">
+                </div>
+                <select id="filterGrade" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-brand-gold">
+                    <option value="">සියලු ශ්‍රේණි</option>
+                </select>
+                <select id="filterSubject" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-brand-gold">
+                    <option value="">සියලු විෂය</option>
+                </select>
+                <select id="filterType" class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:outline-none focus:border-brand-gold">
+                    <option value="lesson">පාඩම් පමණයි</option>
+                    <option value="note">විෂය සටහන් පමණයි</option>
+                    <option value="article">ලිපි පමණයි</option>
+                    <option value="">සියල්ල</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESOURCES -->
+    <section class="py-12">
+        <div class="container-wide">
+            <div id="resourcesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="col-span-3 text-center py-12">
+                    <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-brand-navy text-white py-12 mt-12">
+        <div class="container-wide text-center">
+            <p class="text-sm text-white/70">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+        </div>
+    </footer>
+
+    <script src="/js/resources.js"></script>
+</body>
+</html>
