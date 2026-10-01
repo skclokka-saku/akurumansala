@@ -767,9 +767,7 @@ async function submitForm(type) {
             body.paper_type = document.getElementById('f_type').value;
             body.year = parseInt(document.getElementById('f_year').value);
 
-            // ============================================
-            // PDF එක Upstash එකට upload කරන්න
-            // ============================================
+            // PDF එක Base64 ක්රමයට යවන්න
             const pdfInput = document.getElementById('f_pdf');
             if (pdfInput && pdfInput.files.length > 0) {
                 const file = pdfInput.files[0];
@@ -798,7 +796,6 @@ async function submitForm(type) {
                 }
                 
                 const uploadData = await uploadRes.json();
-                console.log('Upload response:', uploadData);
                 
                 if (uploadData.file && uploadData.file.url) {
                     body.pdf_file = uploadData.file.url;
@@ -827,12 +824,7 @@ async function submitForm(type) {
             body: JSON.stringify(body)
         });
         
-        if (response.status === 'pending') {
-            showToast('⚠️ අනුමැතිය සඳහා යවන ලදී!', 'info');
-        } else {
-            showToast('✅ සාර්ථකව එකතු කරන ලදී!', 'success');
-        }
-        
+        showToast('✅ සාර්ථකව එකතු කරන ලදී!', 'success');
         closeModal();
         
         const tabMap = { lesson: 'lessons', paper: 'papers', video: 'videos', article: 'articles' };
@@ -843,7 +835,6 @@ async function submitForm(type) {
         showToast('දෝෂයක්: ' + err.message, 'error');
     }
 }
-
 async function deleteItem(type, id) {
     if (!confirm('ඔබට මෙය මකා දැමීමට අවශ්‍යද?')) return;
     
