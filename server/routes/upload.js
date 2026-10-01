@@ -3,12 +3,7 @@ const router = express.Router();
 const multer = require('multer');
 const { authenticate, authorize } = require('../middleware/auth');
 
-// Upstash Blob Configuration
-const UPSTASH_TOKEN = process.env.UPSTASH_BLOB_TOKEN;
-const UPSTASH_URL = process.env.UPSTASH_BLOB_URL;
-const BUCKET_NAME = 'akuru-uploads';
-
-// Multer memory storage
+// Multer memory storage (Base64 encoding සඳහා)
 const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
@@ -28,42 +23,7 @@ const upload = multer({
 });
 
 // ==========================================
-// UPLOAD TO UPSTASH FUNCTION (Using fetch)
-// ==========================================
-async function uploadToUpstash(buffer, originalName, mimetype) {
-    try {
-        const uniqueName = `${Date.now()}-${originalName.replace(/\s+/g, '-')}`;
-        
-        const response = await fetch(`${UPSTASH_URL}/${BUCKET_NAME}/${uniqueName}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${UPSTASH_TOKEN}`,
-                'Content-Type': mimetype,
-            },
-            body: buffer,
-        });
-
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Upstash API error: ${response.status} - ${errorText}`);
-        }
-
-        const data = await response.json();
-        
-        return {
-            url: data.url || `${UPSTASH_URL}/${BUCKET_NAME}/${uniqueName}`,
-            name: uniqueName,
-            size: buffer.length,
-            type: mimetype
-        };
-    } catch (error) {
-        console.error('Upstash upload error:', error);
-        throw new Error('ෆයිල් එක Upstash එකට උඩුගත කිරීමේ දෝෂයක්: ' + error.message);
-    }
-}
-
-// ==========================================
-// POST /api/upload - Single file
+// POST /api/upload - Single file (Base64)
 // ==========================================
 router.post('/', authenticate, authorize('admin', 'teacher'), (req, res) => {
     upload.single('file')(req, res, async (err) => {
@@ -77,11 +37,18 @@ router.post('/', authenticate, authorize('admin', 'teacher'), (req, res) => {
         }
 
         try {
-            const fileInfo = await uploadToUpstash(
-                req.file.buffer,
-                req.file.originalname,
-                req.file.mimetype
-            );
+            // ෆයිල් එක Base64 string එකකට convert කරන්න
+            const base64Data = req.file.buffer.toString('base64');
+            const dataUrl = `data:${req.file.mimetype};base64,${base64Data}`;
+
+            const fileInfo = {
+                url: dataUrl,
+                name: req.file.originalname,
+                size: req.file.size,
+                type: req.file.mimetype
+            };
+
+            console.log('✅ File uploaded (Base64):', req.file.originalname);
 
             res.json({
                 message: 'ෆයිල් සාර්ථකව උඩුගත කරන ලදී',
@@ -108,15 +75,15 @@ router.post('/multiple', authenticate, authorize('admin', 'teacher'), (req, res)
         }
 
         try {
-            const files = [];
-            for (const file of req.files) {
-                const fileInfo = await uploadToUpstash(
-                    file.buffer,
-                    file.originalname,
-                    file.mimetype
-                );
-                files.push(fileInfo);
-            }
+            const files = req.files.map(file => {
+                const base64Data = file.buffer.toString('base64');
+                return {
+                    url: `data:${file.mimetype};base64,${base64Data}`,
+                    name: file.originalname,
+                    size: file.size,
+                    type: file.mimetype
+                };
+            });
 
             res.json({
                 message: 'ෆයිල් සාර්ථකව උඩුගත කරන ලදී',
