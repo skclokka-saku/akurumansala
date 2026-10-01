@@ -4,122 +4,617 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ප්‍රශ්නාවලි | අකුරු මංසල</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    colors: { brand: { navy: '#0F2C59', gold: '#D4A017', gold2: '#E8B923' } }
+                    colors: {
+                        brand: {
+                            navy: '#0F2C59',
+                            navy2: '#1B3A6B',
+                            gold: '#D4A017',
+                            gold2: '#E8B923',
+                            light: '#F8F9FC',
+                        }
+                    },
+                    fontFamily: { sinhala: ['"Noto Serif Sinhala"', 'sans-serif'] }
                 }
             }
         }
     </script>
-    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Noto Serif Sinhala', sans-serif; background: #F8F9FC; }
-        .container-wide { width: 100%; padding-left: 2rem; padding-right: 2rem; }
-        @media (min-width: 768px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
-        @media (min-width: 1280px) { .container-wide { padding-left: 5rem; padding-right: 5rem; } }
-        @media (max-width: 640px) { .container-wide { padding-left: 1.25rem; padding-right: 1.25rem; } }
-        .page-header { background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; padding: 3rem 0; }
-        .quiz-card { background: white; border-radius: 1rem; padding: 1.75rem; box-shadow: 0 4px 20px rgba(15, 44, 89, 0.08); transition: all 0.3s; display: flex; flex-direction: column; height: 100%; }
-        .quiz-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(15, 44, 89, 0.15); }
+        body { font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; background: #F8F9FC; }
+        body.dark { background: #0a0f1e; color: #e2e8f0; }
+        .main-nav { background: white; box-shadow: 0 2px 20px rgba(15, 44, 89, 0.08); }
+        body.dark .main-nav { background: #1a1a2e; }
+        .nav-link {
+            position: relative; font-weight: 600; color: #0F2C59; font-size: 0.8125rem;
+            letter-spacing: 0.5px; text-transform: uppercase; transition: color 0.3s;
+            padding: 0.5rem 0.75rem; text-decoration: none;
+        }
+        body.dark .nav-link { color: #cbd5e1; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; width: 0; height: 2px;
+            background: #D4A017; transition: all 0.3s ease; transform: translateX(-50%);
+        }
+        .nav-link:hover, .nav-link.active { color: #D4A017; }
+        .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+        .theme-toggle {
+            width: 42px; height: 42px; border-radius: 50%; background: rgba(212, 160, 23, 0.12);
+            color: #D4A017; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s; border: 2px solid #D4A017;
+        }
+        .theme-toggle:hover { background: #D4A017; color: #0F2C59; transform: rotate(20deg) scale(1.1); }
+        .btn-primary {
+            background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59;
+            padding: 0.875rem 2rem; border-radius: 0.75rem; font-weight: 800;
+            text-transform: uppercase; font-size: 0.75rem; letter-spacing: 1.5px;
+            transition: all 0.4s; display: inline-flex; align-items: center; gap: 0.75rem;
+            box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4); cursor: pointer; border: none;
+            text-decoration: none;
+        }
+        .btn-primary:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 12px 30px rgba(212, 160, 23, 0.6); }
+        .quiz-card {
+            background: white; border-radius: 1rem; overflow: hidden;
+            box-shadow: 0 6px 25px rgba(15, 44, 89, 0.08); transition: all 0.5s;
+            display: flex; flex-direction: column; height: 100%; cursor: pointer;
+        }
+        body.dark .quiz-card { background: #1a1a2e; }
+        .quiz-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(15, 44, 89, 0.2); }
+        .quiz-icon-wrap {
+            height: 140px; background: linear-gradient(135deg, #22c55e, #16a34a);
+            display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        .quiz-icon-wrap i { font-size: 3.5rem; color: white; }
+        .quiz-count-badge {
+            position: absolute; top: 1rem; right: 1rem; background: rgba(255,255,255,0.95);
+            color: #0F2C59; padding: 0.375rem 0.875rem; border-radius: 999px;
+            font-weight: 800; font-size: 0.6875rem;
+        }
+        .footer { background: #0F2C59; color: white; padding-top: 4rem; }
+        body.dark .footer { background: #05080f; }
+        .footer a { color: rgba(255,255,255,0.75); transition: all 0.2s; font-size: 0.875rem; display: inline-block; text-decoration: none; }
+        .footer a:hover { color: #D4A017; padding-left: 4px; }
+        .footer-title {
+            color: white; font-weight: 800; text-transform: uppercase; font-size: 0.8125rem;
+            letter-spacing: 1.5px; margin-bottom: 1.25rem; position: relative; padding-bottom: 0.5rem;
+        }
+        .footer-title::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 2px; background: #D4A017;
+        }
+        .social-icon {
+            width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center; transition: all 0.3s;
+            color: white; text-decoration: none;
+        }
+        .social-icon:hover { background: #D4A017; color: #0F2C59; transform: translateY(-4px) scale(1.1); }
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none;
+            align-items: center; justify-content: center; z-index: 100; padding: 1rem; overflow-y: auto;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: white; border-radius: 1rem; max-width: 800px; width: 100%;
+            max-height: 90vh; overflow-y: auto; position: relative;
+        }
+        body.dark .modal-content { background: #1e293b; }
+        .option-btn {
+            width: 100%; text-align: left; padding: 1rem 1.25rem; border-radius: 0.75rem;
+            border: 2px solid #e2e8f0; background: white; transition: all 0.3s;
+            font-size: 0.9375rem; cursor: pointer; font-family: inherit;
+            display: flex; align-items: center; gap: 1rem;
+        }
+        body.dark .option-btn { background: #0f172a; border-color: #334155; color: #e2e8f0; }
+        .option-btn:hover { border-color: #D4A017; background: rgba(212, 160, 23, 0.05); }
+        .option-btn.selected { border-color: #D4A017; background: rgba(212, 160, 23, 0.15); }
+        .option-btn.correct { border-color: #22c55e; background: rgba(34, 197, 94, 0.15); }
+        .option-btn.wrong { border-color: #ef4444; background: rgba(239, 68, 68, 0.15); }
+        .option-letter {
+            width: 36px; height: 36px; border-radius: 50%; background: #f1f5f9;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; flex-shrink: 0; color: #0F2C59;
+        }
+        body.dark .option-letter { background: #334155; color: #e2e8f0; }
+        .option-btn.selected .option-letter { background: #D4A017; color: white; }
+        .option-btn.correct .option-letter { background: #22c55e; color: white; }
+        .option-btn.wrong .option-letter { background: #ef4444; color: white; }
+        .timer-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: #0F2C59; color: white; padding: 0.5rem 1rem;
+            border-radius: 999px; font-weight: 800; font-size: 0.875rem;
+        }
+        .timer-badge.warning { background: #ef4444; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
     </style>
 </head>
-<body>
+<body class="min-h-screen">
 
-    <header class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container-wide h-20 flex items-center justify-between">
-            <a href="/" class="flex items-center space-x-3">
-                <div class="w-14 h-14 bg-white rounded-2xl shadow-lg border-2 border-brand-gold/30 flex items-center justify-center p-1">
-                    <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain">
-                </div>
-                <div>
-                    <h1 class="text-xl font-black text-brand-navy">අකුරු මංසල</h1>
-                    <p class="text-xs text-brand-gold font-bold">ඉගෙනුමට නව මඟක්</p>
-                </div>
-            </a>
-            <nav class="hidden lg:flex items-center space-x-1">
-                <a href="/" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">මුල් පිටුව</a>
-                <a href="/resources.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">සම්පත්</a>
-                <a href="/papers.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">ප්‍රශ්න පත්‍ර</a>
-                <a href="/videos.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">වීඩියෝ</a>
-                <a href="/quizzes.html" class="px-4 py-2 text-brand-gold font-bold text-sm uppercase">ප්‍රශ්නාවලි</a>
-            </nav>
-            <a href="/admin.html" class="bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy px-5 py-2.5 rounded-xl font-bold text-sm">
-                <i class="fa-solid fa-shield-halved mr-2"></i>Admin
-            </a>
-        </div>
-    </header>
-
-    <section class="page-header">
-        <div class="container-wide">
-            <p class="text-brand-gold font-bold text-sm tracking-wider uppercase mb-2">ONLINE QUIZZES</p>
-            <h1 class="text-4xl md:text-5xl font-black mb-3">ප්‍රශ්නාවලි</h1>
-            <p class="text-white/80">ඔබේ දැනුම පරීක්ෂා කරන්න</p>
-        </div>
-    </section>
-
-    <section class="py-12">
-        <div class="container-wide">
-            <div id="quizzesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="col-span-3 text-center py-12">
-                    <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+    <!-- HEADER -->
+    <header class="main-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="h-20 flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border-2 border-brand-gold/30 flex items-center justify-center p-1">
+                        <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-xl\'></i>'">
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-lg font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
+                        <p class="text-xs text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
+                    </div>
+                </a>
+                <nav class="hidden lg:flex items-center space-x-1">
+                    <a href="/" class="nav-link">මුල් පිටුව</a>
+                    <a href="/resources.html" class="nav-link">සම්පත්</a>
+                    <a href="/papers.html" class="nav-link">ප්‍රශ්න පත්‍ර</a>
+                    <a href="/videos.html" class="nav-link">වීඩියෝ</a>
+                    <a href="/quizzes.html" class="nav-link active">ප්‍රශ්නාවලි</a>
+                </nav>
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleTheme()" class="theme-toggle">
+                        <i id="themeIcon" class="fa-solid fa-moon"></i>
+                    </button>
+                    <a href="/login.html" class="hidden md:inline-flex btn-primary" style="padding: 0.6rem 1.25rem;">
+                        <i class="fa-solid fa-user"></i>
+                        <span>පිවිසෙන්න</span>
+                    </a>
                 </div>
             </div>
         </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="bg-brand-navy text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <i class="fa-solid fa-bullseye absolute text-9xl" style="top: 10%; left: 5%;"></i>
+            <i class="fa-solid fa-lightbulb absolute text-9xl" style="bottom: 10%; right: 5%;"></i>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-3" data-aos="fade-up">
+                <i class="fa-solid fa-gamepad mr-2"></i>Online Quizzes
+            </p>
+            <h1 class="text-4xl md:text-5xl font-black mb-3" data-aos="fade-up" data-aos-delay="100">ප්‍රශ්නාවලි</h1>
+            <p class="text-white/70 text-base max-w-2xl" data-aos="fade-up" data-aos-delay="200">
+                දැනුම පරීක්ෂා කරන්න, ලකුණු ලබාගන්න, ඉගෙන ගන්න!
+            </p>
+        </div>
     </section>
 
-    <footer class="bg-brand-navy text-white py-12">
-        <div class="container-wide text-center">
-            <p class="text-sm text-white/70">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+    <!-- FILTERS -->
+    <section class="max-w-7xl mx-auto px-4 -mt-6 relative z-10">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 grid grid-cols-1 md:grid-cols-3 gap-3" data-aos="fade-up">
+            <input type="text" id="searchInput" placeholder="ප්‍රශ්නාවලි සොයන්න..." class="border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-gold">
+            <select id="gradeFilter" class="border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-gold">
+                <option value="">සියලු ශ්‍රේණි</option>
+            </select>
+            <select id="subjectFilter" class="border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-gold">
+                <option value="">සියලු විෂය</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- QUIZZES -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <div id="quizzesContainer">
+            <div class="text-center py-12">
+                <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer mt-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-white/10">
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-12 h-12 bg-white rounded-2xl flex items-center justify-center p-2">
+                            <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-xl\'></i>'">
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-black">අකුරු මංසල</h3>
+                            <p class="text-xs text-white/70">ඉගෙනුමට නව මඟක්</p>
+                        </div>
+                    </div>
+                    <p class="text-white/70 text-sm leading-relaxed mb-6">
+                        ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-title">ඉක්මන් සබැඳි</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/">මුල් පිටුව</a></li>
+                        <li><a href="/resources.html">සම්පත්</a></li>
+                        <li><a href="/papers.html">ප්‍රශ්න පත්‍ර</a></li>
+                        <li><a href="/videos.html">වීඩියෝ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">අප අමතන්න</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
+                            <span class="text-white/80 text-sm">කොළඹ, ශ්‍රී ලංකාව</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-phone text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">+94 11 234 5678</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-envelope text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">info@akurumansala.lk</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 text-center text-xs text-white/60">
+                <p>© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+            </div>
         </div>
     </footer>
 
+    <!-- QUIZ MODAL -->
+    <div id="quizModal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="quizModalBody"></div>
+        </div>
+    </div>
+
     <script>
         const API_BASE = '/api';
-        
-        document.addEventListener('DOMContentLoaded', async () => {
-            const grid = document.getElementById('quizzesGrid');
-            
+        let allQuizzes = [];
+
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            body.classList.toggle('dark');
+            if (body.classList.contains('dark')) {
+                icon.className = 'fa-solid fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.className = 'fa-solid fa-moon';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+                document.body.classList.add('dark');
+                const icon = document.getElementById('themeIcon');
+                if (icon) icon.className = 'fa-solid fa-sun';
+            }
+        }
+
+        async function loadFilters() {
             try {
-                const quizzes = await fetch(`${API_BASE}/quizzes`).then(r => r.json());
-                
-                if (quizzes.length === 0) {
-                    grid.innerHTML = `<div class="col-span-3 text-center py-16">
+                const [gradesRes, subjectsRes] = await Promise.all([
+                    fetch(`${API_BASE}/grades`),
+                    fetch(`${API_BASE}/subjects`)
+                ]);
+                const grades = await gradesRes.json();
+                const subjects = await subjectsRes.json();
+
+                const gradeFilter = document.getElementById('gradeFilter');
+                grades.forEach(g => {
+                    const opt = document.createElement('option');
+                    opt.value = g.id;
+                    opt.textContent = g.grade_name;
+                    gradeFilter.appendChild(opt);
+                });
+
+                const subjectFilter = document.getElementById('subjectFilter');
+                subjects.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = s.subject_name;
+                    subjectFilter.appendChild(opt);
+                });
+            } catch (err) {
+                console.error('Filter load error:', err);
+            }
+        }
+
+        async function loadQuizzes() {
+            const container = document.getElementById('quizzesContainer');
+            try {
+                const res = await fetch(`${API_BASE}/quizzes`);
+                allQuizzes = await res.json();
+                renderQuizzes(allQuizzes);
+            } catch (err) {
+                container.innerHTML = `<div class="text-center py-16 text-red-500">දෝෂයක්: ${err.message}</div>`;
+            }
+        }
+
+        function renderQuizzes(quizzes) {
+            const container = document.getElementById('quizzesContainer');
+
+            if (!quizzes || quizzes.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg">
                         <i class="fa-solid fa-bullseye text-6xl text-gray-300 mb-4"></i>
                         <p class="text-gray-500 text-lg">ප්‍රශ්නාවලි නොමැත</p>
-                        <p class="text-gray-400 text-sm mt-2">ඉක්මනින් ප්‍රශ්නාවලි එකතු වේවි</p>
-                    </div>`;
+                        <p class="text-gray-400 text-sm mt-2">Admin Panel එකෙන් ප්‍රශ්නාවලි එකතු කරන්න</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${quizzes.map(q => `
+                        <div class="quiz-card" onclick="openQuiz(${q.id})" data-aos="fade-up">
+                            <div class="quiz-icon-wrap">
+                                <i class="fa-solid fa-bullseye"></i>
+                                <span class="quiz-count-badge">${q.question_count || 0} ප්‍රශ්න</span>
+                            </div>
+                            <div class="p-5 flex-1 flex flex-col">
+                                <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${q.title}</h3>
+                                <p class="text-xs text-gray-500 mb-3">
+                                    ${q.grade_name || ''} ${q.subject_name ? '• ' + q.subject_name : ''}
+                                </p>
+                                <p class="text-xs text-gray-400 flex-1 line-clamp-2">${q.description || 'විස්තරයක් නොමැත'}</p>
+                                <div class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
+                                    <span class="text-xs text-gray-500"><i class="fa-solid fa-clock mr-1"></i>${q.duration_minutes || 15} මිනිත්තු</span>
+                                    <span class="text-brand-gold font-bold text-xs">ක්‍රීඩා කරන්න <i class="fa-solid fa-play ml-1"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            if (window.AOS) AOS.refresh();
+        }
+
+        // ============================================
+        // OPEN QUIZ
+        // ============================================
+        async function openQuiz(id) {
+            const modal = document.getElementById('quizModal');
+            const body = document.getElementById('quizModalBody');
+
+            body.innerHTML = `<div class="p-12 text-center"><div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            try {
+                const res = await fetch(`${API_BASE}/quizzes/${id}`);
+                const quiz = await res.json();
+
+                if (!quiz.questions || quiz.questions.length === 0) {
+                    body.innerHTML = `
+                        <div class="p-12 text-center">
+                            <i class="fa-solid fa-exclamation-circle text-6xl text-yellow-500 mb-4"></i>
+                            <p class="text-gray-700 dark:text-gray-300 text-lg">මෙම ප්‍රශ්නාවලියේ ප්‍රශ්න නොමැත</p>
+                            <button onclick="closeQuiz()" class="mt-4 btn-primary">වහන්න</button>
+                        </div>
+                    `;
                     return;
                 }
-                
-                grid.innerHTML = quizzes.map(q => `
-                    <div class="quiz-card">
-                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-teal-500 text-white flex items-center justify-center text-2xl mb-4">
-                            <i class="fa-solid fa-bullseye"></i>
+
+                const answers = {};
+                let currentQuestion = 0;
+                const totalQuestions = quiz.questions.length;
+                let timeLeft = (quiz.duration_minutes || 15) * 60;
+                let timerInterval;
+
+                function renderQuestion() {
+                    const q = quiz.questions[currentQuestion];
+                    const letters = ['A', 'B', 'C', 'D'];
+                    const options = [q.option_a, q.option_b, q.option_c, q.option_d];
+
+                    body.innerHTML = `
+                        <div class="p-6">
+                            <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+                                <div>
+                                    <p class="text-xs text-brand-gold font-black uppercase mb-1">${quiz.title}</p>
+                                    <p class="text-sm text-gray-500">ප්‍රශ්නය ${currentQuestion + 1} / ${totalQuestions}</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div id="timerBadge" class="timer-badge">
+                                        <i class="fa-solid fa-clock"></i>
+                                        <span id="timerText">${formatTime(timeLeft)}</span>
+                                    </div>
+                                    <button onclick="closeQuiz()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600">
+                                        <i class="fa-solid fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-6">
+                                <div class="bg-brand-gold h-2 rounded-full transition-all duration-300" style="width: ${((currentQuestion + 1) / totalQuestions) * 100}%"></div>
+                            </div>
+
+                            <h2 class="text-xl font-black text-brand-navy dark:text-white mb-6">${q.question}</h2>
+
+                            <div class="space-y-3 mb-6">
+                                ${options.map((opt, i) => `
+                                    <button class="option-btn ${answers[q.id] === letters[i] ? 'selected' : ''}" onclick="selectAnswer(${q.id}, '${letters[i]}')" data-qid="${q.id}" data-answer="${letters[i]}">
+                                        <span class="option-letter">${letters[i]}</span>
+                                        <span>${opt}</span>
+                                    </button>
+                                `).join('')}
+                            </div>
+
+                            <div class="flex items-center justify-between pt-4 border-t">
+                                <button onclick="prevQuestion()" class="px-6 py-3 rounded-lg border-2 border-gray-200 font-bold text-gray-600 hover:bg-gray-50 transition ${currentQuestion === 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${currentQuestion === 0 ? 'disabled' : ''}>
+                                    <i class="fa-solid fa-arrow-left mr-2"></i>පෙර
+                                </button>
+                                ${currentQuestion === totalQuestions - 1 ? `
+                                    <button onclick="submitQuiz(${quiz.id})" class="btn-primary">
+                                        <i class="fa-solid fa-paper-plane"></i> ඉදිරිපත් කරන්න
+                                    </button>
+                                ` : `
+                                    <button onclick="nextQuestion()" class="btn-primary">
+                                        ඊළඟ <i class="fa-solid fa-arrow-right ml-2"></i>
+                                    </button>
+                                `}
+                            </div>
                         </div>
-                        <h3 class="text-xl font-black text-brand-navy mb-2">${q.title}</h3>
-                        <p class="text-sm text-gray-500 mb-4 flex-1">${q.description || ''}</p>
-                        <div class="flex items-center justify-between pt-4 border-t">
-                            <span class="text-xs font-bold text-green-600 bg-green-100 px-3 py-1 rounded-full">
-                                ${q.question_count || 0} ප්‍රශ්න
-                            </span>
-                            <a href="/quiz.html?id=${q.id}" class="text-brand-gold font-bold text-sm hover:underline">
-                                ක්‍රීඩා කරන්න →
-                            </a>
+                    `;
+                }
+
+                function formatTime(seconds) {
+                    const m = Math.floor(seconds / 60);
+                    const s = seconds % 60;
+                    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+                }
+
+                // Expose functions to window
+                window.selectAnswer = (qid, ans) => {
+                    answers[qid] = ans;
+                    document.querySelectorAll(`[data-qid="${qid}"]`).forEach(btn => {
+                        btn.classList.toggle('selected', btn.dataset.answer === ans);
+                    });
+                };
+
+                window.nextQuestion = () => {
+                    if (currentQuestion < totalQuestions - 1) {
+                        currentQuestion++;
+                        renderQuestion();
+                    }
+                };
+
+                window.prevQuestion = () => {
+                    if (currentQuestion > 0) {
+                        currentQuestion--;
+                        renderQuestion();
+                    }
+                };
+
+                window.submitQuiz = async (quizId) => {
+                    if (!confirm('ප්‍රශ්නාවලිය ඉදිරිපත් කිරීමට අවශ්‍යද?')) return;
+                    
+                    clearInterval(timerInterval);
+
+                    const answersArray = Object.entries(answers).map(([qid, ans]) => ({
+                        question_id: parseInt(qid),
+                        answer: ans
+                    }));
+
+                    try {
+                        const res = await fetch(`${API_BASE}/quizzes/${quizId}/submit`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ answers: answersArray })
+                        });
+                        const result = await res.json();
+                        showResult(result, quiz);
+                    } catch (err) {
+                        alert('දෝෂයක්: ' + err.message);
+                    }
+                };
+
+                function showResult(result, quiz) {
+                    const percentage = result.percentage;
+                    const isPass = percentage >= 50;
+                    
+                    body.innerHTML = `
+                        <div class="p-8 text-center">
+                            <div class="w-24 h-24 rounded-full mx-auto mb-6 flex items-center justify-center text-5xl ${isPass ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}">
+                                <i class="fa-solid ${isPass ? 'fa-trophy' : 'fa-face-sad-tear'}"></i>
+                            </div>
+                            
+                            <h2 class="text-3xl font-black text-brand-navy dark:text-white mb-2">
+                                ${isPass ? 'සුබ පැතුම්!' : 'නැවත උත්සාහ කරන්න!'}
+                            </h2>
+                            <p class="text-gray-500 mb-6">${quiz.title}</p>
+
+                            <div class="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto">
+                                <div class="bg-brand-navy text-white rounded-xl p-4">
+                                    <div class="text-3xl font-black">${result.score}</div>
+                                    <div class="text-xs opacity-80 mt-1">නිවැරදි</div>
+                                </div>
+                                <div class="bg-gray-100 dark:bg-gray-800 rounded-xl p-4">
+                                    <div class="text-3xl font-black text-gray-700 dark:text-gray-300">${result.total}</div>
+                                    <div class="text-xs text-gray-500 mt-1">මුළු ප්‍රශ්න</div>
+                                </div>
+                                <div class="bg-brand-gold text-brand-navy rounded-xl p-4">
+                                    <div class="text-3xl font-black">${percentage}%</div>
+                                    <div class="text-xs font-bold mt-1">ලකුණු</div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap gap-3 justify-center">
+                                <button onclick="closeQuiz()" class="px-6 py-3 rounded-lg border-2 border-gray-200 font-bold text-gray-600 hover:bg-gray-50 transition">
+                                    වහන්න
+                                </button>
+                                <button onclick="openQuiz(${quiz.id})" class="btn-primary">
+                                    <i class="fa-solid fa-redo"></i> නැවත උත්සාහ කරන්න
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                `).join('');
+                    `;
+                }
+
+                // Start timer
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    const timerText = document.getElementById('timerText');
+                    const timerBadge = document.getElementById('timerBadge');
+                    if (timerText) timerText.textContent = formatTime(timeLeft);
+                    if (timerBadge && timeLeft <= 60) timerBadge.classList.add('warning');
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        alert('කාලය අවසන්!');
+                        window.submitQuiz(quiz.id);
+                    }
+                }, 1000);
+
+                renderQuestion();
             } catch (err) {
-                grid.innerHTML = `<div class="col-span-3 text-center py-12 text-red-500">දෝෂයක්: ${err.message}</div>`;
+                body.innerHTML = `<div class="p-12 text-center text-red-500">දෝෂයක්: ${err.message}</div>`;
             }
+        }
+
+        window.closeQuiz = () => {
+            const modal = document.getElementById('quizModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            document.getElementById('quizModalBody').innerHTML = '';
+        };
+
+        // ============================================
+        // FILTERS
+        // ============================================
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const gradeId = document.getElementById('gradeFilter').value;
+            const subjectId = document.getElementById('subjectFilter').value;
+
+            const filtered = allQuizzes.filter(q => {
+                const matchSearch = !search || (q.title || '').toLowerCase().includes(search);
+                const matchGrade = !gradeId || String(q.grade_id) === gradeId;
+                const matchSubject = !subjectId || String(q.subject_id) === subjectId;
+                return matchSearch && matchGrade && matchSubject;
+            });
+
+            renderQuizzes(filtered);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('gradeFilter').addEventListener('change', applyFilters);
+        document.getElementById('subjectFilter').addEventListener('change', applyFilters);
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadTheme();
+            await loadFilters();
+            await loadQuizzes();
         });
+    </script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, offset: 100 });
     </script>
 </body>
 </html>
