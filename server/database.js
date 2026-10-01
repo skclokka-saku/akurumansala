@@ -72,27 +72,31 @@ function initializeDatabase() {
 
         db.exec(`
             CREATE TABLE IF NOT EXISTS lessons (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
-                title_en TEXT,
-                description TEXT,
-                content TEXT,
-                grade_id INTEGER NOT NULL,
-                subject_id INTEGER NOT NULL,
-                lesson_number INTEGER,
-                duration INTEGER,
-                difficulty TEXT DEFAULT 'medium',
-                pdf_file TEXT,
-                video_url TEXT,
-                thumbnail TEXT,
-                views INTEGER DEFAULT 0,
-                is_published INTEGER DEFAULT 1,
-                created_by INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
-                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
-            );
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    title_en TEXT,
+    description TEXT,
+    content TEXT,
+    grade_id INTEGER NOT NULL,
+    subject_id INTEGER NOT NULL,
+    lesson_number INTEGER,
+    duration INTEGER,
+    difficulty TEXT DEFAULT 'medium',
+    pdf_file TEXT,
+    video_url TEXT,
+    thumbnail TEXT,
+    views INTEGER DEFAULT 0,
+    is_published INTEGER DEFAULT 1,
+    status TEXT DEFAULT 'approved',
+    rejection_reason TEXT,
+    approved_by INTEGER,
+    approved_at DATETIME,
+    created_by INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
+    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+);
         `);
 
         db.exec(`
