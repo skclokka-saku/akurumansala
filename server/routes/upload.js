@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const { authenticate, authorize } = require('../middleware/auth');
-const { put } = require('@vercel/blob');
 
 // Upstash Blob Configuration
 const UPSTASH_TOKEN = process.env.UPSTASH_BLOB_TOKEN;
@@ -29,20 +28,31 @@ const upload = multer({
 });
 
 // ==========================================
-// UPLOAD TO UPSTASH FUNCTION
+// UPLOAD TO UPSTASH FUNCTION (Using fetch, no @vercel/blob needed)
 // ==========================================
 async function uploadToUpstash(buffer, originalName, mimetype) {
     try {
         const uniqueName = `${Date.now()}-${originalName.replace(/\s+/g, '-')}`;
         
-        const blob = await put(uniqueName, buffer, {
-            access: 'public',
-            token: UPSTASH_TOKEN,
-            contentType: mimetype,
+        // Upstash Blob API එකට fetch හරහා upload කරමු
+        const response = await fetch(`${UPSTASH_URL}/${BUCKET_NAME}/${uniqueName}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${UPSTASH_TOKEN}`,
+                'Content-Type': mimetype,
+            },
+            body: buffer,
         });
 
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Upstash API error: ${response.status} - ${errorText}`);
+        }
+
+        const data = await response.json();
+        
         return {
-            url: blob.url,
+            url: data.url || `${UPSTASH_URL}/${BUCKET_NAME}/${uniqueName}`,
             name: uniqueName,
             size: buffer.length,
             type: mimetype
