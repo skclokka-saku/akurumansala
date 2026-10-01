@@ -1,315 +1,1114 @@
 <!DOCTYPE html>
 <html lang="si">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>අකුරු මංසල | ඉගෙනුමට නව මඟක්</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'brand-navy': '#1e293b',
-                        'brand-gold': '#D4A017',
-                        'brand-gold2': '#fbbf24',
-                    },
-                    fontFamily: {
-                        'sinhala': ['Noto Sans Sinhala', 'sans-serif'],
-                    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="අකුරු මංසල - ශ්‍රී ලංකාවේ දරුවන්ට ඉගෙනුමට නව මඟක්">
+<title>අකුරු මංසල | ඉගෙනුමට නව මඟක්</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<script>
+tailwind.config = {
+    darkMode: 'class',
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    navy: '#0F2C59',
+                    navy2: '#1B3A6B',
+                    gold: '#D4A017',
+                    gold2: '#E8B923',
+                    light: '#F8F9FC',
                 }
+            },
+            fontFamily: {
+                sinhala: ['"Noto Serif Sinhala"', 'sans-serif'],
             }
         }
-    </script>
-    <style>
-        body { font-family: 'Noto Sans Sinhala', sans-serif; }
-        .stat-card {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            transition: all 0.3s ease;
-        }
-        .stat-card:hover {
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            transform: translateY(-2px);
-        }
-        .hero-pattern {
-            background-image: linear-gradient(rgba(30, 41, 59, 0.9), rgba(30, 41, 59, 0.9)), url('/images/hero-bg.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-        .dark body { background-color: #0f172a; color: #e2e8f0; }
-        .dark .stat-card { background-color: #1e293b; color: #e2e8f0; }
-        .dark .text-brand-navy { color: #f1f5f9; }
-        .dark .text-gray-500 { color: #94a3b8; }
-        .dark .bg-white { background-color: #1e293b; }
-        .dark .bg-gray-50 { background-color: #0f172a; }
-    </style>
-</head>
-<body class="bg-gray-50 min-h-screen">
+    }
+}
+</script>
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="/" class="flex items-center space-x-2">
-                <img src="/images/logo.png" alt="Logo" class="w-10 h-10 rounded-lg" onerror="this.style.display='none'">
-                <div>
-                    <h1 class="font-black text-brand-navy text-lg leading-tight">අකුරු මංසල</h1>
-                    <p class="text-[10px] text-gray-500">ඉගෙනුමට නව මඟක්</p>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif;
+        overflow-x: hidden;
+        background: #F8F9FC;
+        color: #1e293b;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark { background: #0a0f1e; color: #e2e8f0; }
+
+    .container-wide {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        margin: 0 auto;
+    }
+    @media (min-width: 768px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
+    @media (min-width: 1280px) { .container-wide { padding-left: 5rem; padding-right: 5rem; } }
+    @media (max-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
+
+    .top-bar { background: #0F2C59; color: white; font-size: 0.75rem; }
+    .top-bar a { color: rgba(255,255,255,0.85); transition: color 0.2s; text-decoration: none; }
+    .top-bar a:hover { color: #D4A017; }
+
+    .main-nav { background: white; box-shadow: 0 2px 20px rgba(15, 44, 89, 0.08); }
+    body.dark .main-nav { background: #1a1a2e; }
+
+    .nav-link {
+        position: relative;
+        font-weight: 600;
+        color: #0F2C59;
+        font-size: 0.8125rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        transition: color 0.3s;
+        padding: 0.5rem 0.75rem;
+        text-decoration: none;
+    }
+    body.dark .nav-link { color: #cbd5e1; }
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: #D4A017;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+    .nav-link:hover, .nav-link.active { color: #D4A017; }
+    .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+
+    .hero-section { position: relative; min-height: 650px; background: #0F2C59; overflow: hidden; }
+    .hero-bg {
+        position: absolute;
+        inset: 0;
+        background-image: url('/images/hero-students.jpg');
+        background-size: cover;
+        background-position: center;
+        z-index: 1;
+    }
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(15, 44, 89, 0.95) 0%, rgba(15, 44, 89, 0.85) 35%, rgba(15, 44, 89, 0.55) 55%, rgba(15, 44, 89, 0.25) 75%, rgba(15, 44, 89, 0.05) 100%);
+        z-index: 2;
+    }
+    body.dark .hero-overlay {
+        background: linear-gradient(90deg, rgba(10, 15, 30, 0.98) 0%, rgba(10, 15, 30, 0.90) 35%, rgba(10, 15, 30, 0.60) 55%, rgba(10, 15, 30, 0.30) 75%, rgba(10, 15, 30, 0.10) 100%);
+    }
+    .hero-content { position: relative; z-index: 3; padding: 5rem 6rem 5rem 8rem; width: 100%; }
+    @media (max-width: 1280px) { .hero-content { padding: 5rem 4rem; } }
+    @media (max-width: 768px) { .hero-content { padding: 4rem 2rem; } }
+    @media (max-width: 640px) { .hero-content { padding: 3rem 1.5rem; } }
+
+    .hero-title { text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); letter-spacing: -0.02em; line-height: 1.1; }
+    .hero-gold-text { text-shadow: 0 2px 20px rgba(212, 160, 23, 0.6); }
+
+    .hero-info-cards { position: relative; z-index: 5; margin-top: -3rem; padding-bottom: 2rem; }
+
+    .info-card-3d {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 8px 30px rgba(15, 44, 89, 0.15);
+        border-left: 5px solid #D4A017;
+        transition: all 0.4s;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+    body.dark .info-card-3d { background: #1a1a2e; }
+    .info-card-3d:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(15, 44, 89, 0.25); }
+    .info-card-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        flex-shrink: 0;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        padding: 0.875rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+        transition: all 0.4s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+    }
+    .btn-primary:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 12px 30px rgba(212, 160, 23, 0.6); }
+
+    .btn-outline {
+        border: 2px solid white;
+        color: white;
+        padding: 0.875rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+        transition: all 0.4s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(10px);
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .btn-outline:hover { background: white; color: #0F2C59; transform: translateY(-4px); }
+
+    .btn-navy {
+        background: #0F2C59;
+        color: white;
+        padding: 0.75rem 1.75rem;
+        border-radius: 0.75rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+        transition: all 0.3s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+    }
+    .btn-navy:hover { background: #1B3A6B; transform: translateY(-3px); }
+
+    .theme-toggle {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: rgba(212, 160, 23, 0.12);
+        color: #D4A017;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: 2px solid #D4A017;
+    }
+    .theme-toggle:hover { background: #D4A017; color: #0F2C59; transform: rotate(20deg) scale(1.1); }
+
+    .feature-card {
+        background: white;
+        padding: 1.75rem 1.25rem;
+        border-radius: 1rem;
+        text-align: center;
+        border-bottom: 4px solid transparent;
+        transition: all 0.4s;
+        box-shadow: 0 4px 15px rgba(15, 44, 89, 0.08);
+    }
+    body.dark .feature-card { background: #1a1a2e; }
+    .feature-card:hover { border-bottom-color: #D4A017; transform: translateY(-8px); }
+    .feature-icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 0.875rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: #D4A017;
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.12), rgba(212, 160, 23, 0.05));
+        border-radius: 1rem;
+        transition: all 0.4s;
+    }
+    .feature-card:hover .feature-icon { transform: scale(1.15) rotate(-8deg); }
+
+    .program-card {
+        background: white;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 6px 25px rgba(15, 44, 89, 0.08);
+        transition: all 0.5s;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    body.dark .program-card { background: #1a1a2e; }
+    .program-card:hover { transform: translateY(-12px); box-shadow: 0 25px 50px rgba(15, 44, 89, 0.2); }
+    .program-card .img-wrap { position: relative; height: 200px; overflow: hidden; }
+    .program-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
+    .program-card:hover img { transform: scale(1.1); }
+    .program-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        background: #D4A017;
+        color: #0F2C59;
+        padding: 0.375rem 0.875rem;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 0.6875rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .stats-bar {
+        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+        color: white;
+        padding: 3rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .activity-card {
+        border-radius: 1rem;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        transition: all 0.4s;
+    }
+    .activity-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+    .activity-card img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.5s; display: block; }
+    .activity-card:hover img { transform: scale(1.12); }
+    .activity-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(15, 44, 89, 0.98) 0%, rgba(15, 44, 89, 0.7) 60%, transparent 100%);
+        color: white;
+        padding: 2rem 1rem 1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .activity-label i { color: #D4A017; }
+
+    .resource-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 4px 20px rgba(15, 44, 89, 0.08);
+        transition: all 0.4s;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    body.dark .resource-card { background: #1a1a2e; }
+    .resource-card:hover { transform: translateY(-8px); box-shadow: 0 20px 45px rgba(15, 44, 89, 0.15); }
+    .resource-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.75rem;
+        color: white;
+        margin-bottom: 1rem;
+    }
+
+    .testimonial-card {
+        background: white;
+        padding: 1.75rem;
+        border-radius: 1rem;
+        border-left: 4px solid #D4A017;
+        box-shadow: 0 4px 20px rgba(15, 44, 89, 0.08);
+        transition: all 0.3s;
+        position: relative;
+        height: 100%;
+    }
+    body.dark .testimonial-card { background: #1a1a2e; }
+    .testimonial-card:hover { transform: translateY(-6px); box-shadow: 0 20px 45px rgba(15, 44, 89, 0.15); }
+
+    .cta-section {
+        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+        color: white;
+        padding: 3rem;
+        border-radius: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .footer { background: #0F2C59; color: white; padding-top: 4rem; }
+    body.dark .footer { background: #05080f; }
+    .footer a { color: rgba(255,255,255,0.75); transition: all 0.2s; font-size: 0.875rem; display: inline-block; text-decoration: none; }
+    .footer a:hover { color: #D4A017; padding-left: 4px; }
+    .footer-title {
+        color: white;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.8125rem;
+        letter-spacing: 1.5px;
+        margin-bottom: 1.25rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+    .footer-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 30px;
+        height: 2px;
+        background: #D4A017;
+    }
+
+    .social-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        color: white;
+        text-decoration: none;
+    }
+    .social-icon:hover { background: #D4A017; color: #0F2C59; transform: translateY(-4px) scale(1.1); }
+
+    .section-label {
+        color: #D4A017;
+        font-weight: 800;
+        font-size: 0.6875rem;
+        letter-spacing: 0.25em;
+        text-transform: uppercase;
+        margin-bottom: 0.625rem;
+        display: inline-block;
+    }
+
+    .section-title {
+        font-size: 1.875rem;
+        font-weight: 900;
+        color: #0F2C59;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+    body.dark .section-title { color: white; }
+    @media (min-width: 768px) { .section-title { font-size: 2.25rem; } }
+    @media (min-width: 1024px) { .section-title { font-size: 2.75rem; } }
+
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #F8F9FC; }
+    ::-webkit-scrollbar-thumb { background: #D4A017; border-radius: 5px; }
+
+    @media (max-width: 768px) { .hero-section { min-height: 550px; } }
+</style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <div class="top-bar py-2 hidden md:block">
+        <div class="container-wide">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-6">
+                    <span><i class="fa-solid fa-location-dot text-brand-gold mr-2"></i>කොළඹ, ශ්‍රී ලංකාව</span>
+                    <span><i class="fa-solid fa-phone text-brand-gold mr-2"></i>+94 11 234 5678</span>
+                    <span><i class="fa-solid fa-envelope text-brand-gold mr-2"></i>info@akurumansala.lk</span>
                 </div>
-            </a>
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-bold">
-                <a href="/" class="text-brand-gold">මුල් පිටුව</a>
-                <a href="/resources.html" class="text-gray-600 hover:text-brand-gold transition">සම්පත්</a>
-                <a href="/papers.html" class="text-gray-600 hover:text-brand-gold transition">ප්‍රශ්න පත්‍ර</a>
-                <a href="/videos.html" class="text-gray-600 hover:text-brand-gold transition">වීඩියෝ</a>
-                <a href="/quizzes.html" class="text-gray-600 hover:text-brand-gold transition">ප්‍රශ්නාවලි</a>
-            </nav>
-            <div class="flex items-center space-x-3">
-                <button onclick="toggleTheme()" class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600">
-                    <i id="themeIcon" class="fa-solid fa-moon"></i>
-                </button>
-                <a href="/login.html" class="hidden sm:block bg-gray-100 text-brand-navy px-4 py-2 rounded-lg font-bold text-sm hover:bg-gray-200 transition">
-                    <i class="fa-solid fa-sign-in-alt mr-1"></i> පිවිසෙන්න
-                </a>
-                <a href="/admin.html" class="bg-brand-gold text-brand-navy px-4 py-2 rounded-lg font-bold text-sm hover:bg-brand-gold2 transition">
-                    <i class="fa-solid fa-user-shield mr-1"></i> Admin
-                </a>
+                <div class="flex items-center space-x-4">
+                    <span class="font-bold text-brand-gold">Follow Us:</span>
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="main-nav sticky top-0 z-50">
+        <div class="container-wide">
+            <div class="h-20 flex items-center justify-between">
+                <a href="#home" class="flex items-center space-x-3">
+                    <div class="w-14 h-14 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border-2 border-brand-gold/30 flex items-center justify-center p-1">
+                        <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-2xl\'></i>'">
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
+                        <p class="text-xs text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
+                    </div>
+                </a>
+
+                <nav class="hidden lg:flex items-center space-x-1">
+                    <a href="#home" class="nav-link active">මුල් පිටුව</a>
+                    <a href="#about" class="nav-link">අප ගැන</a>
+                    <a href="#grades" class="nav-link">ශ්‍රේණි</a>
+                    <a href="#activities" class="nav-link">ක්‍රියාකාරකම්</a>
+                    <a href="/resources.html" class="nav-link">සම්පත්</a>
+                    <a href="/papers.html" class="nav-link">ප්‍රශ්න පත්‍ර</a>
+                    <a href="/videos.html" class="nav-link">වීඩියෝ</a>
+                </nav>
+
+                <div class="flex items-center space-x-2 md:space-x-3">
+                    <button onclick="toggleTheme()" class="theme-toggle">
+                        <i id="themeIcon" class="fa-solid fa-moon"></i>
+                    </button>
+                    <a href="/login.html" class="hidden md:inline-flex btn-navy" style="padding: 0.6rem 1.25rem;">
+                        <i class="fa-solid fa-user"></i>
+                        <span>පිවිසෙන්න</span>
+                    </a>
+                    <a href="/admin.html" class="hidden md:inline-flex btn-primary" style="padding: 0.6rem 1.25rem;">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Admin</span>
+                    </a>
+                    <button onclick="toggleMobileMenu()" class="lg:hidden w-10 h-10 rounded-lg bg-brand-navy text-white flex items-center justify-center">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t px-4 py-4 space-y-2">
+            <a href="#home" class="block px-4 py-3 rounded-lg bg-brand-navy text-white font-bold">මුල් පිටුව</a>
+            <a href="#about" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">අප ගැන</a>
+            <a href="#grades" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">ශ්‍රේණි</a>
+            <a href="#activities" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">ක්‍රියාකාරකම්</a>
+            <a href="/resources.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">සම්පත්</a>
+            <a href="/papers.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">ප්‍රශ්න පත්‍ර</a>
+            <a href="/videos.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">වීඩියෝ</a>
+            <a href="/quizzes.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">ප්‍රශ්නාවලි</a>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-pattern text-white py-20 md:py-32">
-        <div class="max-w-7xl mx-auto px-4">
-            <p class="text-brand-gold text-sm font-black tracking-widest uppercase mb-4">ශ්‍රී ලංකාවේ අංක 1 අධ්‍යාපනික වේදිකාව</p>
-            <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
-                දැනුමට<br>
-                <span class="text-brand-gold">අකුරු</span><br>
-                එකතු කරමු.
-            </h1>
-            <p class="text-lg md:text-xl text-white/80 mb-8 max-w-2xl">
-                1 සිට 13 ශ්‍රේණි දක්වා සිසුන්ට ඉගෙනීමට, ගුරුවරුන්ට අධ්‍යාපනික සම්පත් බෙදා ගැනීමට නිර්මාණය කළ අධ්‍යාපනික වේදිකාවක්.
-            </p>
-            <div class="flex flex-wrap gap-4 mb-12">
-                <a href="/resources.html" class="bg-brand-gold text-brand-navy px-8 py-4 rounded-xl font-black text-lg hover:bg-brand-gold2 transition shadow-lg">
-                    <i class="fa-solid fa-rocket mr-2"></i> ඉගෙනීම අරඹන්න
+    <!-- HERO -->
+    <section id="home" class="hero-section">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <div class="max-w-3xl">
+                <p class="text-brand-gold font-bold text-xs md:text-sm tracking-[0.15em] uppercase mb-4" data-aos="fade-up">
+                    <i class="fa-solid fa-graduation-cap mr-2"></i>ශ්‍රී ලංකාවේ අංක 1 අධ්‍යාපනික වේදිකාව
+                </p>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 hero-title" data-aos="fade-up" data-aos-delay="100">
+                    <span class="block mb-2">දැනුමට</span>
+                    <span class="block text-brand-gold hero-gold-text mb-2">අකුරු</span>
+                    <span class="block">එකතු කරමු.</span>
+                </h1>
+                <p class="text-base md:text-lg text-white/95 mb-8 max-w-2xl leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+                    <strong class="text-brand-gold">1 සිට 13 ශ්‍රේණි දක්වා</strong> සිසුන්ට ඉගෙනීමට, ගුරුවරුන්ට අධ්‍යාපනික සම්පත් බෙදා ගැනීමට නිර්මාණය කළ අධ්‍යාපනික වේදිකාවක්.
+                </p>
+                <div class="flex flex-wrap gap-4 mb-8" data-aos="fade-up" data-aos-delay="300">
+                    <a href="/resources.html" class="btn-primary">
+                        <i class="fa-solid fa-rocket"></i>
+                        <span>ඉගෙනීම අරඹන්න</span>
+                    </a>
+                    <a href="#about" class="btn-outline">
+                        <i class="fa-solid fa-play"></i>
+                        <span>තව දැනගන්න</span>
+                    </a>
+                </div>
+                <div class="flex flex-wrap gap-5 pt-6 border-t border-white/20" data-aos="fade-up" data-aos-delay="400">
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-9 h-9 rounded-full bg-brand-gold flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                        </div>
+                        <span class="text-white font-bold text-xs md:text-sm">නොමිලේ ප්‍රවේශය</span>
+                    </div>
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-9 h-9 rounded-full bg-brand-gold flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                        </div>
+                        <span class="text-white font-bold text-xs md:text-sm">ශ්‍රේණි 1-13</span>
+                    </div>
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-9 h-9 rounded-full bg-brand-gold flex items-center justify-center flex-shrink-0">
+                            <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                        </div>
+                        <span class="text-white font-bold text-xs md:text-sm">විශ්වාසනීය</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INFO CARDS -->
+    <section class="hero-info-cards">
+        <div class="container-wide">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <a href="/resources.html" class="info-card-3d" data-aos="fade-up">
+                    <div class="info-card-icon" style="background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59;">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-brand-navy dark:text-white text-lg mb-1">පාඩම් මාලාවන්</h3>
+                        <p class="text-brand-navy dark:text-gray-400 text-sm font-bold">
+                            <i class="fa-solid fa-arrow-trend-up mr-2 text-brand-gold"></i><span id="infoLessons">0</span>+ පාඩම්
+                        </p>
+                    </div>
                 </a>
-                <a href="/about.html" class="bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white px-8 py-4 rounded-xl font-black text-lg hover:bg-white/20 transition">
-                    <i class="fa-solid fa-info-circle mr-2"></i> තව දැනගන්න
+                <a href="/papers.html" class="info-card-3d" data-aos="fade-up" data-aos-delay="100">
+                    <div class="info-card-icon" style="background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: #D4A017;">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-brand-navy dark:text-white text-lg mb-1">ප්‍රශ්න පත්‍ර</h3>
+                        <p class="text-brand-navy dark:text-gray-400 text-sm font-bold">
+                            <i class="fa-solid fa-arrow-trend-up mr-2 text-brand-gold"></i><span id="infoPapers">0</span>+ ප්‍රශ්න පත්‍ර
+                        </p>
+                    </div>
+                </a>
+                <a href="/videos.html" class="info-card-3d" data-aos="fade-up" data-aos-delay="200">
+                    <div class="info-card-icon" style="background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59;">
+                        <i class="fa-solid fa-video"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-brand-navy dark:text-white text-lg mb-1">වීඩියෝ පාඩම්</h3>
+                        <p class="text-brand-navy dark:text-gray-400 text-sm font-bold">
+                            <i class="fa-solid fa-arrow-trend-up mr-2 text-brand-gold"></i><span id="infoVideos">0</span>+ වීඩියෝ
+                        </p>
+                    </div>
                 </a>
             </div>
-            <div class="flex flex-wrap gap-6 text-sm font-bold">
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-check-circle text-brand-gold"></i> නොමිලේ ප්‍රවේශය
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="py-14 bg-white dark:bg-gray-900">
+        <div class="container-wide">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-5">
+                <div class="feature-card" data-aos="fade-up">
+                    <div class="feature-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">ශ්‍රේණි 1-13</h3>
+                    <p class="text-xs text-gray-500">සියලුම ශ්‍රේණි සඳහා</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-check-circle text-brand-gold"></i> ශ්‍රේණි 1-13
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">දක්ෂ ගුරුවරු</h3>
+                    <p class="text-xs text-gray-500">පළපුරුදු මණ්ඩලය</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <i class="fa-solid fa-check-circle text-brand-gold"></i> විශ්වාසනීය
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon"><i class="fa-solid fa-globe"></i></div>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">ඕනෑම තැනක</h3>
+                    <p class="text-xs text-gray-500">ඕනෑම උපාංගයකින්</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon"><i class="fa-solid fa-trophy"></i></div>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">ගුණාත්මක</h3>
+                    <p class="text-xs text-gray-500">උසස් තත්ත්වයේ</p>
+                </div>
+                <div class="feature-card col-span-2 md:col-span-1" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon"><i class="fa-solid fa-heart"></i></div>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">ළමා හිතකාමී</h3>
+                    <p class="text-xs text-gray-500">දරුවන්ට ගැලපෙන</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Stats Cards -->
-    <section class="max-w-7xl mx-auto px-4 -mt-12 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <a href="/resources.html" class="stat-card text-center hover:border-brand-gold border-2 border-transparent">
-                <div class="w-16 h-16 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center text-3xl mx-auto mb-4">
-                    <i class="fa-solid fa-book-open"></i>
+    <!-- ABOUT -->
+    <section id="about" class="py-20 bg-brand-light dark:bg-gray-950">
+        <div class="container-wide">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <div data-aos="fade-right">
+                    <div class="relative">
+                        <img src="/images/about-school.jpg" alt="අප ගැන" class="rounded-2xl shadow-2xl w-full h-[400px] object-cover" onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800'">
+                        <div class="absolute -bottom-5 -right-5 bg-brand-gold text-brand-navy p-5 rounded-2xl shadow-2xl">
+                            <div class="text-4xl font-black">10+</div>
+                            <div class="text-xs font-bold uppercase mt-2">වසර අත්දැකීම්</div>
+                        </div>
+                    </div>
                 </div>
-                <h3 class="text-3xl font-black text-brand-navy" id="statLessons">0</h3>
-                <p class="text-sm text-gray-500 mt-1">පාඩම්</p>
-            </a>
-            <a href="/papers.html" class="stat-card text-center hover:border-brand-gold border-2 border-transparent">
-                <div class="w-16 h-16 rounded-2xl bg-pink-100 text-pink-600 flex items-center justify-center text-3xl mx-auto mb-4">
-                    <i class="fa-solid fa-file-lines"></i>
-                </div>
-                <h3 class="text-3xl font-black text-brand-navy" id="statPapers">0</h3>
-                <p class="text-sm text-gray-500 mt-1">ප්‍රශ්න පත්‍ර</p>
-            </a>
-            <a href="/videos.html" class="stat-card text-center hover:border-brand-gold border-2 border-transparent">
-                <div class="w-16 h-16 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center text-3xl mx-auto mb-4">
-                    <i class="fa-solid fa-video"></i>
-                </div>
-                <h3 class="text-3xl font-black text-brand-navy" id="statVideos">0</h3>
-                <p class="text-sm text-gray-500 mt-1">වීඩියෝ</p>
-            </a>
-        </div>
-    </section>
 
-    <!-- Features -->
-    <section class="max-w-7xl mx-auto px-4 py-16">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="stat-card text-center">
-                <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl mx-auto mb-3">
-                    <i class="fa-solid fa-graduation-cap"></i>
+                <div data-aos="fade-left">
+                    <span class="section-label">අප ගැන</span>
+                    <h2 class="section-title">ඉගෙනීම සරල කරමු.</h2>
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
+                        "අකුරු මංසල" යනු ශ්‍රී ලංකාවේ සිසුන්ට සහ ගුරුවරුන්ට අධ්‍යාපනික සම්පත් පහසුවෙන් සොයාගැනීමට, භාවිතා කිරීමට සහ බෙදා ගැනීමට නිර්මාණය කළ වේදිකාවකි.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center">
+                                <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                            </div>
+                            <span class="font-bold text-brand-navy dark:text-white text-sm">සරල හා වේගවත්</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center">
+                                <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                            </div>
+                            <span class="font-bold text-brand-navy dark:text-white text-sm">ශ්‍රේණි හා විෂය අනුව</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center">
+                                <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                            </div>
+                            <span class="font-bold text-brand-navy dark:text-white text-sm">ගුරු සම්පත් පහසුකම</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center">
+                                <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                            </div>
+                            <span class="font-bold text-brand-navy dark:text-white text-sm">නොමිලේ ප්‍රවේශය</span>
+                        </div>
+                    </div>
+                    <a href="#grades" class="btn-navy">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span>තව දැනගන්න</span>
+                    </a>
                 </div>
-                <h4 class="font-black text-brand-navy">ශ්‍රේණි 1-13</h4>
-                <p class="text-xs text-gray-500">සියලුම ශ්‍රේණි සඳහා</p>
-            </div>
-            <div class="stat-card text-center">
-                <div class="w-12 h-12 rounded-xl bg-green-100 text-green-600 flex items-center justify-center text-xl mx-auto mb-3">
-                    <i class="fa-solid fa-users"></i>
-                </div>
-                <h4 class="font-black text-brand-navy">දක්ෂ ගුරුවරු</h4>
-                <p class="text-xs text-gray-500">පළපුරුදු මණ්ඩලය</p>
-            </div>
-            <div class="stat-card text-center">
-                <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl mx-auto mb-3">
-                    <i class="fa-solid fa-mobile-alt"></i>
-                </div>
-                <h4 class="font-black text-brand-navy">ඕනෑම තැනක</h4>
-                <p class="text-xs text-gray-500">ඕනෑම උපාංගයකින්</p>
-            </div>
-            <div class="stat-card text-center">
-                <div class="w-12 h-12 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center text-xl mx-auto mb-3">
-                    <i class="fa-solid fa-star"></i>
-                </div>
-                <h4 class="font-black text-brand-navy">ගුණාත්මක</h4>
-                <p class="text-xs text-gray-500">උසස් තත්ත්වයේ</p>
             </div>
         </div>
     </section>
 
-    <!-- Resources Section -->
-    <section class="bg-white py-16">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center mb-12">
-                <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-2">Learning Library</p>
-                <h2 class="text-4xl font-black text-brand-navy mb-2">අධ්‍යාපනික සම්පත්</h2>
-                <p class="text-gray-500">ඔබට අවශ්‍ය සම්පත් තෝරන්න</p>
+    <!-- GRADES -->
+    <section id="grades" class="py-20 bg-white dark:bg-gray-900">
+        <div class="container-wide">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <span class="section-label">ACADEMIC PROGRAMS</span>
+                <h2 class="section-title">සෑම ශ්‍රේණියකටම විශේෂිත</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    ඔබේ දරුවාගේ ශ්‍රේණියට ගැලපෙන සම්පත් තෝරන්න
+                </p>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <a href="/resources.html" class="stat-card block">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-2xl">
-                            <i class="fa-solid fa-book-open"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-black text-brand-navy">පාඩම්</h3>
-                            <p class="text-xs text-gray-500">විෂය අනුව සකස් කළ පාඩම්</p>
-                        </div>
+                <div class="program-card" data-aos="fade-up">
+                    <div class="img-wrap">
+                        <img src="/images/grade-1-5.jpg" alt="ප්‍රාථමික" onerror="this.src='https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600'">
+                        <span class="program-badge">ශ්‍රේණි 1-5</span>
                     </div>
-                    <p class="text-2xl font-black text-brand-navy"><span id="resLessons">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></p>
-                    <button class="mt-3 text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">ප්‍රාථමික අධ්‍යාපනය</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                            මූලික අක්ෂර, ගණන් කිරීම සහ පරිසරය ගැන ඉගෙන ගනිමු.
+                        </p>
+                        <a href="/resources.html" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                            තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="program-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="img-wrap">
+                        <img src="/images/grade-6-9.jpg" alt="මධ්‍යම" onerror="this.src='https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600'">
+                        <span class="program-badge">ශ්‍රේණි 6-9</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">මධ්‍යම අධ්‍යාපනය</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                            විෂය මාලාව පුළුල් කරගනිමින් ගැඹුරු ඉගෙනීම.
+                        </p>
+                        <a href="/resources.html" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                            තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="program-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="img-wrap">
+                        <img src="/images/grade-10-11.jpg" alt="සා.පෙළ" onerror="this.src='https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600'">
+                        <span class="program-badge">ශ්‍රේණි 10-11</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">සාමාන්‍ය පෙළ</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                            සාමාන්‍ය පෙළ විභාගයට සූදානම් වීම.
+                        </p>
+                        <a href="/papers.html" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                            තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="program-card" data-aos="fade-up">
+                    <div class="img-wrap">
+                        <img src="/images/grade-12-13.jpg" alt="උ.පෙළ" onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600'">
+                        <span class="program-badge">ශ්‍රේණි 12-13</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">උසස් පෙළ</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                            උසස් පෙළ විභාගයට සහ විශ්වවිද්‍යාලයට සූදානම් වීම.
+                        </p>
+                        <a href="/papers.html" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                            තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="program-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="img-wrap">
+                        <img src="/images/grade-special.jpg" alt="විශේෂ" onerror="this.src='https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=600'">
+                        <span class="program-badge">විශේෂ</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">විශේෂ අධ්‍යාපනය</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                            විශේෂ අවශ්‍යතා ඇති දරුවන්ට ගැලපෙන සම්පත්.
+                        </p>
+                        <a href="/resources.html" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                            තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="program-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="img-wrap">
+                        <img src="/images/grade-activity.jpg" alt="ක්‍රියාකාරකම්" onerror="this.src='https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600'">
+                        <span class="program-badge">ක්‍රියාකාරකම්</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col">
+                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">අමතර ක්‍රියාකාරකම්</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                            ක්‍රීඩා, සංගීතය, චිත්‍ර ඇතුළු අමතර ක්‍රියාකාරකම්.
+                        </p>
+                        <a href="#activities" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                            තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <section class="stats-bar">
+        <div class="container-wide">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div data-aos="zoom-in">
+                    <div class="text-3xl md:text-5xl font-black text-brand-gold mb-1.5" id="statLessons">0</div>
+                    <div class="text-xs font-bold uppercase tracking-wider">පාඩම්</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="100">
+                    <div class="text-3xl md:text-5xl font-black text-brand-gold mb-1.5" id="statPapers">0</div>
+                    <div class="text-xs font-bold uppercase tracking-wider">ප්‍රශ්න පත්‍ර</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="200">
+                    <div class="text-3xl md:text-5xl font-black text-brand-gold mb-1.5" id="statVideos">0</div>
+                    <div class="text-xs font-bold uppercase tracking-wider">වීඩියෝ</div>
+                </div>
+                <div data-aos="zoom-in" data-aos-delay="300">
+                    <div class="text-3xl md:text-5xl font-black text-brand-gold mb-1.5">13</div>
+                    <div class="text-xs font-bold uppercase tracking-wider">ශ්‍රේණි</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ACTIVITIES -->
+    <section id="activities" class="py-20 bg-brand-light dark:bg-gray-950">
+        <div class="container-wide">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <span class="section-label">BEYOND CLASSROOM</span>
+                <h2 class="section-title">පන්තියෙන් පිටත ක්‍රියාකාරකම්</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    ක්‍රීඩා, කලා, සංගීතය සහ තවත් බොහෝ ක්‍රියාකාරකම්
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div class="activity-card" data-aos="fade-up">
+                    <img src="/images/activity-sports.jpg" alt="ක්‍රීඩා" onerror="this.src='https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400'">
+                    <div class="activity-label"><i class="fa-solid fa-futbol"></i>ක්‍රීඩා</div>
+                </div>
+                <div class="activity-card" data-aos="fade-up" data-aos-delay="100">
+                    <img src="/images/activity-music.jpg" alt="සංගීතය" onerror="this.src='https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400'">
+                    <div class="activity-label"><i class="fa-solid fa-music"></i>සංගීතය</div>
+                </div>
+                <div class="activity-card" data-aos="fade-up" data-aos-delay="200">
+                    <img src="/images/activity-art.jpg" alt="චිත්‍ර" onerror="this.src='https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400'">
+                    <div class="activity-label"><i class="fa-solid fa-palette"></i>චිත්‍ර</div>
+                </div>
+                <div class="activity-card" data-aos="fade-up" data-aos-delay="300">
+                    <img src="/images/activity-reading.jpg" alt="කියවීම" onerror="this.src='https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400'">
+                    <div class="activity-label"><i class="fa-solid fa-book"></i>කියවීම</div>
+                </div>
+                <div class="activity-card" data-aos="fade-up" data-aos-delay="400">
+                    <img src="/images/activity-science.jpg" alt="විද්‍යාව" onerror="this.src='https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=400'">
+                    <div class="activity-label"><i class="fa-solid fa-flask"></i>විද්‍යාව</div>
+                </div>
+                <div class="activity-card" data-aos="fade-up" data-aos-delay="500">
+                    <img src="/images/activity-dance.jpg" alt="නර්තනය" onerror="this.src='https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400'">
+                    <div class="activity-label"><i class="fa-solid fa-person-running"></i>නර්තනය</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESOURCES -->
+    <section id="resources" class="py-20 bg-white dark:bg-gray-900">
+        <div class="container-wide">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <span class="section-label">LEARNING LIBRARY</span>
+                <h2 class="section-title">අධ්‍යාපනික සම්පත්</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    ඔබට අවශ්‍ය සම්පත් තෝරන්න
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <a href="/resources.html" class="resource-card" data-aos="fade-up">
+                    <div class="resource-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">පාඩම්</h3>
+                    <p class="text-gray-500 text-sm mb-4 flex-1">විෂය අනුව සකස් කළ පාඩම්</p>
+                    <div class="flex items-center justify-between pt-4 border-t">
+                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resLessons">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    </div>
                 </a>
 
-                <a href="/papers.html" class="stat-card block">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center text-2xl">
-                            <i class="fa-solid fa-file-lines"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-black text-brand-navy">ප්‍රශ්න පත්‍ර</h3>
-                            <p class="text-xs text-gray-500">පාසල් පරීක්ෂණ සහ පුහුණු පත්‍ර</p>
-                        </div>
+                <a href="/resources.html" class="resource-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="resource-icon" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
+                        <i class="fa-solid fa-file-lines"></i>
                     </div>
-                    <p class="text-2xl font-black text-brand-navy"><span id="resPapers">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></p>
-                    <button class="mt-3 text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">විෂය සටහන්</h3>
+                    <p class="text-gray-500 text-sm mb-4 flex-1">කෙටි, පැහැදිලි සටහන්</p>
+                    <div class="flex items-center justify-between pt-4 border-t">
+                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resNotes">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    </div>
                 </a>
 
-                <a href="/videos.html" class="stat-card block">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 rounded-xl bg-red-100 text-red-600 flex items-center justify-center text-2xl">
-                            <i class="fa-solid fa-video"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-black text-brand-navy">වීඩියෝ පාඩම්</h3>
-                            <p class="text-xs text-gray-500">දෘශ්‍යමය ඉගෙනුම්</p>
-                        </div>
+                <a href="/papers.html" class="resource-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="resource-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+                        <i class="fa-solid fa-file-pdf"></i>
                     </div>
-                    <p class="text-2xl font-black text-brand-navy"><span id="resVideos">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></p>
-                    <button class="mt-3 text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">ප්‍රශ්න පත්‍ර</h3>
+                    <p class="text-gray-500 text-sm mb-4 flex-1">පාසල් පරීක්ෂණ සහ පුහුණු පත්‍ර</p>
+                    <div class="flex items-center justify-between pt-4 border-t">
+                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resPapers">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    </div>
                 </a>
 
-                <a href="/resources.html" class="stat-card block">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center text-2xl">
-                            <i class="fa-solid fa-newspaper"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-black text-brand-navy">ලිපි</h3>
-                            <p class="text-xs text-gray-500">අධ්‍යාපනික ලිපි</p>
-                        </div>
+                <a href="/videos.html" class="resource-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="resource-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                        <i class="fa-solid fa-video"></i>
                     </div>
-                    <p class="text-2xl font-black text-brand-navy"><span id="resArticles">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></p>
-                    <button class="mt-3 text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">වීඩියෝ පාඩම්</h3>
+                    <p class="text-gray-500 text-sm mb-4 flex-1">දෘශ්‍යමය ඉගෙනුම්</p>
+                    <div class="flex items-center justify-between pt-4 border-t">
+                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resVideos">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    </div>
                 </a>
 
-                <a href="/quizzes.html" class="stat-card block">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 rounded-xl bg-green-100 text-green-600 flex items-center justify-center text-2xl">
-                            <i class="fa-solid fa-bullseye"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-black text-brand-navy">ප්‍රශ්නාවලි</h3>
-                            <p class="text-xs text-gray-500">Online quizzes</p>
-                        </div>
+                <a href="/resources.html" class="resource-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="resource-icon" style="background: linear-gradient(135deg, #a855f7, #9333ea);">
+                        <i class="fa-solid fa-newspaper"></i>
                     </div>
-                    <p class="text-2xl font-black text-brand-navy"><span id="resQuizzes">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></p>
-                    <button class="mt-3 text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">ලිපි</h3>
+                    <p class="text-gray-500 text-sm mb-4 flex-1">අධ්‍යාපනික ලිපි</p>
+                    <div class="flex items-center justify-between pt-4 border-t">
+                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resArticles">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    </div>
+                </a>
+
+                <a href="/quizzes.html" class="resource-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="resource-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">ප්‍රශ්නාවලි</h3>
+                    <p class="text-gray-500 text-sm mb-4 flex-1">Online quizzes</p>
+                    <div class="flex items-center justify-between pt-4 border-t">
+                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resQuizzes">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    </div>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="bg-brand-navy text-white py-16">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-4">For Teachers</p>
-            <h2 class="text-3xl md:text-4xl font-black mb-4">ඔබේ සම්පත් තවත් දරුවන්ට ලබා දෙන්න.</h2>
-            <p class="text-white/70 mb-8">පාඩම්, සටහන්, ප්‍රශ්න පත්‍ර සහ වීඩියෝ අකුරු මංසල වෙත එකතු කරන්න.</p>
-            <a href="/login.html" class="inline-block bg-brand-gold text-brand-navy px-8 py-4 rounded-xl font-black text-lg hover:bg-brand-gold2 transition shadow-lg">
-                <i class="fa-solid fa-user-plus mr-2"></i> ගිණුමක් විවෘත කරන්න
-            </a>
+    <!-- TESTIMONIALS -->
+    <section class="py-20 bg-brand-light dark:bg-gray-950">
+        <div class="container-wide">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <span class="section-label">TESTIMONIALS</span>
+                <h2 class="section-title">දෙමාපියන්ගේ අදහස්</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="testimonial-card" data-aos="fade-up">
+                    <div class="flex mb-4">
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic text-sm">
+                        "අකුරු මංසල මගේ දරුවාට ඉගෙනීමට ඉතාම හොඳ තැනක්. ගුරුවරුන් ඉතාම කැපවීමෙන් වැඩ කරනවා."
+                    </p>
+                    <div class="flex items-center space-x-3 pt-4 border-t">
+                        <img src="/images/parent-1.jpg" class="w-12 h-12 rounded-full object-cover" alt="Parent" onerror="this.src='https://ui-avatars.com/api/?name=PS&background=D4A017&color=0F2C59'">
+                        <div>
+                            <p class="font-black text-brand-navy dark:text-white text-sm">ප්‍රියා ෂර්මා</p>
+                            <p class="text-xs text-gray-500">8 ශ්‍රේණියේ මව</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex mb-4">
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic text-sm">
+                        "අධ්‍යාපනික සම්පත් රැසක් එකම තැනකින්. මගේ දරුවාට ගණිතයට තිබුණු බය නැති වුණා."
+                    </p>
+                    <div class="flex items-center space-x-3 pt-4 border-t">
+                        <img src="/images/parent-2.jpg" class="w-12 h-12 rounded-full object-cover" alt="Parent" onerror="this.src='https://ui-avatars.com/api/?name=RM&background=0F2C59&color=D4A017'">
+                        <div>
+                            <p class="font-black text-brand-navy dark:text-white text-sm">රොහිත් මහතා</p>
+                            <p class="text-xs text-gray-500">10 ශ්‍රේණියේ පියා</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex mb-4">
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                        <i class="fa-solid fa-star text-brand-gold"></i>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic text-sm">
+                        "ගුරුවරුන්ගේ සහාය ඉතාම හොඳයි. මගේ දුවට පාසල් වැඩවලට ලොකු උපකාරයක්."
+                    </p>
+                    <div class="flex items-center space-x-3 pt-4 border-t">
+                        <img src="/images/parent-3.jpg" class="w-12 h-12 rounded-full object-cover" alt="Parent" onerror="this.src='https://ui-avatars.com/api/?name=AP&background=D4A017&color=0F2C59'">
+                        <div>
+                            <p class="font-black text-brand-navy dark:text-white text-sm">අනූෂා පෙරේරා</p>
+                            <p class="text-xs text-gray-500">6 ශ්‍රේණියේ මව</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-brand-navy text-white pt-12 pb-6 border-t border-white/10">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-                <div class="md:col-span-2">
-                    <div class="flex items-center space-x-2 mb-4">
-                        <img src="/images/logo.png" alt="Logo" class="w-10 h-10 rounded-lg" onerror="this.style.display='none'">
+    <!-- CTA -->
+    <section class="py-20 bg-white dark:bg-gray-900">
+        <div class="container-wide">
+            <div class="cta-section" data-aos="zoom-in">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center relative z-10">
+                    <div class="lg:col-span-2">
+                        <span class="text-brand-gold font-black text-xs tracking-[0.2em] uppercase mb-3 inline-block">FOR TEACHERS</span>
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 leading-tight">
+                            ඔබේ සම්පත් තවත් දරුවන්ට ලබා දෙන්න.
+                        </h2>
+                        <p class="text-white/85 leading-relaxed">
+                            පාඩම්, සටහන්, ප්‍රශ්න පත්‍ර සහ වීඩියෝ අකුරු මංසල වෙත එකතු කරන්න.
+                        </p>
+                    </div>
+                    <div class="text-center lg:text-right">
+                        <a href="/login.html" class="btn-primary inline-flex">
+                            <i class="fa-solid fa-user-plus"></i>
+                            <span>ගිණුමක් විවෘත කරන්න</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container-wide">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center p-2">
+                            <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-2xl\'></i>'">
+                        </div>
                         <div>
-                            <h3 class="font-black text-lg">අකුරු මංසල</h3>
-                            <p class="text-xs text-white/60">ඉගෙනුමට නව මඟක්</p>
+                            <h3 class="text-xl font-black">අකුරු මංසල</h3>
+                            <p class="text-xs text-white/70">ඉගෙනුමට නව මඟක්</p>
                         </div>
                     </div>
-                    <p class="text-sm text-white/60 max-w-md">
+                    <p class="text-white/70 text-sm leading-relaxed mb-6">
                         ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
                     </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
                 </div>
+
                 <div>
-                    <h4 class="font-black mb-4">ඉක්මන් සබැඳි</h4>
-                    <ul class="space-y-2 text-sm text-white/60">
-                        <li><a href="/" class="hover:text-brand-gold transition">මුල් පිටුව</a></li>
-                        <li><a href="/resources.html" class="hover:text-brand-gold transition">සම්පත්</a></li>
-                        <li><a href="/papers.html" class="hover:text-brand-gold transition">ප්‍රශ්න පත්‍ර</a></li>
-                        <li><a href="/videos.html" class="hover:text-brand-gold transition">වීඩියෝ</a></li>
+                    <h4 class="footer-title">ඉක්මන් සබැඳි</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#home">මුල් පිටුව</a></li>
+                        <li><a href="#about">අප ගැන</a></li>
+                        <li><a href="#grades">ශ්‍රේණි</a></li>
+                        <li><a href="/resources.html">සම්පත්</a></li>
                     </ul>
                 </div>
+
                 <div>
-                    <h4 class="font-black mb-4">අප අමතන්න</h4>
-                    <ul class="space-y-2 text-sm text-white/60">
-                        <li><i class="fa-solid fa-location-dot mr-2"></i>කොළඹ, ශ්‍රී ලංකාව</li>
-                        <li><i class="fa-solid fa-phone mr-2"></i>+94 11 234 5678</li>
-                        <li><i class="fa-solid fa-envelope mr-2"></i>info@akurumansala.lk</li>
+                    <h4 class="footer-title">විෂය මාලාව</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/resources.html">සිංහල භාෂාව</a></li>
+                        <li><a href="/resources.html">ගණිතය</a></li>
+                        <li><a href="/resources.html">විද්‍යාව</a></li>
+                        <li><a href="/resources.html">ඉංග්‍රීසි</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">අප අමතන්න</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
+                            <span class="text-white/80 text-sm">කොළඹ, ශ්‍රී ලංකාව</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-phone text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">+94 11 234 5678</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-envelope text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">info@akurumansala.lk</span>
+                        </li>
                     </ul>
                 </div>
             </div>
-            <div class="text-center text-sm text-white/40 pt-6 border-t border-white/10">
-                © 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි
+
+            <div class="pt-8 text-center text-xs text-white/60">
+                <p>© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
             </div>
         </div>
     </footer>
+
+    <button id="backToTop" onclick="scrollToTop()" class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-lg bg-brand-gold text-brand-navy shadow-2xl items-center justify-center hidden hover:scale-110 transition-all">
+        <i class="fa-solid fa-arrow-up text-lg"></i>
+    </button>
 
     <script>
         const API_BASE = '/api';
@@ -340,6 +1139,34 @@
         }
 
         // ============================================
+        // MOBILE MENU
+        // ============================================
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        // ============================================
+        // BACK TO TOP
+        // ============================================
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.addEventListener('scroll', () => {
+            const btn = document.getElementById('backToTop');
+            if (btn) {
+                if (window.scrollY > 500) {
+                    btn.classList.remove('hidden');
+                    btn.classList.add('flex');
+                } else {
+                    btn.classList.add('hidden');
+                    btn.classList.remove('flex');
+                }
+            }
+        });
+
+        // ============================================
         // LOAD STATISTICS
         // ============================================
         async function loadStats() {
@@ -347,15 +1174,25 @@
                 const res = await fetch(`${API_BASE}/resources/stats`);
                 const stats = await res.json();
 
-                document.getElementById('statLessons').textContent = stats.total_lessons || 0;
-                document.getElementById('statPapers').textContent = stats.total_papers || 0;
-                document.getElementById('statVideos').textContent = stats.total_videos || 0;
+                const lessons = stats.total_lessons || 0;
+                const papers = stats.total_papers || 0;
+                const videos = stats.total_videos || 0;
+                const articles = stats.total_articles || 0;
 
-                document.getElementById('resLessons').textContent = stats.total_lessons || 0;
-                document.getElementById('resPapers').textContent = stats.total_papers || 0;
-                document.getElementById('resVideos').textContent = stats.total_videos || 0;
-                document.getElementById('resArticles').textContent = stats.total_articles || 0;
+                document.getElementById('infoLessons').textContent = lessons;
+                document.getElementById('infoPapers').textContent = papers;
+                document.getElementById('infoVideos').textContent = videos;
+
+                document.getElementById('statLessons').textContent = lessons;
+                document.getElementById('statPapers').textContent = papers;
+                document.getElementById('statVideos').textContent = videos;
+
+                document.getElementById('resLessons').textContent = lessons;
+                document.getElementById('resPapers').textContent = papers;
+                document.getElementById('resVideos').textContent = videos;
+                document.getElementById('resArticles').textContent = articles;
                 document.getElementById('resQuizzes').textContent = '0';
+                document.getElementById('resNotes').textContent = '0';
             } catch (err) {
                 console.error('Stats load error:', err);
             }
@@ -370,5 +1207,10 @@
         });
     </script>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, offset: 100 });
+    </script>
+    <script src="/js/ai-chat.js"></script>
 </body>
 </html>
