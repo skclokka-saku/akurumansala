@@ -57,7 +57,6 @@ router.post('/', authenticate, authorize('admin', 'teacher'), async (req, res) =
             return res.status(400).json({ error: 'අවශ්‍ය තොරතුරු ලබා දෙන්න' });
         }
 
-        // pdf_file එක object එකක් විදියට එනවා නම්, ඒකේ url එක විතරක් ගමු
         let pdfUrl = null;
         if (pdf_file) {
             pdfUrl = typeof pdf_file === 'object' ? pdf_file.url : pdf_file;
