@@ -85,13 +85,13 @@ router.get('/', async (req, res) => {
 router.get('/stats', async (req, res) => {
     try {
         const stats = {
-            total_lessons: (await dbGet('SELECT COUNT(*) as c FROM lessons WHERE is_published = 1')).c,
-            total_papers: (await dbGet('SELECT COUNT(*) as c FROM papers WHERE is_published = 1')).c,
-            total_videos: (await dbGet('SELECT COUNT(*) as c FROM videos WHERE is_published = 1')).c,
-            total_articles: (await dbGet('SELECT COUNT(*) as c FROM articles WHERE is_published = 1')).c,
-            total_grades: (await dbGet('SELECT COUNT(*) as c FROM grades WHERE is_active = 1')).c,
-            total_subjects: (await dbGet('SELECT COUNT(*) as c FROM subjects WHERE is_active = 1')).c,
-            total_users: (await dbGet('SELECT COUNT(*) as c FROM users')).c,
+            total_lessons: (await dbGet('SELECT COUNT(*) as c FROM lessons WHERE is_published = 1'))?.c || 0,
+            total_papers: (await dbGet('SELECT COUNT(*) as c FROM papers WHERE is_published = 1'))?.c || 0,
+            total_videos: (await dbGet('SELECT COUNT(*) as c FROM videos WHERE is_published = 1'))?.c || 0,
+            total_articles: (await dbGet('SELECT COUNT(*) as c FROM articles WHERE is_published = 1'))?.c || 0,
+            total_grades: (await dbGet('SELECT COUNT(*) as c FROM grades WHERE is_active = 1'))?.c || 0,
+            total_subjects: (await dbGet('SELECT COUNT(*) as c FROM subjects WHERE is_active = 1'))?.c || 0,
+            total_users: (await dbGet('SELECT COUNT(*) as c FROM users'))?.c || 0,
         };
         res.json(stats);
     } catch (error) {
@@ -134,15 +134,13 @@ router.post('/lesson', authenticate, authorize('admin', 'teacher'), async (req, 
         const isPublished = req.user.role === 'admin' ? 1 : 0;
 
         const result = await dbRun(
-            `INSERT INTO lessons (title, title_en, description, content, grade_id, subject_id, lesson_number, difficulty, pdf_file, video_url, thumbnail, created_by, status, is_published, approved_by, approved_at) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO lessons (title, title_en, description, content, grade_id, subject_id, lesson_number, difficulty, pdf_file, video_url, thumbnail, created_by, status, is_published) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 title, title_en || null, description || null, content || null, 
                 grade_id, subject_id, lesson_number || null, difficulty || 'medium', 
                 pdf_file || null, video_url || null, thumbnail || null, 
-                req.user.id, status, isPublished,
-                status === 'approved' ? req.user.id : null,
-                status === 'approved' ? new Date().toISOString() : null
+                req.user.id, status, isPublished
             ]
         );
 
@@ -172,13 +170,11 @@ router.post('/note', authenticate, authorize('admin', 'teacher'), async (req, re
         const isPublished = req.user.role === 'admin' ? 1 : 0;
 
         const result = await dbRun(
-            `INSERT INTO notes (title, description, content, grade_id, subject_id, pdf_file, thumbnail, created_by, status, is_published, approved_by, approved_at) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO notes (title, description, content, grade_id, subject_id, pdf_file, thumbnail, created_by, status, is_published) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 title, description || null, content || null, grade_id, subject_id, 
-                pdf_file || null, thumbnail || null, req.user.id, status, isPublished,
-                status === 'approved' ? req.user.id : null,
-                status === 'approved' ? new Date().toISOString() : null
+                pdf_file || null, thumbnail || null, req.user.id, status, isPublished
             ]
         );
 
@@ -208,15 +204,13 @@ router.post('/paper', authenticate, authorize('admin', 'teacher'), async (req, r
         const isPublished = req.user.role === 'admin' ? 1 : 0;
 
         const result = await dbRun(
-            `INSERT INTO papers (title, description, grade_id, subject_id, paper_type, term, year, pdf_file, answer_pdf, total_marks, duration_minutes, created_by, status, is_published, approved_by, approved_at) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO papers (title, description, grade_id, subject_id, paper_type, term, year, pdf_file, answer_pdf, total_marks, duration_minutes, created_by, status, is_published) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 title, description || null, grade_id, subject_id, 
                 paper_type || 'term', term || null, year || new Date().getFullYear(), 
                 pdf_file || null, answer_pdf || null, total_marks || null, 
-                duration_minutes || null, req.user.id, status, isPublished,
-                status === 'approved' ? req.user.id : null,
-                status === 'approved' ? new Date().toISOString() : null
+                duration_minutes || null, req.user.id, status, isPublished
             ]
         );
 
@@ -259,15 +253,13 @@ router.post('/video', authenticate, authorize('admin', 'teacher'), async (req, r
         const isPublished = req.user.role === 'admin' ? 1 : 0;
 
         const result = await dbRun(
-            `INSERT INTO videos (title, description, grade_id, subject_id, video_url, youtube_id, thumbnail, duration_minutes, created_by, status, is_published, approved_by, approved_at) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO videos (title, description, grade_id, subject_id, video_url, youtube_id, thumbnail, duration_minutes, created_by, status, is_published) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 title, description || null, grade_id, subject_id, 
                 video_url, youtube_id, 
                 thumbnail || (youtube_id ? `https://img.youtube.com/vi/${youtube_id}/maxresdefault.jpg` : null),
-                duration_minutes || null, req.user.id, status, isPublished,
-                status === 'approved' ? req.user.id : null,
-                status === 'approved' ? new Date().toISOString() : null
+                duration_minutes || null, req.user.id, status, isPublished
             ]
         );
 
@@ -297,14 +289,12 @@ router.post('/article', authenticate, authorize('admin', 'teacher'), async (req,
         const isPublished = req.user.role === 'admin' ? 1 : 0;
 
         const result = await dbRun(
-            `INSERT INTO articles (title, description, content, category, tags, thumbnail, author, created_by, status, is_published, approved_by, approved_at) 
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO articles (title, description, content, category, tags, thumbnail, author, created_by, status, is_published) 
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
                 title, description || null, content, 
                 category || 'education', tags || null, thumbnail || null, 
-                author || req.user.name, req.user.id, status, isPublished,
-                status === 'approved' ? req.user.id : null,
-                status === 'approved' ? new Date().toISOString() : null
+                author || req.user.name, req.user.id, status, isPublished
             ]
         );
 

@@ -1,33 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 const { authenticate, authorize } = require('../middleware/auth');
 
-// Ensure uploads directory exists
-const uploadDir = path.join(__dirname, '..', 'uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
+// ============================================
+// UPSTASH BLOB CONFIGURATION
+// ============================================
+const UPSTASH_TOKEN = process.env.UPSTASH_BLOB_TOKEN;
+const UPSTASH_URL = process.env.UPSTASH_BLOB_URL;
+const BUCKET_NAME = 'akuru-uploads';
 
-// Multer storage
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        let subDir = 'misc';
-        if (file.mimetype === 'application/pdf') subDir = 'pdfs';
-        else if (file.mimetype.startsWith('image/')) subDir = 'images';
-        else if (file.mimetype.startsWith('video/')) subDir = 'videos';
-        
-        const fullPath = path.join(uploadDir, subDir);
-        if (!fs.existsSync(fullPath)) fs.mkdirSync(fullPath, { recursive: true });
-        cb(null, fullPath);
-    },
-    filename: (req, file, cb) => {
-        const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
-        cb(null, uniqueName);
-    }
-});
+console.log('📦 Upstash Blob Config:');
+console.log('   Token:', UPSTASH_TOKEN ? 'SET' : 'NOT SET');
+console.log('   URL:', UPSTASH_URL || 'NOT SET');
+
+// Multer memory storage
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
     const allowed = [
@@ -36,55 +24,133 @@ const fileFilter = (req, file, cb) => {
         'video/mp4', 'video/webm'
     ];
     if (allowed.includes(file.mimetype)) cb(null, true);
-    else cb(new Error('අවසර නොලද ගොනු වර්ගයකි'), false);
+    else cb(new Error('අවසර නොලද ගොනු වර්ගයකි. PDF, රූප හෝ වීඩියෝ පමණයි.'), false);
 };
 
 const upload = multer({
     storage,
     fileFilter,
-    limits: { fileSize: 100 * 1024 * 1024 } // 100MB
+    limits: { fileSize: 50 * 1024 * 1024 } // 50MB
 });
 
-// POST /api/upload
-router.post('/', authenticate, authorize('admin', 'teacher'), upload.single('file'), (req, res) => {
-    try {
-        if (!req.file) return res.status(400).json({ error: 'ගොනුවක් උඩුගත කරන්න' });
-        
-        const relativePath = req.file.path.replace(uploadDir, '').replace(/\\/g, '/');
-        const fileUrl = `/uploads${relativePath}`;
-        
-        res.json({
-            message: 'ගොනුව සාර්ථකව උඩුගත කරන ලදී',
-            file: {
-                url: fileUrl,
-                filename: req.file.filename,
-                originalname: req.file.originalname,
-                mimetype: req.file.mimetype,
-                size: req.file.size
-            }
-        });
-    } catch (error) {
-        res.status(500).json({ error: 'උඩුගත කිරීමේ දෝෂයක්' });
+// ============================================
+// HELPER: Upload to Upstash Blob via REST API
+// ============================================
+async function uploadToUpstash(buffer, originalName, mimetype) {
+    if (!UPSTASH_TOKEN || !UPSTASH_URL) {
+        throw new Error('Upstash Blob සේවාව නොමැත. පරිපාලක අමතන්න.');
     }
+    
+    const fileExt = originalName.split('.').pop();
+    const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}.${fileExt}`;
+    const filePath = `uploads/${fileName}`;
+    
+    console.log('⬆️ Uploading to Upstash:', filePath, `(${buffer.length} bytes)`);
+    
+    // Upload using fetch to Upstash Blob REST API
+    const uploadUrl = `${UPSTASH_URL}/blob/${filePath}`;
+    
+    const response = await fetch(uploadUrl, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${UPSTASH_TOKEN}`,
+            'Content-Type': mimetype || 'application/octet-stream',
+            'Content-Length': buffer.length.toString()
+        },
+        body: buffer
+    });
+    
+    if (!response.ok) {
+        const errText = await response.text();
+        console.error('Upstash upload error:', response.status, errText);
+        throw new Error(`Upstash උඩුගත දෝෂය: ${response.status}`);
+    }
+    
+    const publicUrl = `${UPSTASH_URL}/blob/${filePath}`;
+    console.log('✅ Uploaded:', publicUrl);
+    
+    return {
+        url: publicUrl,
+        filename: fileName,
+        originalname: originalName,
+        mimetype: mimetype,
+        size: buffer.length
+    };
+}
+
+// ============================================
+// POST /api/upload - Single file
+// ============================================
+router.post('/', authenticate, authorize('admin', 'teacher'), (req, res) => {
+    upload.single('file')(req, res, async (err) => {
+        if (err) {
+            console.error('Multer error:', err);
+            return res.status(400).json({ error: err.message || 'උඩුගත කිරීමේ දෝෂයක්' });
+        }
+        
+        if (!req.file) {
+            return res.status(400).json({ error: 'ගොනුවක් උඩුගත කරන්න' });
+        }
+        
+        try {
+            const fileInfo = await uploadToUpstash(
+                req.file.buffer,
+                req.file.originalname,
+                req.file.mimetype
+            );
+            
+            res.json({
+                message: 'ගොනුව සාර්ථකව උඩුගත කරන ලදී',
+                file: fileInfo
+            });
+        } catch (error) {
+            console.error('Upload error:', error);
+            res.status(500).json({ error: 'උඩුගත කිරීමේ දෝෂයක්: ' + error.message });
+        }
+    });
 });
 
+// ============================================
 // POST /api/upload/multiple
-router.post('/multiple', authenticate, authorize('admin', 'teacher'), upload.array('files', 10), (req, res) => {
-    try {
-        if (!req.files || req.files.length === 0) return res.status(400).json({ error: 'ගොනු කිසිවක් නැත' });
+// ============================================
+router.post('/multiple', authenticate, authorize('admin', 'teacher'), (req, res) => {
+    upload.array('files', 10)(req, res, async (err) => {
+        if (err) {
+            return res.status(400).json({ error: err.message || 'උඩුගත කිරීමේ දෝෂයක්' });
+        }
         
-        const files = req.files.map(f => ({
-            url: `/uploads${f.path.replace(uploadDir, '').replace(/\\/g, '/')}`,
-            filename: f.filename,
-            originalname: f.originalname,
-            mimetype: f.mimetype,
-            size: f.size
-        }));
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).json({ error: 'ගොනු කිසිවක් නැත' });
+        }
         
-        res.json({ message: 'ගොනු සාර්ථකව උඩුගත කරන ලදී', files });
-    } catch (error) {
-        res.status(500).json({ error: 'උඩුගත කිරීමේ දෝෂයක්' });
-    }
+        try {
+            const files = [];
+            for (const file of req.files) {
+                const fileInfo = await uploadToUpstash(
+                    file.buffer,
+                    file.originalname,
+                    file.mimetype
+                );
+                files.push(fileInfo);
+            }
+            
+            res.json({ message: 'ගොනු සාර්ථකව උඩුගත කරන ලදී', files });
+        } catch (error) {
+            console.error('Upload error:', error);
+            res.status(500).json({ error: 'උඩුගත කිරීමේ දෝෂයක්' });
+        }
+    });
+});
+
+// ============================================
+// GET /api/upload/status
+// ============================================
+router.get('/status', (req, res) => {
+    res.json({
+        status: (UPSTASH_TOKEN && UPSTASH_URL) ? 'ready' : 'not_configured',
+        url: UPSTASH_URL || null,
+        token: UPSTASH_TOKEN ? 'SET' : 'NOT SET'
+    });
 });
 
 module.exports = router;

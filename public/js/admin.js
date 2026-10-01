@@ -633,39 +633,44 @@ function openForm(type) {
         `;
     } else if (type === 'paper') {
         formFields = `
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
-                    <input id="f_title" required class="form-input" placeholder="ප්‍රශ්න පත්‍රයේ නම">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold mb-2">ශ්‍රේණිය *</label>
-                        <select id="f_grade" required class="form-input">${gradeOptions}</select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2">විෂය *</label>
-                        <select id="f_subject" required class="form-input">${subjectOptions}</select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold mb-2">වර්ගය</label>
-                        <select id="f_type" class="form-input">
-                            <option value="term">වාර පරීක්ෂණය</option>
-                            <option value="school">පාසල් පරීක්ෂණය</option>
-                            <option value="practice">පුහුණු</option>
-                            <option value="exam">විභාගය</option>
-                            <option value="model">ආදර්ශ</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2">වර්ෂය</label>
-                        <input type="number" id="f_year" value="${new Date().getFullYear()}" class="form-input">
-                    </div>
-                </div>
+    <div class="space-y-4">
+        <div>
+            <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
+            <input id="f_title" required class="form-input" placeholder="ප්‍රශ්න පත්‍රයේ නම">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-bold mb-2">ශ්‍රේණිය *</label>
+                <select id="f_grade" required class="form-input">${gradeOptions}</select>
             </div>
-        `;
+            <div>
+                <label class="block text-sm font-bold mb-2">විෂය *</label>
+                <select id="f_subject" required class="form-input">${subjectOptions}</select>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-bold mb-2">වර්ගය</label>
+                <select id="f_type" class="form-input">
+                    <option value="term">වාර පරීක්ෂණය</option>
+                    <option value="school">පාසල් පරීක්ෂණය</option>
+                    <option value="practice">පුහුණු</option>
+                    <option value="exam">විභාගය</option>
+                    <option value="model">ආදර්ශ</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-2">වර්ෂය</label>
+                <input type="number" id="f_year" value="${new Date().getFullYear()}" class="form-input">
+            </div>
+        </div>
+        <div>
+            <label class="block text-sm font-bold mb-2">📄 PDF ගොනුව</label>
+            <input type="file" id="f_pdf" accept=".pdf" class="form-input">
+            <p class="text-xs text-gray-500 mt-1">උපරිම 50MB. PDF පමණයි.</p>
+        </div>
+    </div>
+`;
     } else if (type === 'video') {
         formFields = `
             <div class="space-y-4">

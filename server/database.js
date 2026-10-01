@@ -17,6 +17,7 @@ console.log('✅ SQLite database connected:', DB_PATH);
 
 function initializeDatabase() {
     try {
+        // Users
         db.exec(`
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,6 +33,7 @@ function initializeDatabase() {
             );
         `);
 
+        // Grades
         db.exec(`
             CREATE TABLE IF NOT EXISTS grades (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,6 +48,7 @@ function initializeDatabase() {
             );
         `);
 
+        // Subjects
         db.exec(`
             CREATE TABLE IF NOT EXISTS subjects (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,6 +62,7 @@ function initializeDatabase() {
             );
         `);
 
+        // Grade-Subjects
         db.exec(`
             CREATE TABLE IF NOT EXISTS grade_subjects (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,35 +74,37 @@ function initializeDatabase() {
             );
         `);
 
+        // Lessons
         db.exec(`
             CREATE TABLE IF NOT EXISTS lessons (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT NOT NULL,
-    title_en TEXT,
-    description TEXT,
-    content TEXT,
-    grade_id INTEGER NOT NULL,
-    subject_id INTEGER NOT NULL,
-    lesson_number INTEGER,
-    duration INTEGER,
-    difficulty TEXT DEFAULT 'medium',
-    pdf_file TEXT,
-    video_url TEXT,
-    thumbnail TEXT,
-    views INTEGER DEFAULT 0,
-    is_published INTEGER DEFAULT 1,
-    status TEXT DEFAULT 'approved',
-    rejection_reason TEXT,
-    approved_by INTEGER,
-    approved_at DATETIME,
-    created_by INTEGER,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
-    FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
-);
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                title_en TEXT,
+                description TEXT,
+                content TEXT,
+                grade_id INTEGER NOT NULL,
+                subject_id INTEGER NOT NULL,
+                lesson_number INTEGER,
+                duration INTEGER,
+                difficulty TEXT DEFAULT 'medium',
+                pdf_file TEXT,
+                video_url TEXT,
+                thumbnail TEXT,
+                views INTEGER DEFAULT 0,
+                is_published INTEGER DEFAULT 1,
+                status TEXT DEFAULT 'approved',
+                rejection_reason TEXT,
+                approved_by INTEGER,
+                approved_at DATETIME,
+                created_by INTEGER,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
+                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+            );
         `);
 
+        // Notes
         db.exec(`
             CREATE TABLE IF NOT EXISTS notes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -111,6 +117,10 @@ function initializeDatabase() {
                 thumbnail TEXT,
                 views INTEGER DEFAULT 0,
                 is_published INTEGER DEFAULT 1,
+                status TEXT DEFAULT 'approved',
+                rejection_reason TEXT,
+                approved_by INTEGER,
+                approved_at DATETIME,
                 created_by INTEGER,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -119,6 +129,7 @@ function initializeDatabase() {
             );
         `);
 
+        // Papers
         db.exec(`
             CREATE TABLE IF NOT EXISTS papers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -137,6 +148,10 @@ function initializeDatabase() {
                 views INTEGER DEFAULT 0,
                 downloads INTEGER DEFAULT 0,
                 is_published INTEGER DEFAULT 1,
+                status TEXT DEFAULT 'approved',
+                rejection_reason TEXT,
+                approved_by INTEGER,
+                approved_at DATETIME,
                 created_by INTEGER,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -145,6 +160,7 @@ function initializeDatabase() {
             );
         `);
 
+        // Videos
         db.exec(`
             CREATE TABLE IF NOT EXISTS videos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -158,6 +174,10 @@ function initializeDatabase() {
                 duration_minutes INTEGER,
                 views INTEGER DEFAULT 0,
                 is_published INTEGER DEFAULT 1,
+                status TEXT DEFAULT 'approved',
+                rejection_reason TEXT,
+                approved_by INTEGER,
+                approved_at DATETIME,
                 created_by INTEGER,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -166,6 +186,7 @@ function initializeDatabase() {
             );
         `);
 
+        // Articles
         db.exec(`
             CREATE TABLE IF NOT EXISTS articles (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -178,12 +199,68 @@ function initializeDatabase() {
                 author TEXT,
                 views INTEGER DEFAULT 0,
                 is_published INTEGER DEFAULT 1,
+                status TEXT DEFAULT 'approved',
+                rejection_reason TEXT,
+                approved_by INTEGER,
+                approved_at DATETIME,
                 created_by INTEGER,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
             );
         `);
 
+        // Quizzes
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS quizzes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                title TEXT NOT NULL,
+                description TEXT,
+                grade_id INTEGER NOT NULL,
+                subject_id INTEGER NOT NULL,
+                duration_minutes INTEGER DEFAULT 30,
+                total_questions INTEGER DEFAULT 0,
+                is_published INTEGER DEFAULT 1,
+                created_by INTEGER,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
+                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+            );
+        `);
+
+        // Quiz Questions
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS quiz_questions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                quiz_id INTEGER NOT NULL,
+                question TEXT NOT NULL,
+                option_a TEXT NOT NULL,
+                option_b TEXT NOT NULL,
+                option_c TEXT NOT NULL,
+                option_d TEXT NOT NULL,
+                correct_answer TEXT NOT NULL,
+                explanation TEXT,
+                marks INTEGER DEFAULT 1,
+                question_order INTEGER DEFAULT 0,
+                FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+            );
+        `);
+
+        // Quiz Attempts
+        db.exec(`
+            CREATE TABLE IF NOT EXISTS quiz_attempts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                quiz_id INTEGER NOT NULL,
+                user_name TEXT,
+                score INTEGER,
+                total_marks INTEGER,
+                percentage REAL,
+                answers TEXT,
+                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+            );
+        `);
+
+        // Settings
         db.exec(`
             CREATE TABLE IF NOT EXISTS settings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -193,6 +270,7 @@ function initializeDatabase() {
             );
         `);
 
+        // Activity Log
         db.exec(`
             CREATE TABLE IF NOT EXISTS activity_log (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
