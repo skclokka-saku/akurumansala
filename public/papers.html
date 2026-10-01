@@ -221,9 +221,10 @@
                                 </p>
                             </div>
                         <div>
-    ${p.title}
-    <button onclick="openPdf('${p.pdf_file}')" class="text-brand-gold font-bold text-sm"> බලන්න </button>
-</div>
+                            <button onclick='openPdf("${p.pdf_file}")' class="text-brand-gold font-bold text-sm">
+                                බලන්න <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
                 `).join('');
             } catch (err) {
                 container.innerHTML = `<div class="text-center py-12 text-red-500">දෝෂයක්: ${err.message}</div>`;
