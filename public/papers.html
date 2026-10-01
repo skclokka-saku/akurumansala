@@ -230,6 +230,39 @@
                 container.innerHTML = `<div class="text-center py-12 text-red-500">දෝෂයක්: ${err.message}</div>`;
             }
         }
+        // ============================================
+// PDF OPEN FUNCTION (Base64 සඳහා)
+// ============================================
+function openPdf(pdfData) {
+    try {
+        if (!pdfData) {
+            alert('PDF එක නොමැත');
+            return;
+        }
+        
+        // Base64 data URL එකක් නම්
+        if (pdfData.startsWith('data:')) {
+            // Base64 → Blob → URL
+            const parts = pdfData.split(',');
+            const mime = parts[0].match(/:(.*?);/)[1];
+            const b64 = parts[1];
+            const binary = atob(b64);
+            const array = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                array[i] = binary.charCodeAt(i);
+            }
+            const blob = new Blob([array], { type: mime });
+            const url = URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        } else {
+            // සාමාන්‍ය URL එකක් නම්
+            window.open(pdfData, '_blank');
+        }
+    } catch (e) {
+        console.error('PDF open error:', e);
+        alert('PDF එක open කිරීමේ දෝෂයක්');
+    }
+}
     </script>
 </body>
 </html>
