@@ -33,17 +33,14 @@ const upload = multer({
 // ==========================================
 async function uploadToUpstash(buffer, originalName, mimetype) {
     try {
-        // ෆයිල් එකට අද්විතීය නමක් හදමු
         const uniqueName = `${Date.now()}-${originalName.replace(/\s+/g, '-')}`;
         
-        // Upstash Blob එකට ෆයිල් එක upload කරමු
         const blob = await put(uniqueName, buffer, {
             access: 'public',
             token: UPSTASH_TOKEN,
             contentType: mimetype,
         });
 
-        // සාර්ථක වුණා නම් ෆයිල් එකේ URL එක එවමු
         return {
             url: blob.url,
             name: uniqueName,
