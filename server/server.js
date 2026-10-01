@@ -21,8 +21,34 @@ const approvalRoutes = require('./routes/approval');
 const settingsRoutes = require('./routes/settings');
 const quizRoutes = require('./routes/quizzes');
 const aiRoutes = require('./routes/ai');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// ============================================
+// FIND PUBLIC FOLDER (Smart Detection)
+// ============================================
+// Try multiple possible locations for the public folder
+const publicPaths = [
+    path.join(__dirname, '..', 'public'),      // Local: server/../public
+    path.join(__dirname, 'public'),            // Railway: server/public (if moved)
+    path.join(process.cwd(), 'public'),        // Current working directory
+    path.join(process.cwd(), '..', 'public'),  // Parent of cwd
+];
+
+let publicPath = null;
+for (const p of publicPaths) {
+    if (fs.existsSync(p) && fs.existsSync(path.join(p, 'index.html'))) {
+        publicPath = p;
+        console.log('✅ Public folder found:', p);
+        break;
+    }
+}
+
+if (!publicPath) {
+    console.error('❌ Public folder not found in any of these locations:');
+    publicPaths.forEach(p => console.error('   -', p));
+}
 
 // ============================================
 // MIDDLEWARE
@@ -46,47 +72,43 @@ app.use('/api/', limiter);
 // ============================================
 // AUTO-INJECT AI-CHAT SCRIPT INTO HTML FILES
 // ============================================
-app.use((req, res, next) => {
-    // Only for GET requests
-    if (req.method !== 'GET') return next();
-    
-    // Skip API requests
-    if (req.path.startsWith('/api/')) return next();
-    
-    const publicPath = path.join(__dirname, '..', 'public');
-    const requestedPath = req.path === '/' ? '/index.html' : req.path;
-    
-    // Only for HTML files
-    if (!requestedPath.endsWith('.html')) return next();
-    
-    const filePath = path.join(publicPath, requestedPath);
-    
-    // Check if file exists
-    if (!fs.existsSync(filePath)) return next();
-    
-    try {
-        let html = fs.readFileSync(filePath, 'utf8');
+if (publicPath) {
+    app.use((req, res, next) => {
+        if (req.method !== 'GET') return next();
+        if (req.path.startsWith('/api/')) return next();
         
-        // Check if ai-chat.js already included
-        if (!html.includes('ai-chat.js')) {
-            html = html.replace(
-                '</body>',
-                '    <script src="/js/ai-chat.js"></script>\n</body>'
-            );
+        const requestedPath = req.path === '/' ? '/index.html' : req.path;
+        if (!requestedPath.endsWith('.html')) return next();
+        
+        const filePath = path.join(publicPath, requestedPath);
+        if (!fs.existsSync(filePath)) return next();
+        
+        try {
+            let html = fs.readFileSync(filePath, 'utf8');
+            
+            if (!html.includes('ai-chat.js')) {
+                html = html.replace(
+                    '</body>',
+                    '    <script src="/js/ai-chat.js"></script>\n</body>'
+                );
+            }
+            
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            res.send(html);
+        } catch (err) {
+            console.error('Auto-inject error:', err);
+            next();
         }
-        
-        res.setHeader('Content-Type', 'text/html; charset=utf-8');
-        res.send(html);
-    } catch (err) {
-        console.error('Auto-inject error:', err);
-        next();
-    }
-});
+    });
+}
 
 // ============================================
 // STATIC FILES
 // ============================================
-app.use(express.static(path.join(__dirname, '..', 'public')));
+if (publicPath) {
+    app.use(express.static(publicPath));
+    console.log('✅ Static files served from:', publicPath);
+}
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ============================================
@@ -104,14 +126,45 @@ app.use('/api/approval', approvalRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/ai', aiRoutes);
+
 // Health check
 app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', timestamp: new Date().toISOString() });
+    res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        publicPath: publicPath || 'NOT FOUND',
+        cwd: process.cwd(),
+        dirname: __dirname
+    });
 });
 
-// 404 for API
-app.use('/api/*', (req, res) => {
-    res.status(404).json({ error: 'API endpoint not found' });
+// Catch-all for SPA (serve index.html for non-API routes)
+app.get('*', (req, res) => {
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ error: 'API endpoint not found' });
+    }
+    
+    if (publicPath) {
+        const indexPath = path.join(publicPath, 'index.html');
+        if (fs.existsSync(indexPath)) {
+            return res.sendFile(indexPath);
+        }
+    }
+    
+    res.status(404).send(`
+        <html>
+            <head><title>404</title></head>
+            <body style="font-family: sans-serif; padding: 2rem; text-align: center;">
+                <h1>404 - Not Found</h1>
+                <p>Public folder not found. Paths tried:</p>
+                <ul style="text-align: left; display: inline-block;">
+                    ${publicPaths.map(p => `<li><code>${p}</code></li>`).join('')}
+                </ul>
+                <p>CWD: <code>${process.cwd()}</code></p>
+                <p>__dirname: <code>${__dirname}</code></p>
+            </body>
+        </html>
+    `);
 });
 
 // ============================================
@@ -135,20 +188,11 @@ async function startServer() {
         app.listen(PORT, () => {
             console.log('');
             console.log('╔══════════════════════════════════════════════════╗');
-            console.log('║                                                  ║');
             console.log('║   🎓 අකුරු මංසල — Akuru Mansala                 ║');
             console.log('║   📚 ඉගෙනුමට නව මඟක්                            ║');
-            console.log('║                                                  ║');
             console.log('╠══════════════════════════════════════════════════╣');
             console.log(`║   🌐 Server:  http://localhost:${PORT}              ║`);
-            console.log(`║   👤 Admin:   http://localhost:${PORT}/admin.html   ║`);
-            console.log(`║   🔐 Login:   http://localhost:${PORT}/login.html   ║`);
-            console.log('║                                                  ║');
-            console.log('║   📧 Admin:   admin@akurumansala.lk              ║');
-            console.log('║   🔑 Password: admin123                          ║');
-            console.log('║                                                  ║');
-            console.log('║   🤖 e-Akuru-AI: සක්‍රීයයි                          ║');
-            console.log('║                                                  ║');
+            console.log(`║   📁 Public:  ${publicPath ? 'FOUND' : 'NOT FOUND'}                          ║`);
             console.log('╚══════════════════════════════════════════════════╝');
             console.log('');
         });
