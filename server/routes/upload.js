@@ -18,7 +18,7 @@ const fileFilter = (req, file, cb) => {
         'video/mp4', 'video/webm'
     ];
     if (allowed.includes(file.mimetype)) cb(null, true);
-    else cb(new Error('අවසර නැති ෆයිල් වර්ගයකි. PDF, ශ්‍රේණි හෝ වීඩියෝ උඩුගත කරන්න.'), false);
+    else cb(new Error('අවසර නැති ෆයිල් වර්ගයකි. PDF, ඡායාරූප හෝ වීඩියෝ උඩුගත කරන්න.'), false);
 };
 
 const upload = multer({
@@ -28,13 +28,12 @@ const upload = multer({
 });
 
 // ==========================================
-// UPLOAD TO UPSTASH FUNCTION (Using fetch, no @vercel/blob needed)
+// UPLOAD TO UPSTASH FUNCTION (Using fetch)
 // ==========================================
 async function uploadToUpstash(buffer, originalName, mimetype) {
     try {
         const uniqueName = `${Date.now()}-${originalName.replace(/\s+/g, '-')}`;
         
-        // Upstash Blob API එකට fetch හරහා upload කරමු
         const response = await fetch(`${UPSTASH_URL}/${BUCKET_NAME}/${uniqueName}`, {
             method: 'PUT',
             headers: {
