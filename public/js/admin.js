@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadSubjects();
     showTab('dashboard');
     
-    // Check pending count
     setTimeout(checkPendingCount, 1000);
     
     console.log('✅ Admin Panel ready');
@@ -767,6 +766,46 @@ async function submitForm(type) {
         if (type === 'paper') {
             body.paper_type = document.getElementById('f_type').value;
             body.year = parseInt(document.getElementById('f_year').value);
+
+            // ============================================
+            // PDF එක Upstash එකට upload කරන්න
+            // ============================================
+            const pdfInput = document.getElementById('f_pdf');
+            if (pdfInput && pdfInput.files.length > 0) {
+                const file = pdfInput.files[0];
+                
+                if (file.size > 50 * 1024 * 1024) {
+                    showToast('ෆයිල් එක 50MB ට වඩා විශාලයි', 'error');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                showToast('PDF එක upload වෙමින්...', 'info');
+                
+                const uploadRes = await fetch(`${API_BASE}/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${state.token}`
+                    },
+                    body: formData
+                });
+                
+                if (!uploadRes.ok) {
+                    const err = await uploadRes.json().catch(() => ({}));
+                    throw new Error('PDF upload failed: ' + (err.error || uploadRes.statusText));
+                }
+                
+                const uploadData = await uploadRes.json();
+                console.log('Upload response:', uploadData);
+                
+                if (uploadData.file && uploadData.file.url) {
+                    body.pdf_file = uploadData.file.url;
+                } else {
+                    throw new Error('PDF upload response invalid');
+                }
+            }
         }
         
         if (type === 'video') {
@@ -800,6 +839,7 @@ async function submitForm(type) {
         showTab(tabMap[type]);
         
     } catch (err) {
+        console.error('Submit error:', err);
         showToast('දෝෂයක්: ' + err.message, 'error');
     }
 }
@@ -1119,7 +1159,7 @@ function openQuizForm() {
     `;
     
     modal.classList.remove('hidden');
-    addQuestion(); // Add first question by default
+    addQuestion();
     
     document.getElementById('quizForm').addEventListener('submit', submitQuiz);
 }
