@@ -26,14 +26,18 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // ============================================
+// TRUST PROXY (Railway)
+// ============================================
+app.set('trust proxy', 1);
+
+// ============================================
 // FIND PUBLIC FOLDER (Smart Detection)
 // ============================================
-// Try multiple possible locations for the public folder
 const publicPaths = [
-    path.join(__dirname, '..', 'public'),      // Local: server/../public
-    path.join(__dirname, 'public'),            // Railway: server/public (if moved)
-    path.join(process.cwd(), 'public'),        // Current working directory
-    path.join(process.cwd(), '..', 'public'),  // Parent of cwd
+    path.join(__dirname, '..', 'public'),
+    path.join(__dirname, 'public'),
+    path.join(process.cwd(), 'public'),
+    path.join(process.cwd(), '..', 'public'),
 ];
 
 let publicPath = null;
@@ -68,39 +72,6 @@ const limiter = rateLimit({
     message: { error: 'ඉතා බොහෝ ඉල්ලීම්. කරුණාකර නැවත උත්සාහ කරන්න.' }
 });
 app.use('/api/', limiter);
-
-// ============================================
-// AUTO-INJECT AI-CHAT SCRIPT INTO HTML FILES
-// ============================================
-if (publicPath) {
-    app.use((req, res, next) => {
-        if (req.method !== 'GET') return next();
-        if (req.path.startsWith('/api/')) return next();
-        
-        const requestedPath = req.path === '/' ? '/index.html' : req.path;
-        if (!requestedPath.endsWith('.html')) return next();
-        
-        const filePath = path.join(publicPath, requestedPath);
-        if (!fs.existsSync(filePath)) return next();
-        
-        try {
-            let html = fs.readFileSync(filePath, 'utf8');
-            
-            if (!html.includes('ai-chat.js')) {
-                html = html.replace(
-                    '</body>',
-                    '    <script src="/js/ai-chat.js"></script>\n</body>'
-                );
-            }
-            
-            res.setHeader('Content-Type', 'text/html; charset=utf-8');
-            res.send(html);
-        } catch (err) {
-            console.error('Auto-inject error:', err);
-            next();
-        }
-    });
-}
 
 // ============================================
 // STATIC FILES
@@ -138,7 +109,9 @@ app.get('/api/health', (req, res) => {
     });
 });
 
-// Catch-all for SPA (serve index.html for non-API routes)
+// ============================================
+// CATCH-ALL for SPA (serve index.html for non-API routes)
+// ============================================
 app.get('*', (req, res) => {
     if (req.path.startsWith('/api/')) {
         return res.status(404).json({ error: 'API endpoint not found' });
@@ -156,12 +129,7 @@ app.get('*', (req, res) => {
             <head><title>404</title></head>
             <body style="font-family: sans-serif; padding: 2rem; text-align: center;">
                 <h1>404 - Not Found</h1>
-                <p>Public folder not found. Paths tried:</p>
-                <ul style="text-align: left; display: inline-block;">
-                    ${publicPaths.map(p => `<li><code>${p}</code></li>`).join('')}
-                </ul>
-                <p>CWD: <code>${process.cwd()}</code></p>
-                <p>__dirname: <code>${__dirname}</code></p>
+                <p>Public folder not found.</p>
             </body>
         </html>
     `);
