@@ -133,18 +133,32 @@ async function api(endpoint, options = {}) {
 // ============================================
 async function loadGrades() {
     try {
-        state.grades = await api('/grades');
+        const res = await fetch(`${API_BASE}/grades`);
+        if (!res.ok) throw new Error('Grades fetch failed');
+        const grades = await res.json();
+        
+        // Handle both array and object response
+        state.grades = Array.isArray(grades) ? grades : (grades.grades || []);
+        
+        console.log('✅ Grades loaded:', state.grades.length);
     } catch (err) {
-        console.error('Failed to load grades:', err);
+        console.error('❌ Failed to load grades:', err);
         state.grades = [];
     }
 }
 
 async function loadSubjects() {
     try {
-        state.subjects = await api('/subjects');
+        const res = await fetch(`${API_BASE}/subjects`);
+        if (!res.ok) throw new Error('Subjects fetch failed');
+        const subjects = await res.json();
+        
+        // Handle both array and object response
+        state.subjects = Array.isArray(subjects) ? subjects : (subjects.subjects || []);
+        
+        console.log('✅ Subjects loaded:', state.subjects.length);
     } catch (err) {
-        console.error('Failed to load subjects:', err);
+        console.error('❌ Failed to load subjects:', err);
         state.subjects = [];
     }
 }
