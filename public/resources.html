@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>සම්පත් | අකුරු මංසල</title>
+    <title>පාඩම් සම්පත් | අකුරු මංසල</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,169 +28,320 @@
         }
     </script>
     <style>
-        body { font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; background: #F8F9FC; }
-        body.dark { background: #0a0f1e; color: #e2e8f0; }
+        body { 
+            font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; 
+            background: #F8F9FC;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.04) 0%, transparent 50%);
+        }
+        body.dark { 
+            background: #0a0f1e; 
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.06) 0%, transparent 50%);
+        }
 
-        .main-nav { background: white; box-shadow: 0 2px 20px rgba(15, 44, 89, 0.08); }
-        body.dark .main-nav { background: #1a1a2e; }
+        .container-wide {
+            width: 100%;
+            max-width: 1600px;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+            margin: 0 auto;
+        }
+        @media (min-width: 640px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
+        @media (min-width: 1024px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
+
+        .main-nav { 
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
+            border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+        }
+        body.dark .main-nav { background: rgba(26, 26, 46, 0.98); }
 
         .logo-wrap {
-            width: 65px; height: 65px;
+            width: 60px;
+            height: 60px;
             background: linear-gradient(135deg, #ffffff, #f8f9fc);
-            border-radius: 1.1rem;
-            box-shadow: 0 4px 15px rgba(15, 44, 89, 0.15);
+            border-radius: 1rem;
+            box-shadow: 0 6px 20px rgba(15, 44, 89, 0.15);
             border: 2px solid rgba(212, 160, 23, 0.3);
-            display: flex; align-items: center; justify-content: center;
-            padding: 0.4rem;
-            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.3rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .logo-wrap:hover { transform: scale(1.05); }
+        .logo-wrap:hover { transform: scale(1.08) rotate(-3deg); }
         .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
 
         .nav-link {
-            position: relative; font-weight: 700; color: #0F2C59;
-            font-size: 0.8125rem; letter-spacing: 0.5px;
-            text-transform: uppercase; transition: color 0.3s;
-            padding: 0.6rem 0.9rem; text-decoration: none;
-            display: inline-flex; align-items: center; gap: 0.4rem;
-            border-radius: 0.5rem;
+            position: relative;
+            font-weight: 700;
+            color: #0F2C59;
+            font-size: 0.875rem;
+            letter-spacing: 0.3px;
+            transition: all 0.3s;
+            padding: 0.6rem 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border-radius: 0.65rem;
         }
         body.dark .nav-link { color: #cbd5e1; }
-        .nav-link i { font-size: 0.7rem; color: #D4A017; }
-        .nav-link::after {
-            content: ''; position: absolute; bottom: 0; left: 50%;
-            width: 0; height: 3px; background: #D4A017;
-            border-radius: 3px; transition: all 0.3s ease;
-            transform: translateX(-50%);
+        .nav-link i { font-size: 0.8rem; color: #D4A017; }
+        .nav-link:hover { 
+            color: #D4A017; 
+            background: rgba(212, 160, 23, 0.1);
+            transform: translateY(-2px);
         }
-        .nav-link:hover, .nav-link.active { color: #D4A017; background: rgba(212, 160, 23, 0.08); }
-        .nav-link:hover::after, .nav-link.active::after { width: 50%; }
+        .nav-link.active { 
+            color: #D4A017; 
+            background: rgba(212, 160, 23, 0.12);
+        }
+
+        .theme-toggle {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #D4A017, #E8B923);
+            color: #0F2C59;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
+            font-size: 1.05rem;
+        }
+        .theme-toggle:hover { transform: rotate(180deg) scale(1.15); }
 
         .btn-primary {
             background: linear-gradient(135deg, #D4A017, #E8B923);
-            color: #0F2C59; padding: 0.75rem 1.75rem;
-            border-radius: 0.75rem; font-weight: 800;
-            text-transform: uppercase; font-size: 0.75rem;
-            letter-spacing: 1.5px; transition: all 0.4s;
-            display: inline-flex; align-items: center; gap: 0.75rem;
-            box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
-            cursor: pointer; border: none; text-decoration: none;
+            color: #0F2C59;
+            padding: 0.8rem 1.75rem;
+            border-radius: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1.2px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4), inset 0 -3px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
         }
-        .btn-primary:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 12px 30px rgba(212, 160, 23, 0.6); }
+        .btn-primary:hover { 
+            transform: translateY(-4px) scale(1.04); 
+            box-shadow: 0 15px 35px rgba(212, 160, 23, 0.6);
+        }
 
-        .theme-toggle {
-            width: 44px; height: 44px; border-radius: 50%;
-            background: rgba(212, 160, 23, 0.12); color: #D4A017;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.3s; border: 2px solid #D4A017;
+        /* LESSON CARDS - 3D */
+        .lesson-card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            cursor: pointer;
+            border-top: 5px solid transparent;
+            border-left: 1px solid rgba(212, 160, 23, 0.1);
+            border-right: 1px solid rgba(212, 160, 23, 0.1);
+            border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+            position: relative;
         }
-        .theme-toggle:hover { background: #D4A017; color: #0F2C59; transform: rotate(180deg) scale(1.1); }
+        body.dark .lesson-card { background: #1a1a2e; }
+        .lesson-card:hover { 
+            transform: translateY(-12px) scale(1.02); 
+            box-shadow: 0 30px 60px rgba(15, 44, 89, 0.25);
+            border-top-color: #D4A017;
+        }
+        .lesson-card:active { transform: translateY(-6px) scale(1.01); }
+
+        .lesson-icon-wrap {
+            height: 160px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .lesson-icon-wrap::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+            border-radius: 50%;
+        }
+        .lesson-icon-wrap i { 
+            font-size: 4rem; 
+            color: white; 
+            position: relative;
+            z-index: 1;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .lesson-card:hover .lesson-icon-wrap i { transform: scale(1.15) rotate(-10deg); }
+
+        .lesson-grade-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255,255,255,0.95);
+            color: #0F2C59;
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 2;
+        }
+
+        .lesson-subject-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #D4A017, #E8B923);
+            color: #0F2C59;
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(212, 160, 23, 0.5);
+            z-index: 2;
+        }
 
         .filter-input {
-            border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
-            padding: 0.875rem 1rem;
-            font-size: 0.875rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.9rem;
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
             transition: all 0.3s;
             width: 100%;
             font-family: inherit;
             background: white;
         }
         .filter-input:focus {
-            outline: none; border-color: #D4A017;
-            box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.1);
+            outline: none;
+            border-color: #D4A017;
+            box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15);
         }
         body.dark .filter-input { background: #1e293b; color: #e2e8f0; border-color: #334155; }
 
-        .lesson-card {
-            background: white;
-            border-radius: 1.25rem;
-            overflow: hidden;
-            box-shadow: 0 6px 25px rgba(15, 44, 89, 0.08);
-            transition: all 0.5s;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            cursor: pointer;
-            border-top: 4px solid transparent;
-        }
-        body.dark .lesson-card { background: #1a1a2e; }
-        .lesson-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(15, 44, 89, 0.2); border-top-color: #D4A017; }
-
-        .lesson-icon-wrap {
-            height: 140px;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            display: flex;
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            display: none;
             align-items: center;
             justify-content: center;
-            position: relative;
-        }
-        .lesson-icon-wrap i { font-size: 3.5rem; color: white; }
-        .lesson-grade-badge {
-            position: absolute; top: 1rem; left: 1rem;
-            background: rgba(255,255,255,0.95);
-            color: #0F2C59;
-            padding: 0.375rem 0.875rem;
-            border-radius: 999px;
-            font-weight: 800; font-size: 0.6875rem;
-        }
-
-        .modal-overlay {
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.85);
-            display: none; align-items: center; justify-content: center;
-            z-index: 100; padding: 1rem; overflow-y: auto;
+            z-index: 100;
+            padding: 1rem;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
         }
         .modal-overlay.active { display: flex; }
         .modal-content {
-            background: white; border-radius: 1rem;
-            max-width: 800px; width: 100%;
-            max-height: 90vh; overflow-y: auto;
+            background: white;
+            border-radius: 1.5rem;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
             position: relative;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
         }
         body.dark .modal-content { background: #1e293b; }
 
-        .footer { background: linear-gradient(180deg, #0F2C59, #0a1a3a); color: white; padding-top: 4rem; }
+        .footer { 
+            background: linear-gradient(180deg, #0F2C59, #0a1a3a); 
+            color: white; 
+            padding-top: 4rem; 
+        }
         body.dark .footer { background: #05080f; }
-        .footer a { color: rgba(255,255,255,0.75); transition: all 0.2s; font-size: 0.875rem; display: inline-block; text-decoration: none; }
+        .footer a { 
+            color: rgba(255,255,255,0.75); 
+            transition: all 0.3s; 
+            font-size: 0.9rem; 
+            text-decoration: none; 
+        }
         .footer a:hover { color: #D4A017; padding-left: 6px; }
         .footer-title {
-            color: white; font-weight: 800;
-            text-transform: uppercase; font-size: 0.8125rem;
-            letter-spacing: 1.5px; margin-bottom: 1.5rem;
-            position: relative; padding-bottom: 0.75rem;
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            margin-bottom: 1.25rem;
+            position: relative;
+            padding-bottom: 0.6rem;
         }
         .footer-title::after {
-            content: ''; position: absolute; bottom: 0; left: 0;
-            width: 40px; height: 3px;
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
             background: linear-gradient(90deg, #D4A017, #E8B923);
             border-radius: 3px;
         }
         .social-icon {
-            width: 44px; height: 44px; border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s; color: white; text-decoration: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
             border: 1px solid rgba(255,255,255,0.15);
         }
-        .social-icon:hover { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; transform: translateY(-6px) scale(1.15); }
+        .social-icon i { color: #ffffff !important; font-size: 1.1rem; }
+        .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); }
+        .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
+        .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
+        .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
+        .social-icon:hover { 
+            transform: translateY(-6px) scale(1.15) rotate(-5deg); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
     </style>
 </head>
 <body class="min-h-screen">
 
     <!-- HEADER -->
     <header class="main-nav sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="container-wide">
             <div class="h-20 flex items-center justify-between">
                 <a href="/" class="flex items-center space-x-3">
                     <div class="logo-wrap">
-                        <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
+                        <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-2xl\'></i>'">
                     </div>
                     <div class="hidden sm:block">
-                        <h1 class="text-2xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
-                        <p class="text-xs text-brand-gold font-bold mt-1.5">ඉගෙනුමට නව මඟක්</p>
+                        <h1 class="text-xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
+                        <p class="text-xs text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
                     </div>
                 </a>
+
                 <nav class="hidden lg:flex items-center space-x-1">
                     <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
                     <a href="/resources.html" class="nav-link active"><i class="fa-solid fa-book"></i>සම්පත්</a>
@@ -198,13 +349,14 @@
                     <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
                     <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
                 </nav>
+
                 <div class="flex items-center space-x-3">
                     <button onclick="toggleTheme()" class="theme-toggle">
                         <i id="themeIcon" class="fa-solid fa-moon"></i>
                     </button>
                     <a href="/login.html" class="hidden md:inline-flex btn-primary" style="padding: 0.6rem 1.25rem;">
-                        <i class="fa-solid fa-user"></i>
-                        <span>පිවිසෙන්න</span>
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span>Admin</span>
                     </a>
                 </div>
             </div>
@@ -217,7 +369,7 @@
             <i class="fa-solid fa-book absolute text-9xl" style="top: 10%; left: 5%;"></i>
             <i class="fa-solid fa-graduation-cap absolute text-9xl" style="bottom: 10%; right: 5%;"></i>
         </div>
-        <div class="max-w-7xl mx-auto px-4 relative z-10">
+        <div class="container-wide relative z-10">
             <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-3" data-aos="fade-up">
                 <i class="fa-solid fa-book-open mr-2"></i>Learning Library
             </p>
@@ -229,7 +381,7 @@
     </section>
 
     <!-- FILTERS -->
-    <section class="max-w-7xl mx-auto px-4 -mt-6 relative z-10">
+    <section class="container-wide -mt-6 relative z-10">
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 grid grid-cols-1 md:grid-cols-3 gap-3" data-aos="fade-up">
             <input type="text" id="searchInput" placeholder="පාඩම් සොයන්න..." class="filter-input">
             <select id="gradeFilter" class="filter-input">
@@ -242,7 +394,7 @@
     </section>
 
     <!-- LESSONS -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
+    <main class="container-wide py-8">
         <div id="lessonsContainer">
             <div class="text-center py-12">
                 <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
@@ -252,7 +404,7 @@
 
     <!-- FOOTER -->
     <footer class="footer mt-12">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="container-wide">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-white/10">
                 <div class="md:col-span-2">
                     <div class="flex items-center space-x-3 mb-4">
@@ -267,10 +419,11 @@
                     <p class="text-white/70 text-sm leading-relaxed mb-6">
                         ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
                     </p>
-                    <div class="flex space-x-3">
-                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-whatsapp"></i></a>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="#" class="social-icon facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-icon whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" class="social-icon instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
                     </div>
                 </div>
                 <div>
@@ -291,7 +444,7 @@
                         </li>
                         <li class="flex items-center space-x-3">
                             <i class="fa-solid fa-phone text-brand-gold"></i>
-                            <span class="text-white/80 text-sm">+94 11 234 5678</span>
+                            <span class="text-white/80 text-sm">+94 767512666</span>
                         </li>
                         <li class="flex items-center space-x-3">
                             <i class="fa-solid fa-envelope text-brand-gold"></i>
@@ -306,10 +459,10 @@
         </div>
     </footer>
 
-    <!-- Lesson Detail Modal -->
-    <div id="lessonModal" class="modal-overlay">
+    <!-- LESSON MODAL -->
+    <div id="lessonModal" class="modal-overlay" onclick="if(event.target===this) closeModal()">
         <div class="modal-content">
-            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 z-10">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 z-10 shadow-lg">
                 <i class="fa-solid fa-times"></i>
             </button>
             <div id="modalBody"></div>
@@ -378,12 +531,11 @@
         }
 
         // ============================================
-        // LOAD LESSONS (with URL filters)
+        // LOAD LESSONS
         // ============================================
         async function loadLessons() {
             const container = document.getElementById('lessonsContainer');
             try {
-                // URL එකෙන් filter params ගන්න
                 const urlParams = new URLSearchParams(window.location.search);
                 const grades = urlParams.get('grades');
                 const activity = urlParams.get('activity');
@@ -391,7 +543,6 @@
                 const gradeId = urlParams.get('grade_id');
                 const subjectId = urlParams.get('subject_id');
 
-                // API URL එක හදන්න
                 let apiUrl = `${API_BASE}/resources?type=lesson&limit=200`;
                 if (grades) apiUrl += `&grades=${grades}`;
                 if (activity) apiUrl += `&activity=${activity}`;
@@ -403,16 +554,13 @@
                 const data = await res.json();
                 allLessons = data.lessons || [];
                 
-                // Page title එක update කරන්න
                 updatePageTitle(grades, activity, special);
-                
                 renderLessons(allLessons);
             } catch (err) {
                 container.innerHTML = `<div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg text-red-500">දෝෂයක්: ${err.message}</div>`;
             }
         }
 
-        // Page title එක update කරන්න
         function updatePageTitle(grades, activity, special) {
             const titleEl = document.getElementById('pageTitle');
             const subtitleEl = document.getElementById('pageSubtitle');
@@ -467,6 +615,7 @@
                             <div class="lesson-icon-wrap">
                                 <i class="fa-solid fa-book-open"></i>
                                 ${l.grade_name ? `<span class="lesson-grade-badge">${l.grade_name}</span>` : ''}
+                                ${l.subject_name ? `<span class="lesson-subject-badge">${l.subject_name}</span>` : ''}
                             </div>
                             <div class="p-5 flex-1 flex flex-col">
                                 <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${l.title}</h3>
@@ -495,6 +644,7 @@
 
             modalBody.innerHTML = `<div class="p-12 text-center"><div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
             modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
 
             try {
                 const res = await fetch(`${API_BASE}/resources/lesson/${id}`);
@@ -503,21 +653,21 @@
                 modalBody.innerHTML = `
                     <div class="p-8">
                         <div class="mb-6">
-                            <div class="flex items-center gap-3 mb-4">
-                                <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-lg">
                                     <i class="fa-solid fa-book-open text-2xl"></i>
                                 </div>
                                 <div>
-                                    <p class="text-xs text-brand-gold font-black uppercase">පාඩම</p>
+                                    <p class="text-xs text-brand-gold font-black uppercase tracking-wider">පාඩම</p>
                                     <h2 class="text-2xl font-black text-brand-navy dark:text-white">${lesson.title}</h2>
                                 </div>
                             </div>
                             <div class="flex flex-wrap gap-2 mb-4">
-                                ${lesson.grade_name ? `<span class="text-xs font-bold bg-brand-navy text-white px-3 py-1 rounded-full">${lesson.grade_name}</span>` : ''}
-                                ${lesson.subject_name ? `<span class="text-xs font-bold bg-brand-gold text-brand-navy px-3 py-1 rounded-full">${lesson.subject_name}</span>` : ''}
+                                ${lesson.grade_name ? `<span class="text-xs font-bold bg-brand-navy text-white px-4 py-1.5 rounded-full">${lesson.grade_name}</span>` : ''}
+                                ${lesson.subject_name ? `<span class="text-xs font-bold bg-brand-gold text-brand-navy px-4 py-1.5 rounded-full">${lesson.subject_name}</span>` : ''}
                             </div>
                         </div>
-                        <div class="prose max-w-none text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">${lesson.description || 'විස්තරයක් නොමැත'}</div>
+                        <div class="prose max-w-none text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-base">${lesson.description || 'විස්තරයක් නොමැත'}</div>
                     </div>
                 `;
             } catch (err) {
@@ -527,11 +677,8 @@
 
         function closeModal() {
             document.getElementById('lessonModal').classList.remove('active');
+            document.body.style.overflow = '';
         }
-
-        document.getElementById('lessonModal').addEventListener('click', (e) => {
-            if (e.target.id === 'lessonModal') closeModal();
-        });
 
         // ============================================
         // FILTERS
