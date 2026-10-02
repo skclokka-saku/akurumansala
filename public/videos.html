@@ -4,155 +4,723 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>වීඩියෝ පාඩම් | අකුරු මංසල</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        brand: { navy: '#0F2C59', gold: '#D4A017', gold2: '#E8B923' }
-                    }
+                        brand: {
+                            navy: '#0F2C59',
+                            navy2: '#1B3A6B',
+                            gold: '#D4A017',
+                            gold2: '#E8B923',
+                            light: '#F8F9FC',
+                        }
+                    },
+                    fontFamily: { sinhala: ['"Noto Serif Sinhala"', 'sans-serif'] }
                 }
             }
         }
     </script>
-    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Noto Serif Sinhala', sans-serif; background: #F8F9FC; }
-        
+        body { 
+            font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; 
+            background: #F8F9FC;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.04) 0%, transparent 50%);
+        }
+        body.dark { 
+            background: #0a0f1e; 
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.06) 0%, transparent 50%);
+        }
+
         .container-wide {
             width: 100%;
-            padding-left: 2rem;
-            padding-right: 2rem;
+            max-width: 1600px;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+            margin: 0 auto;
         }
-        
-        @media (min-width: 768px) {
-            .container-wide { padding-left: 3rem; padding-right: 3rem; }
+        @media (min-width: 640px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
+        @media (min-width: 1024px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
+
+        .main-nav { 
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
+            border-bottom: 1px solid rgba(212, 160, 23, 0.1);
         }
-        @media (min-width: 1280px) {
-            .container-wide { padding-left: 5rem; padding-right: 5rem; }
+        body.dark .main-nav { 
+            background: rgba(26, 26, 46, 0.98);
         }
-        @media (max-width: 640px) {
-            .container-wide { padding-left: 1.25rem; padding-right: 1.25rem; }
+
+        .logo-wrap {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ffffff, #f8f9fc);
+            border-radius: 1rem;
+            box-shadow: 0 6px 20px rgba(15, 44, 89, 0.15);
+            border: 2px solid rgba(212, 160, 23, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.3rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        
-        .page-header {
-            background: linear-gradient(135deg, #0F2C59, #1B3A6B);
-            color: white;
-            padding: 3rem 0;
+        .logo-wrap:hover { transform: scale(1.08) rotate(-3deg); }
+        .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+
+        .nav-link {
+            position: relative;
+            font-weight: 700;
+            color: #0F2C59;
+            font-size: 0.875rem;
+            letter-spacing: 0.3px;
+            transition: all 0.3s;
+            padding: 0.6rem 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border-radius: 0.65rem;
         }
-        
+        body.dark .nav-link { color: #cbd5e1; }
+        .nav-link i { font-size: 0.8rem; color: #D4A017; }
+        .nav-link:hover { 
+            color: #D4A017; 
+            background: rgba(212, 160, 23, 0.1);
+            transform: translateY(-2px);
+        }
+        .nav-link.active { 
+            color: #D4A017; 
+            background: rgba(212, 160, 23, 0.12);
+        }
+
+        .theme-toggle {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #D4A017, #E8B923);
+            color: #0F2C59;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
+            font-size: 1.05rem;
+        }
+        .theme-toggle:hover { transform: rotate(180deg) scale(1.15); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #D4A017, #E8B923);
+            color: #0F2C59;
+            padding: 0.8rem 1.75rem;
+            border-radius: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1.2px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4), inset 0 -3px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+        .btn-primary:hover { 
+            transform: translateY(-4px) scale(1.04); 
+            box-shadow: 0 15px 35px rgba(212, 160, 23, 0.6);
+        }
+
+        /* VIDEO CARDS - 3D */
         .video-card {
             background: white;
-            border-radius: 1rem;
+            border-radius: 1.5rem;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(15, 44, 89, 0.08);
-            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            cursor: pointer;
+            border: 1px solid rgba(212, 160, 23, 0.1);
+            position: relative;
         }
-        
-        .video-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(15, 44, 89, 0.15);
+        body.dark .video-card { background: #1a1a2e; }
+        .video-card:hover { 
+            transform: translateY(-12px) scale(1.02); 
+            box-shadow: 0 30px 60px rgba(15, 44, 89, 0.25);
+            border-color: rgba(212, 160, 23, 0.3);
+        }
+        .video-card:active { transform: translateY(-6px) scale(1.01); }
+
+        .video-thumb {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+        }
+        .video-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .video-card:hover .video-thumb img { transform: scale(1.15) rotate(2deg); }
+
+        .video-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff0000, #cc0000);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .video-card:hover .video-play-btn { 
+            transform: translate(-50%, -50%) scale(1.2) rotate(10deg); 
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.7);
+        }
+
+        .video-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: linear-gradient(135deg, #D4A017, #E8B923);
+            color: #0F2C59;
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(212, 160, 23, 0.5);
+            z-index: 2;
+        }
+
+        .video-duration {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 0.35rem 0.85rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .filter-input {
+            border: 2px solid #e2e8f0;
+            border-radius: 0.9rem;
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            width: 100%;
+            font-family: inherit;
+            background: white;
+        }
+        .filter-input:focus {
+            outline: none;
+            border-color: #D4A017;
+            box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15);
+        }
+        body.dark .filter-input { background: #1e293b; color: #e2e8f0; border-color: #334155; }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 1rem;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+        }
+        body.dark .modal-content { background: #1e293b; }
+        .modal-video-wrap {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            background: #000;
+        }
+        .modal-video-wrap iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .footer { 
+            background: linear-gradient(180deg, #0F2C59, #0a1a3a); 
+            color: white; 
+            padding-top: 4rem; 
+        }
+        body.dark .footer { background: #05080f; }
+        .footer a { 
+            color: rgba(255,255,255,0.75); 
+            transition: all 0.3s; 
+            font-size: 0.9rem; 
+            text-decoration: none; 
+        }
+        .footer a:hover { color: #D4A017; padding-left: 6px; }
+        .footer-title {
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            margin-bottom: 1.25rem;
+            position: relative;
+            padding-bottom: 0.6rem;
+        }
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #D4A017, #E8B923);
+            border-radius: 3px;
+        }
+        .social-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .social-icon i { color: #ffffff !important; font-size: 1.1rem; }
+        .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); }
+        .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
+        .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
+        .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
+        .social-icon:hover { 
+            transform: translateY(-6px) scale(1.15) rotate(-5deg); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
         }
     </style>
 </head>
-<body>
+<body class="min-h-screen">
 
-    <header class="bg-white shadow-md sticky top-0 z-50">
-        <div class="container-wide h-20 flex items-center justify-between">
-            <a href="/" class="flex items-center space-x-3">
-                <div class="w-14 h-14 bg-white rounded-2xl shadow-lg border-2 border-brand-gold/30 flex items-center justify-center p-1">
-                    <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain">
-                </div>
-                <div>
-                    <h1 class="text-xl font-black text-brand-navy">අකුරු මංසල</h1>
-                    <p class="text-xs text-brand-gold font-bold">ඉගෙනුමට නව මඟක්</p>
-                </div>
-            </a>
-            
-            <nav class="hidden lg:flex items-center space-x-1">
-                <a href="/" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">මුල් පිටුව</a>
-                <a href="/resources.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">සම්පත්</a>
-                <a href="/papers.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">ප්‍රශ්න පත්‍ර</a>
-                <a href="/videos.html" class="px-4 py-2 text-brand-gold font-bold text-sm uppercase">වීඩියෝ</a>
-                <a href="/quizzes.html" class="px-4 py-2 text-brand-navy font-bold text-sm uppercase">ප්‍රශ්නාවලි</a>
-            </nav>
-            
-            <a href="/admin.html" class="bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy px-5 py-2.5 rounded-xl font-bold text-sm">
-                <i class="fa-solid fa-shield-halved mr-2"></i>Admin
-            </a>
-        </div>
-    </header>
-
-    <section class="page-header">
+    <!-- HEADER -->
+    <header class="main-nav sticky top-0 z-50">
         <div class="container-wide">
-            <p class="text-brand-gold font-bold text-sm tracking-wider uppercase mb-2">WATCH & LEARN</p>
-            <h1 class="text-4xl md:text-5xl font-black mb-3">වීඩියෝ පාඩම්</h1>
-            <p class="text-white/80 text-base">දරුවන්ට ආකර්ෂණීය වීඩියෝ පාඩම් නරඹන්න</p>
-        </div>
-    </section>
+            <div class="h-20 flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-3">
+                    <div class="logo-wrap">
+                        <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-2xl\'></i>'">
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
+                        <p class="text-xs text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
+                    </div>
+                </a>
 
-    <section class="py-12">
-        <div class="container-wide">
-            <div id="videosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="col-span-3 text-center py-12">
-                    <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <nav class="hidden lg:flex items-center space-x-1">
+                    <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
+                    <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book"></i>සම්පත්</a>
+                    <a href="/papers.html" class="nav-link"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
+                    <a href="/videos.html" class="nav-link active"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
+                    <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
+                </nav>
+
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleTheme()" class="theme-toggle">
+                        <i id="themeIcon" class="fa-solid fa-moon"></i>
+                    </button>
+                    <a href="/login.html" class="hidden md:inline-flex btn-primary" style="padding: 0.6rem 1.25rem;">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span>Admin</span>
+                    </a>
                 </div>
             </div>
         </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="bg-brand-navy text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <i class="fa-solid fa-play absolute text-9xl" style="top: 10%; left: 5%;"></i>
+            <i class="fa-solid fa-video absolute text-9xl" style="bottom: 10%; right: 5%;"></i>
+        </div>
+        <div class="container-wide relative z-10">
+            <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-3" data-aos="fade-up">
+                <i class="fa-solid fa-video mr-2"></i>Video Library
+            </p>
+            <h1 class="text-4xl md:text-5xl font-black mb-3" data-aos="fade-up" data-aos-delay="100">වීඩියෝ පාඩම්</h1>
+            <p class="text-white/70 text-base max-w-2xl" data-aos="fade-up" data-aos-delay="200">
+                දරුවන්ට ආකර්ෂණීය වීඩියෝ පාඩම් නරඹන්න
+            </p>
+        </div>
     </section>
 
-    <footer class="bg-brand-navy text-white py-12">
-        <div class="container-wide text-center">
-            <p class="text-sm text-white/70">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+    <!-- FILTERS -->
+    <section class="container-wide -mt-6 relative z-10">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 grid grid-cols-1 md:grid-cols-3 gap-3" data-aos="fade-up">
+            <input type="text" id="searchInput" placeholder="වීඩියෝ සොයන්න..." class="filter-input">
+            <select id="gradeFilter" class="filter-input">
+                <option value="">සියලු ශ්‍රේණි</option>
+            </select>
+            <select id="subjectFilter" class="filter-input">
+                <option value="">සියලු විෂය</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- VIDEOS -->
+    <main class="container-wide py-8">
+        <div id="videosContainer">
+            <div class="text-center py-12">
+                <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer mt-12">
+        <div class="container-wide">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-white/10">
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2 shadow-lg">
+                            <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black">අකුරු මංසල</h3>
+                            <p class="text-xs text-white/70 mt-1">ඉගෙනුමට නව මඟක්</p>
+                        </div>
+                    </div>
+                    <p class="text-white/70 text-sm leading-relaxed mb-6">
+                        ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="#" class="social-icon facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-icon whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" class="social-icon instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-title">ඉක්මන් සබැඳි</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/">මුල් පිටුව</a></li>
+                        <li><a href="/resources.html">සම්පත්</a></li>
+                        <li><a href="/papers.html">ප්‍රශ්න පත්‍ර</a></li>
+                        <li><a href="/videos.html">වීඩියෝ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">අප අමතන්න</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
+                            <span class="text-white/80 text-sm">කොළඹ, ශ්‍රී ලංකාව</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-phone text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">+94 767512666</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-envelope text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">info@akurumansala.lk</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 text-center text-xs text-white/60">
+                <p>© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+            </div>
         </div>
     </footer>
 
+    <!-- VIDEO MODAL -->
+    <div id="videoModal" class="modal-overlay" onclick="if(event.target===this) closeVideoModal()">
+        <div class="modal-content">
+            <button onclick="closeVideoModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-gray-800 z-10 shadow-lg">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <div id="modalVideoWrap" class="modal-video-wrap"></div>
+            <div class="p-6">
+                <h2 id="modalVideoTitle" class="text-xl font-black text-brand-navy dark:text-white mb-2"></h2>
+                <p id="modalVideoMeta" class="text-sm text-gray-500 mb-3"></p>
+                <p id="modalVideoDesc" class="text-gray-700 dark:text-gray-300 leading-relaxed"></p>
+            </div>
+        </div>
+    </div>
+
     <script>
         const API_BASE = '/api';
-        
-        document.addEventListener('DOMContentLoaded', async () => {
-            const grid = document.getElementById('videosGrid');
+        let allVideos = [];
+
+        // ============================================
+        // THEME
+        // ============================================
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            body.classList.toggle('dark');
+            if (body.classList.contains('dark')) {
+                icon.className = 'fa-solid fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.className = 'fa-solid fa-moon';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+                document.body.classList.add('dark');
+                const icon = document.getElementById('themeIcon');
+                if (icon) icon.className = 'fa-solid fa-sun';
+            }
+        }
+
+        // ============================================
+        // YOUTUBE ID EXTRACTION
+        // ============================================
+        function getYouTubeId(url) {
+            if (!url) return null;
             
+            let match = url.match(/youtu\.be\/([^"&?\/\s]{11})/);
+            if (match) return match[1];
+            
+            match = url.match(/[?&]v=([^"&?\/\s]{11})/);
+            if (match) return match[1];
+            
+            match = url.match(/youtube\.com\/embed\/([^"&?\/\s]{11})/);
+            if (match) return match[1];
+            
+            match = url.match(/youtube\.com\/v\/([^"&?\/\s]{11})/);
+            if (match) return match[1];
+            
+            return null;
+        }
+
+        // ============================================
+        // LOAD FILTERS
+        // ============================================
+        async function loadFilters() {
             try {
-                const data = await fetch(`${API_BASE}/resources?type=video&limit=50`).then(r => r.json());
-                const videos = data.videos || [];
-                
-                if (videos.length === 0) {
-                    grid.innerHTML = `<div class="col-span-3 text-center py-16">
+                const [gradesRes, subjectsRes] = await Promise.all([
+                    fetch(`${API_BASE}/grades`),
+                    fetch(`${API_BASE}/subjects`)
+                ]);
+                const grades = await gradesRes.json();
+                const subjects = await subjectsRes.json();
+
+                const gradeFilter = document.getElementById('gradeFilter');
+                grades.forEach(g => {
+                    const opt = document.createElement('option');
+                    opt.value = g.id;
+                    opt.textContent = g.grade_name;
+                    gradeFilter.appendChild(opt);
+                });
+
+                const subjectFilter = document.getElementById('subjectFilter');
+                subjects.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = s.subject_name;
+                    subjectFilter.appendChild(opt);
+                });
+            } catch (err) {
+                console.error('Filter load error:', err);
+            }
+        }
+
+        // ============================================
+        // LOAD VIDEOS
+        // ============================================
+        async function loadVideos() {
+            const container = document.getElementById('videosContainer');
+            try {
+                const res = await fetch(`${API_BASE}/videos`);
+                allVideos = await res.json();
+                renderVideos(allVideos);
+            } catch (err) {
+                container.innerHTML = `<div class="text-center py-16 text-red-500">දෝෂයක්: ${err.message}</div>`;
+            }
+        }
+
+        // ============================================
+        // RENDER VIDEOS
+        // ============================================
+        function renderVideos(videos) {
+            const container = document.getElementById('videosContainer');
+
+            if (!videos || videos.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg">
                         <i class="fa-solid fa-video text-6xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500">වීඩියෝ පාඩම් නොමැත</p>
-                    </div>`;
-                    return;
-                }
-                
-                grid.innerHTML = videos.map(v => `
-                    <div class="video-card cursor-pointer" onclick="window.open('https://www.youtube.com/watch?v=${v.youtube_id}', '_blank')">
-                        <div class="relative aspect-video bg-slate-900">
-                            <img src="${v.thumbnail || 'https://img.youtube.com/vi/' + v.youtube_id + '/maxresdefault.jpg'}" 
-                                 alt="${v.title}" 
-                                 class="w-full h-full object-cover opacity-80">
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="w-16 h-16 rounded-full bg-red-500 text-white flex items-center justify-center shadow-xl hover:scale-110 transition">
-                                    <i class="fa-solid fa-play text-2xl ml-1"></i>
+                        <p class="text-gray-500 text-lg">වීඩියෝ නොමැත</p>
+                        <p class="text-gray-400 text-sm mt-2">Admin Panel එකෙන් වීඩියෝ එකතු කරන්න</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${videos.map(v => {
+                        const ytId = getYouTubeId(v.video_url || v.youtube_id);
+                        const thumb = ytId 
+                            ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` 
+                            : '/images/video-placeholder.jpg';
+                        const fallbackThumb = ytId 
+                            ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` 
+                            : '/images/video-placeholder.jpg';
+                        
+                        return `
+                            <div class="video-card" onclick="openVideoModal(${v.id})" data-aos="fade-up">
+                                <div class="video-thumb">
+                                    <img src="${thumb}" 
+                                         alt="${v.title}" 
+                                         onerror="this.onerror=null; this.src='${fallbackThumb}'">
+                                    ${v.subject_name ? `<span class="video-badge">${v.subject_name}</span>` : ''}
+                                    <div class="video-play-btn">
+                                        <i class="fa-solid fa-play"></i>
+                                    </div>
+                                </div>
+                                <div class="p-5 flex-1 flex flex-col">
+                                    <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${v.title}</h3>
+                                    <p class="text-xs text-gray-500 mb-3">
+                                        ${v.grade_name || ''} ${v.subject_name ? '• ' + v.subject_name : ''}
+                                    </p>
+                                    <p class="text-xs text-gray-400 flex-1 line-clamp-2">${v.description || 'විස්තරයක් නොමැත'}</p>
+                                    <div class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
+                                        <span class="text-xs text-gray-500"><i class="fa-solid fa-eye mr-1"></i>${v.views || 0}</span>
+                                        <span class="text-brand-gold font-bold text-xs">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="p-5">
-                            <h3 class="font-bold text-brand-navy mb-1">${v.title}</h3>
-                            <p class="text-xs text-gray-500">${v.grade_name || ''} ${v.subject_name ? '• ' + v.subject_name : ''}</p>
-                        </div>
-                    </div>
-                `).join('');
+                        `;
+                    }).join('')}
+                </div>
+            `;
+
+            if (window.AOS) AOS.refresh();
+        }
+
+        // ============================================
+        // OPEN VIDEO MODAL
+        // ============================================
+        async function openVideoModal(id) {
+            const modal = document.getElementById('videoModal');
+            const wrap = document.getElementById('modalVideoWrap');
+            const title = document.getElementById('modalVideoTitle');
+            const meta = document.getElementById('modalVideoMeta');
+            const desc = document.getElementById('modalVideoDesc');
+
+            try {
+                const res = await fetch(`${API_BASE}/videos/${id}`);
+                const video = await res.json();
+
+                const ytId = getYouTubeId(video.video_url || video.youtube_id);
+                if (ytId) {
+                    wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                } else {
+                    wrap.innerHTML = `<div class="flex items-center justify-center h-full text-white"><p>වීඩියෝව නොමැත</p></div>`;
+                }
+
+                title.textContent = video.title || '';
+                meta.textContent = `${video.grade_name || ''} ${video.subject_name ? '• ' + video.subject_name : ''}`;
+                desc.textContent = video.description || 'විස්තරයක් නොමැත';
+
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
             } catch (err) {
-                grid.innerHTML = `<div class="col-span-3 text-center py-12 text-red-500">දෝෂයක්: ${err.message}</div>`;
+                alert('වීඩියෝව load කිරීමේ දෝෂයක්');
             }
+        }
+
+        function closeVideoModal() {
+            document.getElementById('videoModal').classList.remove('active');
+            document.getElementById('modalVideoWrap').innerHTML = '';
+            document.body.style.overflow = '';
+        }
+
+        // ============================================
+        // FILTERS
+        // ============================================
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const gradeId = document.getElementById('gradeFilter').value;
+            const subjectId = document.getElementById('subjectFilter').value;
+
+            const filtered = allVideos.filter(v => {
+                const matchSearch = !search || (v.title || '').toLowerCase().includes(search);
+                const matchGrade = !gradeId || String(v.grade_id) === gradeId;
+                const matchSubject = !subjectId || String(v.subject_id) === subjectId;
+                return matchSearch && matchGrade && matchSubject;
+            });
+
+            renderVideos(filtered);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('gradeFilter').addEventListener('change', applyFilters);
+        document.getElementById('subjectFilter').addEventListener('change', applyFilters);
+
+        // ============================================
+        // INIT
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadTheme();
+            await loadFilters();
+            await loadVideos();
         });
+    </script>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, offset: 100 });
     </script>
 </body>
 </html>
