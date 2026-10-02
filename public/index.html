@@ -57,16 +57,16 @@ tailwind.config = {
     }
 
     /* Container - FIXED FOR SCREEN FIT */
-    .container-wide {
+       .container-wide {
         width: 100%;
-        max-width: 1600px;
-        padding-left: 1.25rem;
-        padding-right: 1.25rem;
+        max-width: 1920px;
+        padding-left: 1rem;
+        padding-right: 1rem;
         margin: 0 auto;
     }
-    @media (min-width: 640px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
-    @media (min-width: 1024px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
-    @media (min-width: 1440px) { .container-wide { padding-left: 4rem; padding-right: 4rem; } }
+    @media (min-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
+    @media (min-width: 1024px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
+    @media (min-width: 1440px) { .container-wide { padding-left: 2.5rem; padding-right: 2.5rem; } }
 
     /* Top Bar */
     .top-bar { 
@@ -78,21 +78,47 @@ tailwind.config = {
     .top-bar a { color: rgba(255,255,255,0.9); transition: all 0.3s; text-decoration: none; }
     .top-bar a:hover { color: #D4A017; transform: translateY(-2px); }
 
-    /* Social Icons - COLORFUL */
+      /* Social Icons - COLORFUL */
     .social-icon {
         width: 42px;
         height: 42px;
         border-radius: 0.85rem;
-        display: flex;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
         transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        color: white !important;
+        color: #ffffff;
         text-decoration: none;
         font-size: 1rem;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         position: relative;
         overflow: hidden;
+        flex-shrink: 0;
+    }
+    .social-icon i {
+        color: #ffffff !important;
+        font-size: 1.05rem;
+        position: relative;
+        z-index: 2;
+    }
+    .social-icon::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0.2);
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 1;
+    }
+    .social-icon:hover::before { opacity: 1; }
+    .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); }
+    .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
+    .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
+    .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
+    .social-icon.twitter { background: linear-gradient(135deg, #1da1f2, #0d8ddb); }
+    .social-icon:hover { 
+        transform: translateY(-6px) scale(1.15) rotate(-5deg); 
+        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
     }
     .social-icon::before {
         content: '';
@@ -731,21 +757,23 @@ tailwind.config = {
 </head>
 <body>
 
-    <!-- TOP BAR -->
-    <div class="top-bar py-2.5 hidden md:block">
+         <!-- TOP BAR -->
+    <div class="top-bar py-3 hidden md:block">
         <div class="container-wide">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-6">
-                    <span class="flex items-center gap-2 text-sm"><i class="fa-solid fa-location-dot text-brand-gold"></i>කොළඹ, ශ්‍රී ලංකාව</span>
-                    <span class="flex items-center gap-2 text-sm"><i class="fa-solid fa-phone text-brand-gold"></i>+94 767512666</span>
-                    <span class="flex items-center gap-2 text-sm"><i class="fa-solid fa-envelope text-brand-gold"></i>info@akurumansala.lk</span>
+                <div class="flex items-center space-x-8">
+                    <span class="flex items-center gap-2 text-sm font-semibold"><i class="fa-solid fa-location-dot text-brand-gold"></i>කෑ ශ්‍රී ලංකාව</span>
+                    <span class="flex items-center gap-2 text-sm font-semibold"><i class="fa-solid fa-phone text-brand-gold"></i>+94 767512666</span>
+                    <span class="flex items-center gap-2 text-sm font-semibold"><i class="fa-solid fa-envelope text-brand-gold"></i>info@akurumansala.lk</span>
                 </div>
-                <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-4">
                     <span class="font-bold text-brand-gold text-sm">Follow Us:</span>
-                    <a href="#" class="social-icon facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="social-icon youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#" class="social-icon whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-                    <a href="#" class="social-icon instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <div class="flex items-center space-x-2">
+                        <a href="#" class="social-icon facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-icon whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" class="social-icon instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1502,7 +1530,7 @@ tailwind.config = {
                     <ul class="space-y-4">
                         <li class="flex items-start space-x-3">
                             <i class="fa-solid fa-location-dot text-brand-gold mt-1 text-lg"></i>
-                            <span class="text-white/80" data-setting="address">කොළඹ, ශ්‍රී ලංකාව</span>
+                            <span class="text-white/80" data-setting="address">කෑගල්ල, ශ්‍රී ලංකාව</span>
                         </li>
                         <li class="flex items-center space-x-3">
                             <i class="fa-solid fa-phone text-brand-gold text-lg"></i>
