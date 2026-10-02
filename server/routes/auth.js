@@ -2,8 +2,20 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const { dbGet, dbRun, dbAll } = require('../database');
 const { authenticate, authorize, generateToken, isDeveloper } = require('../middleware/auth');
+
+// ============================================
+// NODEMAILER CONFIGURATION
+// ============================================
+const emailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
 
 // ============================================
 // HELPER: Log activity
@@ -69,22 +81,6 @@ router.post('/login', async (req, res) => {
 });
 
 // ============================================
-// POST /api/auth/send-otp - Send OTP to phone
-// ============================================
-// ============================================
-// NODEMAILER CONFIGURATION
-// ============================================
-const nodemailer = require('nodemailer');
-
-const emailTransporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
-});
-
-// ============================================
 // POST /api/auth/send-email-code - Send verification code to email
 // ============================================
 router.post('/send-email-code', async (req, res) => {
@@ -95,24 +91,21 @@ router.post('/send-email-code', async (req, res) => {
             return res.status(400).json({ error: 'විද්‍යුත් තැපෑල අවශ්‍යයි' });
         }
 
-        // Validate email format
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             return res.status(400).json({ error: 'වලංගු විද්‍යුත් තැපෑලක් ඇතුළත් කරන්න' });
         }
 
-        // Check if email already registered
         const existingUser = await dbGet('SELECT id FROM users WHERE email = ?', [email]);
         if (existingUser) {
             return res.status(400).json({ error: 'මෙම විද්‍යුත් තැපෑල දැනටමත් ලියාපදිංචි වී ඇත' });
         }
 
-        // Rate limiting: 2 minutes
         const recentCode = await dbGet(
             `SELECT * FROM otp_codes 
              WHERE phone = ? AND created_at > datetime('now', '-2 minutes') 
              ORDER BY created_at DESC LIMIT 1`,
-            [email]  // Using email in phone column for email codes
+            [email]
         );
 
         if (recentCode) {
@@ -121,11 +114,9 @@ router.post('/send-email-code', async (req, res) => {
             });
         }
 
-        // Generate 6-digit code
         const code = Math.floor(100000 + Math.random() * 900000).toString();
         const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
-        // Send email
         if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
             console.error('Email credentials missing');
             return res.status(500).json({ 
@@ -184,7 +175,6 @@ router.post('/send-email-code', async (req, res) => {
             });
         }
 
-        // Save code to database
         await dbRun(
             'INSERT INTO otp_codes (phone, code, purpose, expires_at) VALUES (?, ?, ?, ?)',
             [email, code, purpose || 'signup', expiresAt]
@@ -240,46 +230,7 @@ router.post('/verify-email-code', async (req, res) => {
         res.status(500).json({ error: 'දෝෂයක්' });
     }
 });
-// ============================================
-// POST /api/auth/verify-otp - Verify OTP
-// ============================================
-router.post('/verify-otp', async (req, res) => {
-    try {
-        const { phone, code } = req.body;
 
-        if (!phone || !code) {
-            return res.status(400).json({ error: 'දුරකථන අංකය සහ කේතය අවශ්‍යයි' });
-        }
-
-        const otp = await dbGet(
-            `SELECT * FROM otp_codes 
-             WHERE phone = ? AND code = ? AND used = 0 AND expires_at > datetime('now') 
-             ORDER BY created_at DESC LIMIT 1`,
-            [phone, code]
-        );
-
-        if (!otp) {
-            await logActivity(null, phone, 'otp_verify_failed', 'Invalid or expired OTP', req, 'failed');
-            return res.status(400).json({ error: 'වලංගු නොවන හෝ කල් ඉකුත් වූ කේතයක්' });
-        }
-
-        await dbRun('UPDATE otp_codes SET used = 1 WHERE id = ?', [otp.id]);
-
-        await logActivity(null, phone, 'otp_verified', 'OTP verified successfully', req, 'success');
-
-        res.json({ 
-            message: 'දුරකථන අංකය සාර්ථකව තහවුරු කරන ලදී',
-            verified: true
-        });
-    } catch (error) {
-        console.error('Verify OTP error:', error);
-        res.status(500).json({ error: 'දෝෂයක්' });
-    }
-});
-
-// ============================================
-// POST /api/auth/register - User Registration
-// ============================================
 // ============================================
 // POST /api/auth/register - User Registration
 // ============================================
@@ -291,15 +242,11 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'සියලු තොරතුරු අවශ්‍යයි' });
         }
 
-        // Validate phone (format only - not verified)
         const cleanedPhone = phone.replace(/\s+/g, '');
         if (!/^0[1-9]\d{8}$/.test(cleanedPhone)) {
             return res.status(400).json({ error: 'වලංගු දුරකථන අංකයක් ඇතුළත් කරන්න (උදා: 0712345678)' });
         }
 
-        // ============================================
-        // VERIFY EMAIL CODE
-        // ============================================
         if (!emailCode) {
             return res.status(400).json({ error: 'විද්‍යුත් තැපෑල තහවුරු කිරීමේ කේතය අවශ්‍යයි' });
         }
@@ -315,13 +262,11 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'විද්‍යුත් තැපෑල තහවුරු කර නැත. කරුණාකර නැවත උත්සාහ කරන්න.' });
         }
 
-        // Check if user exists
         const existingUser = await dbGet('SELECT id FROM users WHERE email = ?', [email]);
         if (existingUser) {
             return res.status(400).json({ error: 'මෙම විද්‍යුත් තැපෑල දැනටමත් ලියාපදිංචි වී ඇත' });
         }
 
-        // Check if phone exists
         const existingPhone = await dbGet('SELECT id FROM users WHERE phone = ?', [cleanedPhone]);
         if (existingPhone) {
             return res.status(400).json({ error: 'මෙම දුරකථන අංකය දැනටමත් ලියාපදිංචි වී ඇත' });
@@ -349,6 +294,7 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ error: 'දෝෂයක්' });
     }
 });
+
 // ============================================
 // POST /api/auth/forgot-password
 // ============================================
@@ -360,7 +306,7 @@ router.post('/forgot-password', async (req, res) => {
             return res.status(400).json({ error: 'විද්‍යුත් තැපෑල අවශ්‍යයි' });
         }
 
-        const user = await dbGet('SELECT id, email FROM users WHERE email = ?', [email]);
+        const user = await dbGet('SELECT id, email, name FROM users WHERE email = ?', [email]);
 
         if (!user) {
             await logActivity(null, email, 'forgot_password_failed', 'Email not found', req, 'failed');
@@ -377,13 +323,58 @@ router.post('/forgot-password', async (req, res) => {
             [email, resetToken, expiresAt]
         );
 
-        await logActivity(user.id, email, 'password_reset_requested', 'Reset token generated', req, 'success');
+        const resetLink = `https://akurumansala.up.railway.app/reset-password.html?token=${resetToken}`;
 
-        console.log(`📧 Password reset link for ${email}: /reset-password.html?token=${resetToken}`);
+        try {
+            await emailTransporter.sendMail({
+                from: `"අකුරු මංසල" <${process.env.EMAIL_USER}>`,
+                to: email,
+                subject: '🔐 අකුරු මංසල - මුරපදය නැවත සකසන්න',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8f9fc;">
+                        <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #a855f7, #6366f1); border-radius: 20px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+                                    <span style="font-size: 40px;">🔑</span>
+                                </div>
+                                <h1 style="color: #0F2C59; margin: 0; font-size: 28px;">අකුරු මංසල</h1>
+                            </div>
+
+                            <h2 style="color: #0F2C59; font-size: 22px; margin-bottom: 16px;">මුරපදය නැවත සකසන්න</h2>
+                            <p style="color: #555; line-height: 1.6; margin-bottom: 24px;">
+                                ඔබගේ මුරපදය නැවත සකස් කිරීම සඳහා පහත බටන් එක ඔබන්න:
+                            </p>
+
+                            <div style="text-align: center; margin: 32px 0;">
+                                <a href="${resetLink}" style="background: linear-gradient(135deg, #a855f7, #6366f1); color: white; padding: 16px 40px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 16px; display: inline-block;">
+                                    මුරපදය නැවත සකසන්න
+                                </a>
+                            </div>
+
+                            <p style="color: #dc2626; font-size: 14px; margin-top: 20px;">
+                                ⚠️ මෙම link එක පැය 1ක් සඳහා වලංගුයි.
+                            </p>
+
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+                            <p style="color: #999; font-size: 12px; text-align: center;">
+                                මෙම ඊමේල් එක ඔබ ඉල්ලා නොමැති නම්, එය නොසලකා හරින්න.
+                            </p>
+                        </div>
+                    </div>
+                `
+            });
+
+            console.log(`✅ Password reset email sent to ${email}`);
+
+        } catch (emailError) {
+            console.error('Email send error:', emailError.message);
+        }
+
+        await logActivity(user.id, email, 'password_reset_requested', 'Reset token sent', req, 'success');
 
         res.json({
-            message: 'ඔබගේ විද්‍යුත් තැපෑලට reset link එකක් යවා ඇත',
-            dev_token: resetToken
+            message: 'ඔබගේ විද්‍යුත් තැපෑලට reset link එකක් යවා ඇත'
         });
     } catch (error) {
         console.error('Forgot password error:', error);
