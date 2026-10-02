@@ -32,7 +32,7 @@ router.get('/stats', async (req, res) => {
 });
 
 // ============================================
-// GET /api/resources?type=lesson&grades=1,2,3&activity=sports
+// GET /api/resources?type=lesson&grade_id=1
 // ============================================
 router.get('/', async (req, res) => {
     try {
@@ -60,13 +60,11 @@ router.get('/', async (req, res) => {
         `;
         const params = [];
 
-        // Grade filter (single)
         if (grade_id) { 
             sql += ' AND t.grade_id = ?'; 
             params.push(grade_id); 
         }
 
-        // Multiple grades filter (for categories)
         if (grades) {
             const gradeNums = grades.split(',').map(g => g.trim()).filter(g => g);
             if (gradeNums.length > 0) {
@@ -75,19 +73,17 @@ router.get('/', async (req, res) => {
             }
         }
 
-        // Subject filter
         if (subject_id) { 
             sql += ' AND t.subject_id = ?'; 
             params.push(subject_id); 
         }
 
-        // Activity filter (using title or subject name)
         if (activity) {
             const activityMap = {
                 sports: ['ක්‍රීඩා', 'Sports', 'ක්‍රීඩාව'],
                 music: ['සංගීත', 'Music', 'සංගීතය'],
-                art: ['චිත්‍ර', 'Art', 'චිත්‍ර කලාව'],
-                reading: ['කියවීම', 'Reading', 'පොත්'],
+                art: ['චිත්‍ර', 'Art'],
+                reading: ['කියවීම', 'Reading'],
                 science: ['විද්‍යා', 'Science', 'විද්‍යාව'],
                 dance: ['නර්තන', 'Dance', 'නර්තනය']
             };
@@ -99,7 +95,6 @@ router.get('/', async (req, res) => {
             });
         }
 
-        // Special education filter
         if (special) {
             sql += ` AND (t.title LIKE '%විශේෂ%' OR s.subject_name LIKE '%විශේෂ%')`;
         }
@@ -114,8 +109,8 @@ router.get('/', async (req, res) => {
         const items = await dbAll(sql, params);
         res.json({ [typeMap[type]]: items });
     } catch (error) {
-        console.error('Resources fetch error:', error);
-        res.status(500).json({ error: 'දෝෂයක්' });
+        console.error('Resources fetch error:', error.message);
+        res.status(500).json({ error: 'දෝෂයක්: ' + error.message });
     }
 });
 
@@ -137,7 +132,7 @@ router.get('/lesson/:id', async (req, res) => {
         await dbRun('UPDATE lessons SET views = views + 1 WHERE id = ?', [req.params.id]);
         res.json(lesson);
     } catch (error) {
-        console.error('Lesson fetch error:', error);
+        console.error('Lesson fetch error:', error.message);
         res.status(500).json({ error: 'දෝෂයක්' });
     }
 });
@@ -173,10 +168,26 @@ router.post('/:type', authenticate, authorize('admin'), async (req, res) => {
                 [title, description || null, grade_id || null, subject_id || null, paper_type || 'term', year || new Date().getFullYear(), pdf_file || null, answer_pdf || null, req.user.id]
             );
         } else if (type === 'video') {
+            // Extract YouTube ID
+            let youtubeId = null;
+            if (video_url) {
+                const url = video_url.trim();
+                let match = url.match(/youtu\.be\/([^"&?\/\s]{11})/);
+                if (match) youtubeId = match[1];
+                if (!youtubeId) {
+                    match = url.match(/[?&]v=([^"&?\/\s]{11})/);
+                    if (match) youtubeId = match[1];
+                }
+                if (!youtubeId) {
+                    match = url.match(/youtube\.com\/embed\/([^"&?\/\s]{11})/);
+                    if (match) youtubeId = match[1];
+                }
+            }
+            
             result = await dbRun(
-                `INSERT INTO videos (title, description, grade_id, subject_id, video_url, is_published, created_by) 
-                 VALUES (?, ?, ?, ?, ?, 1, ?)`,
-                [title, description || null, grade_id || null, subject_id || null, video_url || null, req.user.id]
+                `INSERT INTO videos (title, description, grade_id, subject_id, video_url, youtube_id, is_published, created_by) 
+                 VALUES (?, ?, ?, ?, ?, ?, 1, ?)`,
+                [title, description || null, grade_id || null, subject_id || null, video_url || null, youtubeId, req.user.id]
             );
         } else if (type === 'article') {
             result = await dbRun(
@@ -188,8 +199,8 @@ router.post('/:type', authenticate, authorize('admin'), async (req, res) => {
 
         res.status(201).json({ message: 'සාර්ථකව එකතු කරන ලදී', id: result.id });
     } catch (error) {
-        console.error('Resource creation error:', error);
-        res.status(500).json({ error: 'දෝෂයක්' });
+        console.error('Resource creation error:', error.message);
+        res.status(500).json({ error: 'දෝෂයක්: ' + error.message });
     }
 });
 
@@ -208,7 +219,7 @@ router.delete('/:type/:id', authenticate, authorize('admin'), async (req, res) =
         await dbRun(`DELETE FROM ${typeMap[type]} WHERE id = ?`, [id]);
         res.json({ message: 'සාර්ථකව මකා දමන ලදී' });
     } catch (error) {
-        console.error('Delete error:', error);
+        console.error('Delete error:', error.message);
         res.status(500).json({ error: 'දෝෂයක්' });
     }
 });
