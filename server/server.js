@@ -1,114 +1,207 @@
+require('dotenv').config();
 const express = require('express');
-const router = express.Router();
-const { dbAll, dbGet, dbRun } = require('../database');
-const { authenticate, isDeveloper } = require('../middleware/auth');
+const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+
+const { initializeDatabase } = require('./database');
+const { seedDatabase } = require('./seed');
+
+const authRoutes = require('./routes/auth');
+const resourceRoutes = require('./routes/resources');
+const gradeRoutes = require('./routes/grades');
+const subjectRoutes = require('./routes/subjects');
+const paperRoutes = require('./routes/papers');
+const videoRoutes = require('./routes/videos');
+const articleRoutes = require('./routes/articles');
+const uploadRoutes = require('./routes/upload');
+const approvalRoutes = require('./routes/approval');
+const settingsRoutes = require('./routes/settings');
+const quizRoutes = require('./routes/quizzes');
+const aiRoutes = require('./routes/ai');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
 
 // ============================================
-// GET /api/settings/public - Public settings (used by frontend)
+// FIND PUBLIC FOLDER (Smart Detection)
 // ============================================
-router.get('/public', async (req, res) => {
-    try {
-        const publicKeys = [
-            'site_name', 'site_name_en', 'site_tagline',
-            'site_email', 'site_phone', 'site_address',
-            'site_facebook', 'site_youtube', 'site_whatsapp',
-            'site_instagram', 'site_twitter', 'site_linkedin',
-            'hero_title_1', 'hero_title_2', 'hero_title_3',
-            'hero_description'
-        ];
+// Try multiple possible locations for the public folder
+const publicPaths = [
+    path.join(__dirname, '..', 'public'),      // Local: server/../public
+    path.join(__dirname, 'public'),            // Railway: server/public (if moved)
+    path.join(process.cwd(), 'public'),        // Current working directory
+    path.join(process.cwd(), '..', 'public'),  // Parent of cwd
+];
 
-        const settings = await dbAll(
-            `SELECT setting_key, setting_value FROM settings WHERE setting_key IN (${publicKeys.map(() => '?').join(',')})`,
-            publicKeys
-        );
-
-        const settingsObj = {};
-        settings.forEach(s => {
-            settingsObj[s.setting_key] = s.setting_value;
-        });
-
-        res.json(settingsObj);
-    } catch (error) {
-        console.error('Public settings fetch error:', error.message);
-        res.status(500).json({ error: 'දෝෂයක්' });
+let publicPath = null;
+for (const p of publicPaths) {
+    if (fs.existsSync(p) && fs.existsSync(path.join(p, 'index.html'))) {
+        publicPath = p;
+        console.log('✅ Public folder found:', p);
+        break;
     }
-});
+}
+
+if (!publicPath) {
+    console.error('❌ Public folder not found in any of these locations:');
+    publicPaths.forEach(p => console.error('   -', p));
+}
 
 // ============================================
-// GET /api/settings/admin - Get all settings for admin panel
+// MIDDLEWARE
 // ============================================
-router.get('/admin', authenticate, isDeveloper, async (req, res) => {
-    try {
-        const settings = await dbAll('SELECT setting_key, setting_value FROM settings');
+app.use(helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
+}));
+app.use(cors());
+app.use(express.json({ limit: '200mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Rate limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 500,
+    message: { error: 'ඉතා බොහෝ ඉල්ලීම්. කරුණාකර නැවත උත්සාහ කරන්න.' }
+});
+app.use('/api/', limiter);
+
+// ============================================
+// AUTO-INJECT AI-CHAT SCRIPT INTO HTML FILES
+// ============================================
+if (publicPath) {
+    app.use((req, res, next) => {
+        if (req.method !== 'GET') return next();
+        if (req.path.startsWith('/api/')) return next();
         
-        const settingsObj = {};
-        settings.forEach(s => {
-            settingsObj[s.setting_key] = s.setting_value;
-        });
-
-        res.json(settingsObj);
-    } catch (error) {
-        console.error('Admin settings fetch error:', error.message);
-        res.status(500).json({ error: 'දෝෂයක්' });
-    }
-});
-
-// ============================================
-// GET /api/settings - Get all settings
-// ============================================
-router.get('/', async (req, res) => {
-    try {
-        const settings = await dbAll('SELECT setting_key, setting_value FROM settings');
+        const requestedPath = req.path === '/' ? '/index.html' : req.path;
+        if (!requestedPath.endsWith('.html')) return next();
         
-        const settingsObj = {};
-        settings.forEach(s => {
-            settingsObj[s.setting_key] = s.setting_value;
-        });
-
-        res.json(settingsObj);
-    } catch (error) {
-        console.error('Settings fetch error:', error.message);
-        res.status(500).json({ error: 'දෝෂයක්' });
-    }
-});
-
-// ============================================
-// POST /api/settings - Update settings (Developer only)
-// ============================================
-router.post('/', authenticate, isDeveloper, async (req, res) => {
-    try {
-        const settings = req.body;
-
-        if (!settings || typeof settings !== 'object') {
-            return res.status(400).json({ error: 'වලංගු නොවන දත්ත' });
-        }
-
-        for (const [key, value] of Object.entries(settings)) {
-            const existing = await dbGet('SELECT id FROM settings WHERE setting_key = ?', [key]);
+        const filePath = path.join(publicPath, requestedPath);
+        if (!fs.existsSync(filePath)) return next();
+        
+        try {
+            let html = fs.readFileSync(filePath, 'utf8');
             
-            if (existing) {
-                await dbRun(
-                    'UPDATE settings SET setting_value = ?, updated_at = CURRENT_TIMESTAMP WHERE setting_key = ?',
-                    [value, key]
-                );
-            } else {
-                await dbRun(
-                    'INSERT INTO settings (setting_key, setting_value) VALUES (?, ?)',
-                    [key, value]
+            if (!html.includes('ai-chat.js')) {
+                html = html.replace(
+                    '</body>',
+                    '    <script src="/js/ai-chat.js"></script>\n</body>'
                 );
             }
+            
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            res.send(html);
+        } catch (err) {
+            console.error('Auto-inject error:', err);
+            next();
         }
+    });
+}
 
-        console.log(`✅ Settings updated by ${req.user.email} (${req.user.role})`);
+// ============================================
+// STATIC FILES
+// ============================================
+if (publicPath) {
+    app.use(express.static(publicPath));
+    console.log('✅ Static files served from:', publicPath);
+}
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-        res.json({ 
-            message: 'සැකසුම් සාර්ථකව යාවත්කාලීන කරන ලදී',
-            updated: Object.keys(settings).length
-        });
-    } catch (error) {
-        console.error('Settings update error:', error.message);
-        res.status(500).json({ error: 'දෝෂයක්' });
-    }
+// ============================================
+// API ROUTES
+// ============================================
+app.use('/api/auth', authRoutes);
+app.use('/api/resources', resourceRoutes);
+app.use('/api/grades', gradeRoutes);
+app.use('/api/subjects', subjectRoutes);
+app.use('/api/papers', paperRoutes);
+app.use('/api/videos', videoRoutes);
+app.use('/api/articles', articleRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/approval', approvalRoutes);
+app.use('/api/settings', settingsRoutes);
+app.use('/api/quizzes', quizRoutes);
+app.use('/api/ai', aiRoutes);
+
+// Health check
+app.get('/api/health', (req, res) => {
+    res.json({ 
+        status: 'ok', 
+        timestamp: new Date().toISOString(),
+        publicPath: publicPath || 'NOT FOUND',
+        cwd: process.cwd(),
+        dirname: __dirname
+    });
 });
 
-module.exports = router;
+// Catch-all for SPA (serve index.html for non-API routes)
+app.get('*', (req, res) => {
+    if (req.path.startsWith('/api/')) {
+        return res.status(404).json({ error: 'API endpoint not found' });
+    }
+    
+    if (publicPath) {
+        const indexPath = path.join(publicPath, 'index.html');
+        if (fs.existsSync(indexPath)) {
+            return res.sendFile(indexPath);
+        }
+    }
+    
+    res.status(404).send(`
+        <html>
+            <head><title>404</title></head>
+            <body style="font-family: sans-serif; padding: 2rem; text-align: center;">
+                <h1>404 - Not Found</h1>
+                <p>Public folder not found. Paths tried:</p>
+                <ul style="text-align: left; display: inline-block;">
+                    ${publicPaths.map(p => `<li><code>${p}</code></li>`).join('')}
+                </ul>
+                <p>CWD: <code>${process.cwd()}</code></p>
+                <p>__dirname: <code>${__dirname}</code></p>
+            </body>
+        </html>
+    `);
+});
+
+// ============================================
+// ERROR HANDLER
+// ============================================
+app.use((err, req, res, next) => {
+    console.error('❌ Error:', err);
+    res.status(err.status || 500).json({
+        error: err.message || 'Internal server error'
+    });
+});
+
+// ============================================
+// START SERVER
+// ============================================
+async function startServer() {
+    try {
+        await initializeDatabase();
+        await seedDatabase();
+
+        app.listen(PORT, () => {
+            console.log('');
+            console.log('╔══════════════════════════════════════════════════╗');
+            console.log('║   🎓 අකුරු මංසල — Akuru Mansala                 ║');
+            console.log('║   📚 ඉගෙනුමට නව මඟක්                            ║');
+            console.log('╠══════════════════════════════════════════════════╣');
+            console.log(`║   🌐 Server:  http://localhost:${PORT}              ║`);
+            console.log(`║   📁 Public:  ${publicPath ? 'FOUND' : 'NOT FOUND'}                          ║`);
+            console.log('╚══════════════════════════════════════════════════╝');
+            console.log('');
+        });
+    } catch (error) {
+        console.error('❌ Failed to start server:', error);
+        process.exit(1);
+    }
+}
+
+startServer();
+
+module.exports = app;
