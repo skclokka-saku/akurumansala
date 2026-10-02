@@ -2,20 +2,51 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
 const { dbGet, dbRun, dbAll } = require('../database');
 const { authenticate, authorize, generateToken, isDeveloper } = require('../middleware/auth');
 
 // ============================================
-// NODEMAILER CONFIGURATION
+// EMAIL SENDING FUNCTION (Using Resend API)
 // ============================================
-const emailTransporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+async function sendEmail(to, subject, htmlContent) {
+    try {
+        const RESEND_API_KEY = process.env.RESEND_API_KEY;
+        const EMAIL_FROM = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+
+        if (!RESEND_API_KEY) {
+            console.error('❌ RESEND_API_KEY is not set');
+            throw new Error('Email service not configured');
+        }
+
+        const response = await fetch('https://api.resend.com/emails', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${RESEND_API_KEY}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                from: `අකුරු මංසල <${EMAIL_FROM}>`,
+                to: [to],
+                subject: subject,
+                html: htmlContent
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('❌ Resend API error:', errorData);
+            throw new Error(errorData.message || 'Email sending failed');
+        }
+
+        const data = await response.json();
+        console.log(`✅ Email sent to ${to} - ID: ${data.id}`);
+        return { success: true, id: data.id };
+
+    } catch (error) {
+        console.error('❌ sendEmail error:', error.message);
+        throw error;
     }
-});
+}
 
 // ============================================
 // HELPER: Log activity
@@ -81,11 +112,11 @@ router.post('/login', async (req, res) => {
 });
 
 // ============================================
-// POST /api/auth/send-email-code - Send verification code to email
+// POST /api/auth/send-email-code
 // ============================================
 router.post('/send-email-code', async (req, res) => {
     try {
-        const { email, phone, purpose } = req.body;
+        const { email, purpose } = req.body;
 
         if (!email) {
             return res.status(400).json({ error: 'විද්‍යුත් තැපෑල අවශ්‍යයි' });
@@ -117,19 +148,11 @@ router.post('/send-email-code', async (req, res) => {
         const code = Math.floor(100000 + Math.random() * 900000).toString();
         const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
 
-        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-            console.error('Email credentials missing');
-            return res.status(500).json({ 
-                error: 'Email සේවාව නිසි ලෙස වින්‍යාස කර නැත'
-            });
-        }
-
         try {
-            await emailTransporter.sendMail({
-                from: `"අකුරු මංසල" <${process.env.EMAIL_USER}>`,
-                to: email,
-                subject: '🔐 අකුරු මංසල - ඔබගේ තහවුරු කිරීමේ කේතය',
-                html: `
+            await sendEmail(
+                email,
+                '🔐 අකුරු මංසල - ඔබගේ තහවුරු කිරීමේ කේතය',
+                `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8f9fc;">
                         <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
@@ -163,9 +186,7 @@ router.post('/send-email-code', async (req, res) => {
                         </div>
                     </div>
                 `
-            });
-
-            console.log(`✅ Email code sent to ${email}`);
+            );
 
         } catch (emailError) {
             console.error('Email send error:', emailError.message);
@@ -195,7 +216,7 @@ router.post('/send-email-code', async (req, res) => {
 });
 
 // ============================================
-// POST /api/auth/verify-email-code - Verify email code
+// POST /api/auth/verify-email-code
 // ============================================
 router.post('/verify-email-code', async (req, res) => {
     try {
@@ -232,7 +253,7 @@ router.post('/verify-email-code', async (req, res) => {
 });
 
 // ============================================
-// POST /api/auth/register - User Registration
+// POST /api/auth/register
 // ============================================
 router.post('/register', async (req, res) => {
     try {
@@ -326,11 +347,10 @@ router.post('/forgot-password', async (req, res) => {
         const resetLink = `https://akurumansala.up.railway.app/reset-password.html?token=${resetToken}`;
 
         try {
-            await emailTransporter.sendMail({
-                from: `"අකුරු මංසල" <${process.env.EMAIL_USER}>`,
-                to: email,
-                subject: '🔐 අකුරු මංසල - මුරපදය නැවත සකසන්න',
-                html: `
+            await sendEmail(
+                email,
+                '🔐 අකුරු මංසල - මුරපදය නැවත සකසන්න',
+                `
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8f9fc;">
                         <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
                             <div style="text-align: center; margin-bottom: 30px;">
@@ -354,18 +374,10 @@ router.post('/forgot-password', async (req, res) => {
                             <p style="color: #dc2626; font-size: 14px; margin-top: 20px;">
                                 ⚠️ මෙම link එක පැය 1ක් සඳහා වලංගුයි.
                             </p>
-
-                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
-
-                            <p style="color: #999; font-size: 12px; text-align: center;">
-                                මෙම ඊමේල් එක ඔබ ඉල්ලා නොමැති නම්, එය නොසලකා හරින්න.
-                            </p>
                         </div>
                     </div>
                 `
-            });
-
-            console.log(`✅ Password reset email sent to ${email}`);
+            );
 
         } catch (emailError) {
             console.error('Email send error:', emailError.message);
@@ -422,7 +434,7 @@ router.post('/reset-password', async (req, res) => {
 });
 
 // ============================================
-// GET /api/auth/me - Get current user
+// GET /api/auth/me
 // ============================================
 router.get('/me', authenticate, async (req, res) => {
     try {
@@ -443,7 +455,7 @@ router.get('/me', authenticate, async (req, res) => {
 });
 
 // ============================================
-// GET /api/auth/users - List all users (Admin only)
+// GET /api/auth/users
 // ============================================
 router.get('/users', authenticate, authorize('admin'), async (req, res) => {
     try {
@@ -458,7 +470,7 @@ router.get('/users', authenticate, authorize('admin'), async (req, res) => {
 });
 
 // ============================================
-// GET /api/auth/logs - Get activity logs (Developer only)
+// GET /api/auth/logs
 // ============================================
 router.get('/logs', authenticate, isDeveloper, async (req, res) => {
     try {
@@ -482,7 +494,7 @@ router.get('/logs', authenticate, isDeveloper, async (req, res) => {
 });
 
 // ============================================
-// DELETE /api/auth/logs/:id - Delete a log (Developer only)
+// DELETE /api/auth/logs/:id
 // ============================================
 router.delete('/logs/:id', authenticate, isDeveloper, async (req, res) => {
     try {
@@ -495,7 +507,7 @@ router.delete('/logs/:id', authenticate, isDeveloper, async (req, res) => {
 });
 
 // ============================================
-// DELETE /api/auth/logs - Clear all logs (Developer only)
+// DELETE /api/auth/logs
 // ============================================
 router.delete('/logs', authenticate, isDeveloper, async (req, res) => {
     try {
