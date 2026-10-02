@@ -6,118 +6,242 @@
     <title>සම්පත් | අකුරු මංසල</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        'brand-navy': '#1e293b',
-                        'brand-gold': '#D4A017',
-                        'brand-gold2': '#fbbf24',
+                        brand: {
+                            navy: '#0F2C59',
+                            navy2: '#1B3A6B',
+                            gold: '#D4A017',
+                            gold2: '#E8B923',
+                            light: '#F8F9FC',
+                        }
                     },
-                    fontFamily: {
-                        'sinhala': ['Noto Sans Sinhala', 'sans-serif'],
-                    }
+                    fontFamily: { sinhala: ['"Noto Serif Sinhala"', 'sans-serif'] }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Noto Sans Sinhala', sans-serif; }
-        .stat-card {
+        body { font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; background: #F8F9FC; }
+        body.dark { background: #0a0f1e; color: #e2e8f0; }
+
+        .main-nav { background: white; box-shadow: 0 2px 20px rgba(15, 44, 89, 0.08); }
+        body.dark .main-nav { background: #1a1a2e; }
+
+        .logo-wrap {
+            width: 65px; height: 65px;
+            background: linear-gradient(135deg, #ffffff, #f8f9fc);
+            border-radius: 1.1rem;
+            box-shadow: 0 4px 15px rgba(15, 44, 89, 0.15);
+            border: 2px solid rgba(212, 160, 23, 0.3);
+            display: flex; align-items: center; justify-content: center;
+            padding: 0.4rem;
+            transition: all 0.3s;
+        }
+        .logo-wrap:hover { transform: scale(1.05); }
+        .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+
+        .nav-link {
+            position: relative; font-weight: 700; color: #0F2C59;
+            font-size: 0.8125rem; letter-spacing: 0.5px;
+            text-transform: uppercase; transition: color 0.3s;
+            padding: 0.6rem 0.9rem; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            border-radius: 0.5rem;
+        }
+        body.dark .nav-link { color: #cbd5e1; }
+        .nav-link i { font-size: 0.7rem; color: #D4A017; }
+        .nav-link::after {
+            content: ''; position: absolute; bottom: 0; left: 50%;
+            width: 0; height: 3px; background: #D4A017;
+            border-radius: 3px; transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        .nav-link:hover, .nav-link.active { color: #D4A017; background: rgba(212, 160, 23, 0.08); }
+        .nav-link:hover::after, .nav-link.active::after { width: 50%; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #D4A017, #E8B923);
+            color: #0F2C59; padding: 0.75rem 1.75rem;
+            border-radius: 0.75rem; font-weight: 800;
+            text-transform: uppercase; font-size: 0.75rem;
+            letter-spacing: 1.5px; transition: all 0.4s;
+            display: inline-flex; align-items: center; gap: 0.75rem;
+            box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
+            cursor: pointer; border: none; text-decoration: none;
+        }
+        .btn-primary:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 12px 30px rgba(212, 160, 23, 0.6); }
+
+        .theme-toggle {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(212, 160, 23, 0.12); color: #D4A017;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.3s; border: 2px solid #D4A017;
+        }
+        .theme-toggle:hover { background: #D4A017; color: #0F2C59; transform: rotate(180deg) scale(1.1); }
+
+        .filter-input {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 0.875rem 1rem;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+            width: 100%;
+            font-family: inherit;
             background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            transition: all 0.3s ease;
         }
-        .stat-card:hover {
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-            transform: translateY(-2px);
+        .filter-input:focus {
+            outline: none; border-color: #D4A017;
+            box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.1);
         }
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+        body.dark .filter-input { background: #1e293b; color: #e2e8f0; border-color: #334155; }
+
+        .lesson-card {
+            background: white;
+            border-radius: 1.25rem;
             overflow: hidden;
+            box-shadow: 0 6px 25px rgba(15, 44, 89, 0.08);
+            transition: all 0.5s;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            cursor: pointer;
+            border-top: 4px solid transparent;
         }
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.6);
-            display: none;
+        body.dark .lesson-card { background: #1a1a2e; }
+        .lesson-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(15, 44, 89, 0.2); border-top-color: #D4A017; }
+
+        .lesson-icon-wrap {
+            height: 140px;
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 100;
-            padding: 1rem;
-            overflow-y: auto;
+            position: relative;
+        }
+        .lesson-icon-wrap i { font-size: 3.5rem; color: white; }
+        .lesson-grade-badge {
+            position: absolute; top: 1rem; left: 1rem;
+            background: rgba(255,255,255,0.95);
+            color: #0F2C59;
+            padding: 0.375rem 0.875rem;
+            border-radius: 999px;
+            font-weight: 800; font-size: 0.6875rem;
+        }
+
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: none; align-items: center; justify-content: center;
+            z-index: 100; padding: 1rem; overflow-y: auto;
         }
         .modal-overlay.active { display: flex; }
         .modal-content {
-            background: white;
-            border-radius: 1rem;
-            max-width: 800px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 2rem;
+            background: white; border-radius: 1rem;
+            max-width: 800px; width: 100%;
+            max-height: 90vh; overflow-y: auto;
             position: relative;
         }
-        .dark body { background-color: #0f172a; color: #e2e8f0; }
-        .dark .stat-card { background-color: #1e293b; color: #e2e8f0; }
-        .dark .modal-content { background-color: #1e293b; color: #e2e8f0; }
-        .dark .text-brand-navy { color: #f1f5f9; }
-        .dark .text-gray-500 { color: #94a3b8; }
+        body.dark .modal-content { background: #1e293b; }
+
+        .footer { background: linear-gradient(180deg, #0F2C59, #0a1a3a); color: white; padding-top: 4rem; }
+        body.dark .footer { background: #05080f; }
+        .footer a { color: rgba(255,255,255,0.75); transition: all 0.2s; font-size: 0.875rem; display: inline-block; text-decoration: none; }
+        .footer a:hover { color: #D4A017; padding-left: 6px; }
+        .footer-title {
+            color: white; font-weight: 800;
+            text-transform: uppercase; font-size: 0.8125rem;
+            letter-spacing: 1.5px; margin-bottom: 1.5rem;
+            position: relative; padding-bottom: 0.75rem;
+        }
+        .footer-title::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 40px; height: 3px;
+            background: linear-gradient(90deg, #D4A017, #E8B923);
+            border-radius: 3px;
+        }
+        .social-icon {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s; color: white; text-decoration: none;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .social-icon:hover { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; transform: translateY(-6px) scale(1.15); }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="min-h-screen">
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="/" class="flex items-center space-x-2">
-                <img src="/images/logo.png" alt="Logo" class="w-10 h-10 rounded-lg" onerror="this.style.display='none'">
-                <div>
-                    <h1 class="font-black text-brand-navy text-lg leading-tight">අකුරු මංසල</h1>
-                    <p class="text-[10px] text-gray-500">ඉගෙනුමට නව මඟක්</p>
+    <!-- HEADER -->
+    <header class="main-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="h-20 flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-3">
+                    <div class="logo-wrap">
+                        <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-2xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
+                        <p class="text-xs text-brand-gold font-bold mt-1.5">ඉගෙනුමට නව මඟක්</p>
+                    </div>
+                </a>
+                <nav class="hidden lg:flex items-center space-x-1">
+                    <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
+                    <a href="/resources.html" class="nav-link active"><i class="fa-solid fa-book"></i>සම්පත්</a>
+                    <a href="/papers.html" class="nav-link"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
+                    <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
+                    <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
+                </nav>
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleTheme()" class="theme-toggle">
+                        <i id="themeIcon" class="fa-solid fa-moon"></i>
+                    </button>
+                    <a href="/login.html" class="hidden md:inline-flex btn-primary" style="padding: 0.6rem 1.25rem;">
+                        <i class="fa-solid fa-user"></i>
+                        <span>පිවිසෙන්න</span>
+                    </a>
                 </div>
-            </a>
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-bold">
-                <a href="/" class="text-gray-600 hover:text-brand-gold transition">මුල් පිටුව</a>
-                <a href="/resources.html" class="text-brand-gold">සම්පත්</a>
-                <a href="/papers.html" class="text-gray-600 hover:text-brand-gold transition">ප්‍රශ්න පත්‍ර</a>
-                <a href="/videos.html" class="text-gray-600 hover:text-brand-gold transition">වීඩියෝ</a>
-            </nav>
-            <a href="/admin.html" class="bg-brand-gold text-brand-navy px-4 py-2 rounded-lg font-bold text-sm hover:bg-brand-gold2 transition">
-                <i class="fa-solid fa-user-shield mr-1"></i> Admin
-            </a>
+            </div>
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="bg-brand-navy text-white py-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-2">Learning Resources</p>
-            <h1 class="text-4xl md:text-5xl font-black mb-2">පාඩම් සම්පත්</h1>
-            <p class="text-white/70 text-sm">1 සිට 13 ශ්‍රේණිය දක්වා පාඩම් සහ සම්පත්</p>
+    <!-- HERO -->
+    <section class="bg-brand-navy text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <i class="fa-solid fa-book absolute text-9xl" style="top: 10%; left: 5%;"></i>
+            <i class="fa-solid fa-graduation-cap absolute text-9xl" style="bottom: 10%; right: 5%;"></i>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-3" data-aos="fade-up">
+                <i class="fa-solid fa-book-open mr-2"></i>Learning Library
+            </p>
+            <h1 id="pageTitle" class="text-4xl md:text-5xl font-black mb-3" data-aos="fade-up" data-aos-delay="100">පාඩම් සම්පත්</h1>
+            <p id="pageSubtitle" class="text-white/70 text-base max-w-2xl" data-aos="fade-up" data-aos-delay="200">
+                1 සිට 13 ශ්‍රේණිය දක්වා පාඩම් සහ සම්පත්
+            </p>
         </div>
     </section>
 
-    <!-- Filters -->
-    <section class="max-w-7xl mx-auto px-4 -mt-6">
-        <div class="bg-white rounded-2xl shadow-lg p-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-            <input type="text" id="searchInput" placeholder="පාඩම් සොයන්න..." class="border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-gold">
-            <select id="gradeFilter" class="border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-gold">
+    <!-- FILTERS -->
+    <section class="max-w-7xl mx-auto px-4 -mt-6 relative z-10">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 grid grid-cols-1 md:grid-cols-3 gap-3" data-aos="fade-up">
+            <input type="text" id="searchInput" placeholder="පාඩම් සොයන්න..." class="filter-input">
+            <select id="gradeFilter" class="filter-input">
                 <option value="">සියලු ශ්‍රේණි</option>
             </select>
-            <select id="subjectFilter" class="border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-gold">
+            <select id="subjectFilter" class="filter-input">
                 <option value="">සියලු විෂය</option>
             </select>
         </div>
     </section>
 
-    <!-- Lessons List -->
+    <!-- LESSONS -->
     <main class="max-w-7xl mx-auto px-4 py-8">
         <div id="lessonsContainer">
             <div class="text-center py-12">
@@ -126,17 +250,66 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-brand-navy text-white py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-white/60">
-            © 2026 අකුරු මංසල • සියලු හිමිකම් ඇවිරිණි
+    <!-- FOOTER -->
+    <footer class="footer mt-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-white/10">
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2 shadow-lg">
+                            <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black">අකුරු මංසල</h3>
+                            <p class="text-xs text-white/70 mt-1">ඉගෙනුමට නව මඟක්</p>
+                        </div>
+                    </div>
+                    <p class="text-white/70 text-sm leading-relaxed mb-6">
+                        ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
+                    </p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-title">ඉක්මන් සබැඳි</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/">මුල් පිටුව</a></li>
+                        <li><a href="/resources.html">සම්පත්</a></li>
+                        <li><a href="/papers.html">ප්‍රශ්න පත්‍ර</a></li>
+                        <li><a href="/videos.html">වීඩියෝ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">අප අමතන්න</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
+                            <span class="text-white/80 text-sm">කොළඹ, ශ්‍රී ලංකාව</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-phone text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">+94 11 234 5678</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-envelope text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">info@akurumansala.lk</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 text-center text-xs text-white/60">
+                <p>© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+            </div>
         </div>
     </footer>
 
     <!-- Lesson Detail Modal -->
     <div id="lessonModal" class="modal-overlay">
         <div class="modal-content">
-            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 z-10">
                 <i class="fa-solid fa-times"></i>
             </button>
             <div id="modalBody"></div>
@@ -146,6 +319,31 @@
     <script>
         const API_BASE = '/api';
         let allLessons = [];
+
+        // ============================================
+        // THEME
+        // ============================================
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            body.classList.toggle('dark');
+            if (body.classList.contains('dark')) {
+                icon.className = 'fa-solid fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.className = 'fa-solid fa-moon';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+                document.body.classList.add('dark');
+                const icon = document.getElementById('themeIcon');
+                if (icon) icon.className = 'fa-solid fa-sun';
+            }
+        }
 
         // ============================================
         // LOAD FILTERS
@@ -180,17 +378,68 @@
         }
 
         // ============================================
-        // LOAD LESSONS
+        // LOAD LESSONS (with URL filters)
         // ============================================
         async function loadLessons() {
             const container = document.getElementById('lessonsContainer');
             try {
-                const res = await fetch(`${API_BASE}/resources?type=lesson&limit=200`);
+                // URL එකෙන් filter params ගන්න
+                const urlParams = new URLSearchParams(window.location.search);
+                const grades = urlParams.get('grades');
+                const activity = urlParams.get('activity');
+                const special = urlParams.get('special');
+                const gradeId = urlParams.get('grade_id');
+                const subjectId = urlParams.get('subject_id');
+
+                // API URL එක හදන්න
+                let apiUrl = `${API_BASE}/resources?type=lesson&limit=200`;
+                if (grades) apiUrl += `&grades=${grades}`;
+                if (activity) apiUrl += `&activity=${activity}`;
+                if (special) apiUrl += `&special=${special}`;
+                if (gradeId) apiUrl += `&grade_id=${gradeId}`;
+                if (subjectId) apiUrl += `&subject_id=${subjectId}`;
+
+                const res = await fetch(apiUrl);
                 const data = await res.json();
                 allLessons = data.lessons || [];
+                
+                // Page title එක update කරන්න
+                updatePageTitle(grades, activity, special);
+                
                 renderLessons(allLessons);
             } catch (err) {
-                container.innerHTML = `<div class="stat-card text-center py-16 text-red-500">දෝෂයක්: ${err.message}</div>`;
+                container.innerHTML = `<div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg text-red-500">දෝෂයක්: ${err.message}</div>`;
+            }
+        }
+
+        // Page title එක update කරන්න
+        function updatePageTitle(grades, activity, special) {
+            const titleEl = document.getElementById('pageTitle');
+            const subtitleEl = document.getElementById('pageSubtitle');
+            
+            if (grades) {
+                const gradeNames = {
+                    '1,2,3,4,5': 'ප්‍රාථමික අධ්‍යාපනය (ශ්‍රේණි 1-5)',
+                    '6,7,8,9': 'මධ්‍යම අධ්‍යාපනය (ශ්‍රේණි 6-9)',
+                    '10,11': 'සාමාන්‍ය පෙළ (ශ්‍රේණි 10-11)',
+                    '12,13': 'උසස් පෙළ (ශ්‍රේණි 12-13)'
+                };
+                if (titleEl) titleEl.textContent = gradeNames[grades] || 'පාඩම් සම්පත්';
+                if (subtitleEl) subtitleEl.textContent = 'අදාළ ශ්‍රේණියට අයත් පාඩම් සහ සම්පත්';
+            } else if (activity) {
+                const activityNames = {
+                    'sports': 'ක්‍රීඩා',
+                    'music': 'සංගීතය',
+                    'art': 'චිත්‍ර',
+                    'reading': 'කියවීම',
+                    'science': 'විද්‍යාව',
+                    'dance': 'නර්තනය'
+                };
+                if (titleEl) titleEl.textContent = activityNames[activity] || 'පාඩම් සම්පත්';
+                if (subtitleEl) subtitleEl.textContent = 'අදාළ ක්‍රියාකාරකමට අයත් සම්පත්';
+            } else if (special) {
+                if (titleEl) titleEl.textContent = 'විශේෂ අධ්‍යාපනය';
+                if (subtitleEl) subtitleEl.textContent = 'විශේෂ අවශ්‍යතා ඇති දරුවන්ට ගැලපෙන සම්පත්';
             }
         }
 
@@ -202,9 +451,10 @@
 
             if (!lessons || lessons.length === 0) {
                 container.innerHTML = `
-                    <div class="stat-card text-center py-16">
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg">
                         <i class="fa-solid fa-book-open text-6xl text-gray-300 mb-4"></i>
                         <p class="text-gray-500 text-lg">පාඩම් නොමැත</p>
+                        <p class="text-gray-400 text-sm mt-2">මෙම කාණ්ඩයට අදාළ පාඩම් තවම එකතු කර නැත</p>
                     </div>
                 `;
                 return;
@@ -213,26 +463,27 @@
             container.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     ${lessons.map(l => `
-                        <div class="stat-card border-t-4 border-brand-gold p-6 cursor-pointer" onclick="openLesson(${l.id})">
-                            <div class="flex items-start space-x-4">
-                                <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
-                                    <i class="fa-solid fa-book-open text-2xl"></i>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="font-bold text-brand-navy text-base mb-1 line-clamp-2">${l.title}</h3>
-                                    <p class="text-xs text-gray-500 mb-2">
-                                        ${l.grade_name || ''} ${l.subject_name ? '• ' + l.subject_name : ''}
-                                    </p>
-                                    <p class="text-xs text-gray-400 line-clamp-2">${l.description ? l.description.substring(0, 100) + '...' : 'විස්තරයක් නොමැත'}</p>
-                                    <button class="mt-3 text-brand-gold font-bold text-sm flex items-center gap-1">
-                                        බලන්න <i class="fa-solid fa-arrow-right"></i>
-                                    </button>
+                        <div class="lesson-card" onclick="openLesson(${l.id})" data-aos="fade-up">
+                            <div class="lesson-icon-wrap">
+                                <i class="fa-solid fa-book-open"></i>
+                                ${l.grade_name ? `<span class="lesson-grade-badge">${l.grade_name}</span>` : ''}
+                            </div>
+                            <div class="p-5 flex-1 flex flex-col">
+                                <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${l.title}</h3>
+                                <p class="text-xs text-gray-500 mb-3">
+                                    ${l.grade_name || ''} ${l.subject_name ? '• ' + l.subject_name : ''}
+                                </p>
+                                <p class="text-xs text-gray-400 flex-1 line-clamp-2">${l.description ? l.description.substring(0, 100) + '...' : 'විස්තරයක් නොමැත'}</p>
+                                <div class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
+                                    <span class="text-xs text-gray-500"><i class="fa-solid fa-eye mr-1"></i>${l.views || 0}</span>
+                                    <span class="text-brand-gold font-bold text-xs">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
                                 </div>
                             </div>
                         </div>
                     `).join('')}
                 </div>
             `;
+            if (window.AOS) AOS.refresh();
         }
 
         // ============================================
@@ -242,7 +493,7 @@
             const modal = document.getElementById('lessonModal');
             const modalBody = document.getElementById('modalBody');
 
-            modalBody.innerHTML = `<div class="text-center py-8"><div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
+            modalBody.innerHTML = `<div class="p-12 text-center"><div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
             modal.classList.add('active');
 
             try {
@@ -250,25 +501,27 @@
                 const lesson = await res.json();
 
                 modalBody.innerHTML = `
-                    <div class="mb-6">
-                        <div class="flex items-center gap-3 mb-4">
-                            <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
-                                <i class="fa-solid fa-book-open text-xl"></i>
+                    <div class="p-8">
+                        <div class="mb-6">
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-14 h-14 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+                                    <i class="fa-solid fa-book-open text-2xl"></i>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-brand-gold font-black uppercase">පාඩම</p>
+                                    <h2 class="text-2xl font-black text-brand-navy dark:text-white">${lesson.title}</h2>
+                                </div>
                             </div>
-                            <div>
-                                <p class="text-xs text-brand-gold font-black uppercase">පාඩම</p>
-                                <h2 class="text-2xl font-black text-brand-navy">${lesson.title}</h2>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                ${lesson.grade_name ? `<span class="text-xs font-bold bg-brand-navy text-white px-3 py-1 rounded-full">${lesson.grade_name}</span>` : ''}
+                                ${lesson.subject_name ? `<span class="text-xs font-bold bg-brand-gold text-brand-navy px-3 py-1 rounded-full">${lesson.subject_name}</span>` : ''}
                             </div>
                         </div>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            ${lesson.grade_name ? `<span class="text-xs font-bold bg-brand-navy text-white px-3 py-1 rounded-full">${lesson.grade_name}</span>` : ''}
-                            ${lesson.subject_name ? `<span class="text-xs font-bold bg-brand-gold text-brand-navy px-3 py-1 rounded-full">${lesson.subject_name}</span>` : ''}
-                        </div>
+                        <div class="prose max-w-none text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">${lesson.description || 'විස්තරයක් නොමැත'}</div>
                     </div>
-                    <div class="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap">${lesson.description || 'විස්තරයක් නොමැත'}</div>
                 `;
             } catch (err) {
-                modalBody.innerHTML = `<div class="text-center py-8 text-red-500">දෝෂයක්: ${err.message}</div>`;
+                modalBody.innerHTML = `<div class="p-12 text-center text-red-500">දෝෂයක්: ${err.message}</div>`;
             }
         }
 
@@ -306,10 +559,15 @@
         // INIT
         // ============================================
         document.addEventListener('DOMContentLoaded', async () => {
+            loadTheme();
             await loadFilters();
             await loadLessons();
         });
     </script>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, offset: 100 });
+    </script>
 </body>
 </html>
