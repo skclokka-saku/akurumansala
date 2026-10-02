@@ -617,25 +617,122 @@ function closeModal() {
 // ============================================
 async function renderGrades() {
     const content = document.getElementById('tabContent');
+    content.innerHTML = `<div class="text-center py-12"><div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
     
     try {
         const grades = await api('/grades');
         
-        content.innerHTML = `
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                ${grades.map(g => `
-                    <div class="stat-card text-center">
-                        <div class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl mb-3" style="background:${g.color || '#D4A017'}">
-                            <i class="fa-solid ${g.icon || 'fa-graduation-cap'}"></i>
-                        </div>
-                        <h3 class="font-black text-brand-navy">${g.grade_name}</h3>
-                        <p class="text-xs text-gray-500 mt-1">${g.lesson_count || 0} පාඩම්</p>
-                    </div>
-                `).join('')}
+        let html = `
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-sm text-gray-500">මුළු: <strong>${grades.length}</strong> ශ්‍රේණි</div>
+                <button onclick="openGradeForm()" class="btn-primary">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>නව ශ්‍රේණියක්</span>
+                </button>
             </div>
         `;
+        
+        if (grades.length === 0) {
+            html += `
+                <div class="stat-card text-center py-16">
+                    <i class="fa-solid fa-graduation-cap text-6xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 text-lg">ශ්‍රේණි නොමැත</p>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    ${grades.map(g => `
+                        <div class="stat-card text-center">
+                            <div class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl mb-3" style="background:${g.color || '#D4A017'}">
+                                <i class="fa-solid ${g.icon || 'fa-graduation-cap'}"></i>
+                            </div>
+                            <h3 class="font-black text-brand-navy">${g.grade_name}</h3>
+                            <p class="text-xs text-gray-500 mt-1">${g.lesson_count || 0} පාඩම්</p>
+                            <button onclick="deleteGrade(${g.id})" class="mt-2 text-red-500 hover:text-red-700 text-xs">
+                                <i class="fa-solid fa-trash"></i> මකන්න
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        content.innerHTML = html;
     } catch (err) {
         content.innerHTML = `<div class="text-center py-12 text-red-500">දෝෂයක්: ${err.message}</div>`;
+    }
+}
+
+function openGradeForm() {
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modalBody');
+    
+    document.getElementById('modalTitle').textContent = 'නව ශ්‍රේණියක් එකතු කරන්න';
+    
+    modalBody.innerHTML = `
+        <form id="gradeForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-bold mb-2">ශ්‍රේණි අංකය *</label>
+                <input type="number" id="g_number" required class="form-input" placeholder="1" min="1" max="13">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-2">ශ්‍රේණියේ නම *</label>
+                <input id="g_name" required class="form-input" placeholder="පළමු ශ්‍රේණිය">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-2">ඉංග්‍රීසි නම</label>
+                <input id="g_name_en" class="form-input" placeholder="Grade 1">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-2">වර්ණය</label>
+                <input type="color" id="g_color" value="#D4A017" class="form-input" style="height: 50px;">
+            </div>
+            <div class="flex space-x-3 pt-4">
+                <button type="button" onclick="closeModal()" class="flex-1 py-3 border-2 border-gray-200 text-gray-600 font-bold rounded-xl">
+                    අවලංගු කරන්න
+                </button>
+                <button type="submit" class="flex-1 py-3 bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy font-bold rounded-xl">
+                    <i class="fa-solid fa-save mr-2"></i>සුරකින්න
+                </button>
+            </div>
+        </form>
+    `;
+    
+    modal.classList.remove('hidden');
+    
+    document.getElementById('gradeForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            await api('/grades', {
+                method: 'POST',
+                body: JSON.stringify({
+                    grade_number: parseInt(document.getElementById('g_number').value),
+                    grade_name: document.getElementById('g_name').value,
+                    grade_name_en: document.getElementById('g_name_en').value,
+                    icon: 'fa-graduation-cap',
+                    color: document.getElementById('g_color').value
+                })
+            });
+            showToast('✅ සාර්ථකව එකතු කරන ලදී!', 'success');
+            closeModal();
+            await loadGrades();
+            renderGrades();
+        } catch (err) {
+            showToast('දෝෂයක්: ' + err.message, 'error');
+        }
+    });
+}
+
+async function deleteGrade(id) {
+    if (!confirm('මෙම ශ්‍රේණිය මකා දැමීමට අවශ්‍යද?')) return;
+    try {
+        await api(`/grades/${id}`, { method: 'DELETE' });
+        showToast('සාර්ථකව මකා දමන ලදී', 'success');
+        await loadGrades();
+        renderGrades();
+    } catch (err) {
+        showToast('දෝෂයක්: ' + err.message, 'error');
     }
 }
 
@@ -644,25 +741,117 @@ async function renderGrades() {
 // ============================================
 async function renderSubjects() {
     const content = document.getElementById('tabContent');
+    content.innerHTML = `<div class="text-center py-12"><div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
     
     try {
         const subjects = await api('/subjects');
         
-        content.innerHTML = `
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                ${subjects.map(s => `
-                    <div class="stat-card text-center">
-                        <div class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl mb-3" style="background:${s.color || '#3b82f6'}">
-                            <i class="fa-solid ${s.icon || 'fa-book'}"></i>
-                        </div>
-                        <h3 class="font-bold text-brand-navy text-sm">${s.subject_name}</h3>
-                        <p class="text-xs text-gray-500 mt-1">${s.subject_name_en || ''}</p>
-                    </div>
-                `).join('')}
+        let html = `
+            <div class="flex justify-between items-center mb-6">
+                <div class="text-sm text-gray-500">මුළු: <strong>${subjects.length}</strong> විෂයයන්</div>
+                <button onclick="openSubjectForm()" class="btn-primary">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>නව විෂයයක්</span>
+                </button>
             </div>
         `;
+        
+        if (subjects.length === 0) {
+            html += `
+                <div class="stat-card text-center py-16">
+                    <i class="fa-solid fa-book text-6xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 text-lg">විෂයයන් නොමැත</p>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    ${subjects.map(s => `
+                        <div class="stat-card text-center">
+                            <div class="w-14 h-14 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl mb-3" style="background:${s.color || '#3b82f6'}">
+                                <i class="fa-solid ${s.icon || 'fa-book'}"></i>
+                            </div>
+                            <h3 class="font-bold text-brand-navy text-sm">${s.subject_name}</h3>
+                            <p class="text-xs text-gray-500 mt-1">${s.subject_name_en || ''}</p>
+                            <button onclick="deleteSubject(${s.id})" class="mt-2 text-red-500 hover:text-red-700 text-xs">
+                                <i class="fa-solid fa-trash"></i> මකන්න
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        content.innerHTML = html;
     } catch (err) {
         content.innerHTML = `<div class="text-center py-12 text-red-500">දෝෂයක්: ${err.message}</div>`;
+    }
+}
+
+function openSubjectForm() {
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modalBody');
+    
+    document.getElementById('modalTitle').textContent = 'නව විෂයයක් එකතු කරන්න';
+    
+    modalBody.innerHTML = `
+        <form id="subjectForm" class="space-y-4">
+            <div>
+                <label class="block text-sm font-bold mb-2">විෂය නම *</label>
+                <input id="s_name" required class="form-input" placeholder="ගණිතය">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-2">ඉංග්‍රීසි නම</label>
+                <input id="s_name_en" class="form-input" placeholder="Mathematics">
+            </div>
+            <div>
+                <label class="block text-sm font-bold mb-2">වර්ණය</label>
+                <input type="color" id="s_color" value="#3b82f6" class="form-input" style="height: 50px;">
+            </div>
+            <div class="flex space-x-3 pt-4">
+                <button type="button" onclick="closeModal()" class="flex-1 py-3 border-2 border-gray-200 text-gray-600 font-bold rounded-xl">
+                    අවලංගු කරන්න
+                </button>
+                <button type="submit" class="flex-1 py-3 bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy font-bold rounded-xl">
+                    <i class="fa-solid fa-save mr-2"></i>සුරකින්න
+                </button>
+            </div>
+        </form>
+    `;
+    
+    modal.classList.remove('hidden');
+    
+    document.getElementById('subjectForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            await api('/subjects', {
+                method: 'POST',
+                body: JSON.stringify({
+                    subject_name: document.getElementById('s_name').value,
+                    subject_name_en: document.getElementById('s_name_en').value,
+                    icon: 'fa-book',
+                    color: document.getElementById('s_color').value
+                })
+            });
+            showToast('✅ සාර්ථකව එකතු කරන ලදී!', 'success');
+            closeModal();
+            await loadSubjects();
+            renderSubjects();
+        } catch (err) {
+            showToast('දෝෂයක්: ' + err.message, 'error');
+        }
+    });
+}
+
+async function deleteSubject(id) {
+    if (!confirm('මෙම විෂයය මකා දැමීමට අවශ්‍යද?')) return;
+    try {
+        await api(`/subjects/${id}`, { method: 'DELETE' });
+        showToast('සාර්ථකව මකා දමන ලදී', 'success');
+        await loadSubjects();
+        renderSubjects();
+    } catch (err) {
+        showToast('දෝෂයක්: ' + err.message, 'error');
     }
 }
 
