@@ -71,49 +71,175 @@ router.post('/login', async (req, res) => {
 // ============================================
 // POST /api/auth/send-otp - Send OTP to phone
 // ============================================
-router.post('/send-otp', async (req, res) => {
+// ============================================
+// NODEMAILER CONFIGURATION
+// ============================================
+const nodemailer = require('nodemailer');
+
+const emailTransporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
+// ============================================
+// POST /api/auth/send-email-code - Send verification code to email
+// ============================================
+router.post('/send-email-code', async (req, res) => {
     try {
-        const { phone, purpose } = req.body;
+        const { email, phone, purpose } = req.body;
 
-        if (!phone) {
-            return res.status(400).json({ error: 'දුරකථන අංකය අවශ්‍යයි' });
+        if (!email) {
+            return res.status(400).json({ error: 'විද්‍යුත් තැපෑල අවශ්‍යයි' });
         }
 
-        // Validate Sri Lankan phone number
-        const cleaned = phone.replace(/\s+/g, '').replace(/\+94/, '0');
-        const phoneRegex = /^0[1-9]\d{8}$/;
-        if (!phoneRegex.test(cleaned)) {
-            return res.status(400).json({ error: 'වලංගු ශ්‍රී ලංකා දුරකථන අංකයක් ඇතුළත් කරන්න (උදා: 0712345678)' });
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ error: 'වලංගු විද්‍යුත් තැපෑලක් ඇතුළත් කරන්න' });
         }
 
-        // Generate 6-digit OTP
-        const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-        
-        // Expires in 10 minutes
-        const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+        // Check if email already registered
+        const existingUser = await dbGet('SELECT id FROM users WHERE email = ?', [email]);
+        if (existingUser) {
+            return res.status(400).json({ error: 'මෙම විද්‍යුත් තැපෑල දැනටමත් ලියාපදිංචි වී ඇත' });
+        }
 
-        // Save to database
-        await dbRun(
-            'INSERT INTO otp_codes (phone, code, purpose, expires_at) VALUES (?, ?, ?, ?)',
-            [phone, otpCode, purpose || 'signup', expiresAt]
+        // Rate limiting: 2 minutes
+        const recentCode = await dbGet(
+            `SELECT * FROM otp_codes 
+             WHERE phone = ? AND created_at > datetime('now', '-2 minutes') 
+             ORDER BY created_at DESC LIMIT 1`,
+            [email]  // Using email in phone column for email codes
         );
 
-        await logActivity(null, phone, 'otp_sent', `Purpose: ${purpose || 'signup'}`, req, 'success');
+        if (recentCode) {
+            return res.status(429).json({ 
+                error: 'කේතයක් දැනටමත් යවා ඇත. කරුණාකර මිනිත්තු 2ක් රැඳී සිටින්න.'
+            });
+        }
 
-        console.log(`📱 OTP for ${phone}: ${otpCode}`);
+        // Generate 6-digit code
+        const code = Math.floor(100000 + Math.random() * 900000).toString();
+        const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+
+        // Send email
+        if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+            console.error('Email credentials missing');
+            return res.status(500).json({ 
+                error: 'Email සේවාව නිසි ලෙස වින්‍යාස කර නැත'
+            });
+        }
+
+        try {
+            await emailTransporter.sendMail({
+                from: `"අකුරු මංසල" <${process.env.EMAIL_USER}>`,
+                to: email,
+                subject: '🔐 අකුරු මංසල - ඔබගේ තහවුරු කිරීමේ කේතය',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: #f8f9fc;">
+                        <div style="background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #a855f7, #6366f1); border-radius: 20px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center;">
+                                    <span style="font-size: 40px;">🎓</span>
+                                </div>
+                                <h1 style="color: #0F2C59; margin: 0; font-size: 28px;">අකුරු මංසල</h1>
+                                <p style="color: #666; margin-top: 8px;">ඉගෙනුමට නව මඟක්</p>
+                            </div>
+
+                            <h2 style="color: #0F2C59; font-size: 22px; margin-bottom: 16px;">ඔබගේ තහවුරු කිරීමේ කේතය</h2>
+                            <p style="color: #555; line-height: 1.6; margin-bottom: 24px;">
+                                ඔබගේ ගිණුම තහවුරු කිරීම සඳහා පහත කේතය ඇතුළත් කරන්න:
+                            </p>
+
+                            <div style="background: linear-gradient(135deg, #f3e8ff, #e9d5ff); border-radius: 12px; padding: 24px; text-align: center; margin: 24px 0;">
+                                <div style="font-size: 42px; font-weight: bold; letter-spacing: 12px; color: #7c3aed; font-family: 'Courier New', monospace;">
+                                    ${code}
+                                </div>
+                            </div>
+
+                            <p style="color: #dc2626; font-size: 14px; margin-top: 20px;">
+                                ⚠️ මෙම කේතය මිනිත්තු 10ක් සඳහා වලංගුයි. කිසිවෙකු සමඟ බෙදා නොගන්න.
+                            </p>
+
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 30px 0;">
+
+                            <p style="color: #999; font-size: 12px; text-align: center;">
+                                මෙම ඊමේල් එක ඔබ ඉල්ලා නොමැති නම්, එය නොසලකා හරින්න.
+                            </p>
+                        </div>
+                    </div>
+                `
+            });
+
+            console.log(`✅ Email code sent to ${email}`);
+
+        } catch (emailError) {
+            console.error('Email send error:', emailError.message);
+            await logActivity(null, email, 'email_send_failed', emailError.message, req, 'failed');
+            return res.status(500).json({ 
+                error: 'Email යැවීමේ දෝෂයක්: ' + emailError.message
+            });
+        }
+
+        // Save code to database
+        await dbRun(
+            'INSERT INTO otp_codes (phone, code, purpose, expires_at) VALUES (?, ?, ?, ?)',
+            [email, code, purpose || 'signup', expiresAt]
+        );
+
+        await logActivity(null, email, 'email_code_sent', `Purpose: ${purpose || 'signup'}`, req, 'success');
 
         res.json({
-            message: 'OTP යවන ලදී. SMS හරහා ලැබෙනු ඇත.',
-            // ⚠️ For development only - remove in production
-            dev_otp: otpCode,
+            message: `තහවුරු කිරීමේ කේතය ${email} වෙත යවන ලදී. මිනිත්තු 10ක් ඇතුළත ඇතුළත් කරන්න.`,
+            email: email,
             expires_in: 600
         });
+
     } catch (error) {
-        console.error('Send OTP error:', error);
+        console.error('Send email code error:', error);
         res.status(500).json({ error: 'දෝෂයක්' });
     }
 });
 
+// ============================================
+// POST /api/auth/verify-email-code - Verify email code
+// ============================================
+router.post('/verify-email-code', async (req, res) => {
+    try {
+        const { email, code } = req.body;
+
+        if (!email || !code) {
+            return res.status(400).json({ error: 'විද්‍යුත් තැපෑල සහ කේතය අවශ්‍යයි' });
+        }
+
+        const otp = await dbGet(
+            `SELECT * FROM otp_codes 
+             WHERE phone = ? AND code = ? AND used = 0 AND expires_at > datetime('now') 
+             ORDER BY created_at DESC LIMIT 1`,
+            [email, code]
+        );
+
+        if (!otp) {
+            await logActivity(null, email, 'email_verify_failed', 'Invalid or expired code', req, 'failed');
+            return res.status(400).json({ error: 'වලංගු නොවන හෝ කල් ඉකුත් වූ කේතයක්' });
+        }
+
+        await dbRun('UPDATE otp_codes SET used = 1 WHERE id = ?', [otp.id]);
+
+        await logActivity(null, email, 'email_verified', 'Email verified successfully', req, 'success');
+
+        res.json({ 
+            message: 'විද්‍යුත් තැපෑල සාර්ථකව තහවුරු කරන ලදී',
+            verified: true
+        });
+    } catch (error) {
+        console.error('Verify email code error:', error);
+        res.status(500).json({ error: 'දෝෂයක්' });
+    }
+});
 // ============================================
 // POST /api/auth/verify-otp - Verify OTP
 // ============================================
