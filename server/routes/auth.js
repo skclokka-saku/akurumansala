@@ -280,12 +280,39 @@ router.post('/verify-otp', async (req, res) => {
 // ============================================
 // POST /api/auth/register - User Registration
 // ============================================
+// ============================================
+// POST /api/auth/register - User Registration
+// ============================================
 router.post('/register', async (req, res) => {
     try {
-        const { name, email, password, school, phone, otpCode } = req.body;
+        const { name, email, password, school, phone, emailCode } = req.body;
 
         if (!name || !email || !password || !phone) {
             return res.status(400).json({ error: 'සියලු තොරතුරු අවශ්‍යයි' });
+        }
+
+        // Validate phone (format only - not verified)
+        const cleanedPhone = phone.replace(/\s+/g, '');
+        if (!/^0[1-9]\d{8}$/.test(cleanedPhone)) {
+            return res.status(400).json({ error: 'වලංගු දුරකථන අංකයක් ඇතුළත් කරන්න (උදා: 0712345678)' });
+        }
+
+        // ============================================
+        // VERIFY EMAIL CODE
+        // ============================================
+        if (!emailCode) {
+            return res.status(400).json({ error: 'විද්‍යුත් තැපෑල තහවුරු කිරීමේ කේතය අවශ්‍යයි' });
+        }
+
+        const verifiedCode = await dbGet(
+            `SELECT * FROM otp_codes 
+             WHERE phone = ? AND code = ? AND used = 1 
+             ORDER BY created_at DESC LIMIT 1`,
+            [email, emailCode]
+        );
+
+        if (!verifiedCode) {
+            return res.status(400).json({ error: 'විද්‍යුත් තැපෑල තහවුරු කර නැත. කරුණාකර නැවත උත්සාහ කරන්න.' });
         }
 
         // Check if user exists
@@ -295,7 +322,7 @@ router.post('/register', async (req, res) => {
         }
 
         // Check if phone exists
-        const existingPhone = await dbGet('SELECT id FROM users WHERE phone = ?', [phone]);
+        const existingPhone = await dbGet('SELECT id FROM users WHERE phone = ?', [cleanedPhone]);
         if (existingPhone) {
             return res.status(400).json({ error: 'මෙම දුරකථන අංකය දැනටමත් ලියාපදිංචි වී ඇත' });
         }
@@ -304,13 +331,13 @@ router.post('/register', async (req, res) => {
 
         const result = await dbRun(
             'INSERT INTO users (name, email, password, role, school, phone) VALUES (?, ?, ?, ?, ?, ?)',
-            [name, email, hashedPassword, 'teacher', school || null, phone]
+            [name, email, hashedPassword, 'teacher', school || null, cleanedPhone]
         );
 
         const user = await dbGet('SELECT id, name, email, role, school, phone FROM users WHERE id = ?', [result.id]);
         const token = generateToken(user);
 
-        await logActivity(user.id, email, 'register_success', `Role: teacher, Phone: ${phone}`, req, 'success');
+        await logActivity(user.id, email, 'register_success', `Role: teacher, Phone: ${cleanedPhone}`, req, 'success');
 
         res.status(201).json({
             message: 'සාර්ථකව ලියාපදිංචි වුණා',
@@ -322,7 +349,6 @@ router.post('/register', async (req, res) => {
         res.status(500).json({ error: 'දෝෂයක්' });
     }
 });
-
 // ============================================
 // POST /api/auth/forgot-password
 // ============================================
