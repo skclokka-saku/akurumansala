@@ -78,10 +78,12 @@ tailwind.config = {
     .top-bar a { color: rgba(255,255,255,0.9); transition: all 0.3s; text-decoration: none; }
     .top-bar a:hover { color: #D4A017; transform: translateY(-2px); }
 
-      /* Social Icons - COLORFUL */
+         /* ============================================ */
+    /* SOCIAL ICONS - UNIVERSAL (Header + Footer)  */
+    /* ============================================ */
     .social-icon {
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
         border-radius: 0.85rem;
         display: inline-flex;
         align-items: center;
@@ -89,54 +91,81 @@ tailwind.config = {
         transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         color: #ffffff;
         text-decoration: none;
-        font-size: 1rem;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        font-size: 1.1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
         position: relative;
         overflow: hidden;
         flex-shrink: 0;
+        border: 1px solid rgba(255, 255, 255, 0.15);
     }
     .social-icon i {
         color: #ffffff !important;
-        font-size: 1.05rem;
+        font-size: 1.15rem;
         position: relative;
         z-index: 2;
+        transition: transform 0.3s;
     }
     .social-icon::before {
         content: '';
         position: absolute;
         inset: 0;
-        background: rgba(255,255,255,0.2);
+        background: rgba(255, 255, 255, 0.25);
         opacity: 0;
         transition: opacity 0.3s;
         z-index: 1;
     }
     .social-icon:hover::before { opacity: 1; }
-    .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); }
-    .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
-    .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
-    .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
-    .social-icon.twitter { background: linear-gradient(135deg, #1da1f2, #0d8ddb); }
+    .social-icon:hover i { transform: scale(1.2) rotate(-10deg); }
+
+    /* Brand Colors */
+    .social-icon.facebook { 
+        background: linear-gradient(135deg, #1877f2, #0e5fce); 
+        box-shadow: 0 6px 20px rgba(24, 119, 242, 0.5);
+    }
+    .social-icon.youtube { 
+        background: linear-gradient(135deg, #ff0000, #cc0000); 
+        box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
+    }
+    .social-icon.whatsapp { 
+        background: linear-gradient(135deg, #25d366, #128c7e); 
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+    }
+    .social-icon.instagram { 
+        background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); 
+        box-shadow: 0 6px 20px rgba(221, 42, 123, 0.5);
+    }
+    .social-icon.twitter { 
+        background: linear-gradient(135deg, #1da1f2, #0d8ddb); 
+        box-shadow: 0 6px 20px rgba(29, 161, 242, 0.5);
+    }
+
+    /* Hover Animation */
     .social-icon:hover { 
         transform: translateY(-6px) scale(1.15) rotate(-5deg); 
-        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        border-color: transparent;
     }
-    .social-icon::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: rgba(255,255,255,0.2);
-        opacity: 0;
-        transition: opacity 0.3s;
+
+    /* Header Top Bar - Smaller Icons */
+    .top-bar .social-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 0.95rem;
+        border-radius: 0.7rem;
     }
-    .social-icon:hover::before { opacity: 1; }
-    .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); }
-    .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
-    .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
-    .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
-    .social-icon.twitter { background: linear-gradient(135deg, #1da1f2, #0d8ddb); }
-    .social-icon:hover { 
-        transform: translateY(-6px) scale(1.15) rotate(-5deg); 
-        box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    .top-bar .social-icon i {
+        font-size: 1rem;
+    }
+
+    /* Footer - Standard Icons */
+    .footer .social-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+        border-radius: 0.85rem;
+    }
+    .footer .social-icon i {
+        font-size: 1.15rem;
     }
 
     /* Main Nav */
@@ -757,14 +786,20 @@ tailwind.config = {
 </head>
 <body>
 
-         <!-- TOP BAR -->
+            <!-- TOP BAR -->
     <div class="top-bar py-3 hidden md:block">
         <div class="container-wide">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-8">
-                    <span class="flex items-center gap-2 text-sm font-semibold"><i class="fa-solid fa-location-dot text-brand-gold"></i>කෑ ශ්‍රී ලංකාව</span>
-                    <span class="flex items-center gap-2 text-sm font-semibold"><i class="fa-solid fa-phone text-brand-gold"></i>+94 767512666</span>
-                    <span class="flex items-center gap-2 text-sm font-semibold"><i class="fa-solid fa-envelope text-brand-gold"></i>info@akurumansala.lk</span>
+                    <span class="flex items-center gap-2 text-sm font-semibold">
+                        <i class="fa-solid fa-location-dot text-brand-gold"></i>කොළඹ, ශ්‍රී ලංකාව
+                    </span>
+                    <span class="flex items-center gap-2 text-sm font-semibold">
+                        <i class="fa-solid fa-phone text-brand-gold"></i>+94 767512666
+                    </span>
+                    <span class="flex items-center gap-2 text-sm font-semibold">
+                        <i class="fa-solid fa-envelope text-brand-gold"></i>info@akurumansala.lk
+                    </span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="font-bold text-brand-gold text-sm">Follow Us:</span>
@@ -1478,9 +1513,9 @@ tailwind.config = {
         <div class="container-wide">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-12 border-b border-white/10">
                 
-                <!-- Column 1: Brand -->
+                               <!-- Column 1: Brand -->
                 <div>
-                    <div class="flex items-center space-x-4 mb-6">
+                    <div class="flex items-center space-x-5 mb-6">
                         <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center p-2 shadow-lg">
                             <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-4xl\'></i>'">
                         </div>
@@ -1492,7 +1527,7 @@ tailwind.config = {
                     <p class="text-white/70 leading-relaxed mb-6">
                         ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
                     </p>
-                    <div class="flex space-x-3">
+                    <div class="flex flex-wrap gap-3">
                         <a href="#" class="social-icon facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
                         <a href="#" class="social-icon youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
                         <a href="#" class="social-icon whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
