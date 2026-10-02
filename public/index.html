@@ -49,49 +49,70 @@ tailwind.config = {
 
     .container-wide {
         width: 100%;
-        max-width: 100%;
-        padding-left: 2rem;
-        padding-right: 2rem;
+        max-width: 1400px;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
         margin: 0 auto;
     }
-    @media (min-width: 768px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
-    @media (min-width: 1280px) { .container-wide { padding-left: 5rem; padding-right: 5rem; } }
-    @media (max-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
+    @media (min-width: 768px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
+    @media (min-width: 1280px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
 
-    .top-bar { background: #0F2C59; color: white; font-size: 0.75rem; }
+    .top-bar { background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; font-size: 0.75rem; }
     .top-bar a { color: rgba(255,255,255,0.85); transition: color 0.2s; text-decoration: none; }
     .top-bar a:hover { color: #D4A017; }
 
     .main-nav { background: white; box-shadow: 0 2px 20px rgba(15, 44, 89, 0.08); }
     body.dark .main-nav { background: #1a1a2e; }
 
+    .logo-wrap {
+        width: 65px;
+        height: 65px;
+        background: linear-gradient(135deg, #ffffff, #f8f9fc);
+        border-radius: 1.1rem;
+        box-shadow: 0 4px 15px rgba(15, 44, 89, 0.15);
+        border: 2px solid rgba(212, 160, 23, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem;
+        transition: all 0.3s;
+    }
+    .logo-wrap:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(15, 44, 89, 0.25); }
+    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+
     .nav-link {
         position: relative;
-        font-weight: 600;
+        font-weight: 700;
         color: #0F2C59;
         font-size: 0.8125rem;
         letter-spacing: 0.5px;
         text-transform: uppercase;
         transition: color 0.3s;
-        padding: 0.5rem 0.75rem;
+        padding: 0.6rem 0.9rem;
         text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        border-radius: 0.5rem;
     }
     body.dark .nav-link { color: #cbd5e1; }
+    .nav-link i { font-size: 0.7rem; color: #D4A017; }
     .nav-link::after {
         content: '';
         position: absolute;
         bottom: 0;
         left: 50%;
         width: 0;
-        height: 2px;
+        height: 3px;
         background: #D4A017;
+        border-radius: 3px;
         transition: all 0.3s ease;
         transform: translateX(-50%);
     }
-    .nav-link:hover, .nav-link.active { color: #D4A017; }
-    .nav-link:hover::after, .nav-link.active::after { width: 80%; }
+    .nav-link:hover, .nav-link.active { color: #D4A017; background: rgba(212, 160, 23, 0.08); }
+    .nav-link:hover::after, .nav-link.active::after { width: 50%; }
 
-    .hero-section { position: relative; min-height: 650px; background: #0F2C59; overflow: hidden; }
+    .hero-section { position: relative; min-height: 700px; background: #0F2C59; overflow: hidden; }
     .hero-bg {
         position: absolute;
         inset: 0;
@@ -99,54 +120,75 @@ tailwind.config = {
         background-size: cover;
         background-position: center;
         z-index: 1;
+        animation: zoomIn 20s ease-in-out infinite;
+    }
+    @keyframes zoomIn {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.08); }
     }
     .hero-overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(90deg, rgba(15, 44, 89, 0.95) 0%, rgba(15, 44, 89, 0.85) 35%, rgba(15, 44, 89, 0.55) 55%, rgba(15, 44, 89, 0.25) 75%, rgba(15, 44, 89, 0.05) 100%);
+        background: linear-gradient(90deg, rgba(15, 44, 89, 0.96) 0%, rgba(15, 44, 89, 0.88) 35%, rgba(15, 44, 89, 0.6) 55%, rgba(15, 44, 89, 0.3) 75%, rgba(15, 44, 89, 0.05) 100%);
         z-index: 2;
     }
     body.dark .hero-overlay {
-        background: linear-gradient(90deg, rgba(10, 15, 30, 0.98) 0%, rgba(10, 15, 30, 0.90) 35%, rgba(10, 15, 30, 0.60) 55%, rgba(10, 15, 30, 0.30) 75%, rgba(10, 15, 30, 0.10) 100%);
+        background: linear-gradient(90deg, rgba(10, 15, 30, 0.98) 0%, rgba(10, 15, 30, 0.92) 35%, rgba(10, 15, 30, 0.65) 55%, rgba(10, 15, 30, 0.35) 75%, rgba(10, 15, 30, 0.15) 100%);
     }
-    .hero-content { position: relative; z-index: 3; padding: 5rem 6rem 5rem 8rem; width: 100%; }
-    @media (max-width: 1280px) { .hero-content { padding: 5rem 4rem; } }
-    @media (max-width: 768px) { .hero-content { padding: 4rem 2rem; } }
-    @media (max-width: 640px) { .hero-content { padding: 3rem 1.5rem; } }
+    .hero-content { position: relative; z-index: 3; padding: 5rem 3rem 5rem 5rem; width: 100%; }
+    @media (max-width: 1280px) { .hero-content { padding: 5rem 2rem; } }
+    @media (max-width: 768px) { .hero-content { padding: 4rem 1.5rem; } }
 
-    .hero-title { text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); letter-spacing: -0.02em; line-height: 1.1; }
-    .hero-gold-text { text-shadow: 0 2px 20px rgba(212, 160, 23, 0.6); }
-
-    .hero-info-cards { position: relative; z-index: 5; margin-top: -3rem; padding-bottom: 2rem; }
-
+    .hero-title { text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); letter-spacing: -0.02em; line-height: 1.05; }
+    .hero-gold-text { text-shadow: 0 2px 20px rgba(212, 160, 23, 0.6); display: inline-block; animation: floatUp 3s ease-in-out infinite; }
+    @keyframes floatUp {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+    .hero-info-cards { position: relative; z-index: 5; margin-top: -4rem; padding-bottom: 2rem; }
     .info-card-3d {
         background: white;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        box-shadow: 0 8px 30px rgba(15, 44, 89, 0.15);
+        border-radius: 1.25rem;
+        padding: 1.75rem;
+        box-shadow: 0 10px 40px rgba(15, 44, 89, 0.15);
         border-left: 5px solid #D4A017;
         transition: all 0.4s;
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 1.25rem;
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+    }
+    .info-card-3d::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, rgba(212, 160, 23, 0.1), transparent);
+        border-radius: 50%;
     }
     body.dark .info-card-3d { background: #1a1a2e; }
-    .info-card-3d:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(15, 44, 89, 0.25); }
+    .info-card-3d:hover { transform: translateY(-10px); box-shadow: 0 25px 60px rgba(15, 44, 89, 0.25); }
     .info-card-icon {
-        width: 60px;
-        height: 60px;
-        border-radius: 1rem;
+        width: 68px;
+        height: 68px;
+        border-radius: 1.25rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.75rem;
+        font-size: 1.9rem;
         flex-shrink: 0;
+        transition: all 0.4s;
     }
+    .info-card-3d:hover .info-card-icon { transform: scale(1.1) rotate(-8deg); }
 
     .btn-primary {
         background: linear-gradient(135deg, #D4A017, #E8B923);
         color: #0F2C59;
-        padding: 0.875rem 2rem;
+        padding: 0.9rem 2rem;
         border-radius: 0.75rem;
         font-weight: 800;
         text-transform: uppercase;
@@ -156,17 +198,32 @@ tailwind.config = {
         display: inline-flex;
         align-items: center;
         gap: 0.75rem;
-        box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
+        box-shadow: 0 8px 25px rgba(212, 160, 23, 0.4);
         cursor: pointer;
         border: none;
         text-decoration: none;
+        position: relative;
+        overflow: hidden;
     }
-    .btn-primary:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 12px 30px rgba(212, 160, 23, 0.6); }
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: rgba(255,255,255,0.3);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+    .btn-primary:hover::before { width: 300px; height: 300px; }
+    .btn-primary:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 15px 35px rgba(212, 160, 23, 0.6); }
 
     .btn-outline {
         border: 2px solid white;
         color: white;
-        padding: 0.875rem 2rem;
+        padding: 0.9rem 2rem;
         border-radius: 0.75rem;
         font-weight: 800;
         text-transform: uppercase;
@@ -203,8 +260,8 @@ tailwind.config = {
     .btn-navy:hover { background: #1B3A6B; transform: translateY(-3px); }
 
     .theme-toggle {
-        width: 42px;
-        height: 42px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         background: rgba(212, 160, 23, 0.12);
         color: #D4A017;
@@ -215,82 +272,113 @@ tailwind.config = {
         transition: all 0.3s;
         border: 2px solid #D4A017;
     }
-    .theme-toggle:hover { background: #D4A017; color: #0F2C59; transform: rotate(20deg) scale(1.1); }
+    .theme-toggle:hover { background: #D4A017; color: #0F2C59; transform: rotate(180deg) scale(1.1); }
 
     .feature-card {
         background: white;
-        padding: 1.75rem 1.25rem;
-        border-radius: 1rem;
+        padding: 2rem 1.5rem;
+        border-radius: 1.25rem;
         text-align: center;
         border-bottom: 4px solid transparent;
         transition: all 0.4s;
         box-shadow: 0 4px 15px rgba(15, 44, 89, 0.08);
+        position: relative;
+        overflow: hidden;
     }
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(212, 160, 23, 0.1), transparent);
+        border-radius: 50%;
+        transition: all 0.5s;
+        opacity: 0;
+    }
+    .feature-card:hover::before { opacity: 1; top: -20%; right: -20%; }
     body.dark .feature-card { background: #1a1a2e; }
-    .feature-card:hover { border-bottom-color: #D4A017; transform: translateY(-8px); }
+    .feature-card:hover { border-bottom-color: #D4A017; transform: translateY(-10px); }
     .feature-icon {
-        width: 64px;
-        height: 64px;
-        margin: 0 auto 0.875rem;
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.75rem;
+        font-size: 1.9rem;
         color: #D4A017;
-        background: linear-gradient(135deg, rgba(212, 160, 23, 0.12), rgba(212, 160, 23, 0.05));
-        border-radius: 1rem;
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.15), rgba(212, 160, 23, 0.05));
+        border-radius: 1.25rem;
         transition: all 0.4s;
     }
-    .feature-card:hover .feature-icon { transform: scale(1.15) rotate(-8deg); }
+    .feature-card:hover .feature-icon { transform: scale(1.15) rotate(-10deg); background: linear-gradient(135deg, #D4A017, #E8B923); color: white; }
 
     .program-card {
         background: white;
-        border-radius: 1rem;
+        border-radius: 1.25rem;
         overflow: hidden;
         box-shadow: 0 6px 25px rgba(15, 44, 89, 0.08);
         transition: all 0.5s;
         display: flex;
         flex-direction: column;
         height: 100%;
+        position: relative;
     }
     body.dark .program-card { background: #1a1a2e; }
-    .program-card:hover { transform: translateY(-12px); box-shadow: 0 25px 50px rgba(15, 44, 89, 0.2); }
-    .program-card .img-wrap { position: relative; height: 200px; overflow: hidden; }
+    .program-card:hover { transform: translateY(-12px); box-shadow: 0 30px 60px rgba(15, 44, 89, 0.25); }
+    .program-card .img-wrap { position: relative; height: 220px; overflow: hidden; }
     .program-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
-    .program-card:hover img { transform: scale(1.1); }
+    .program-card:hover img { transform: scale(1.15); }
     .program-badge {
         position: absolute;
         top: 1rem;
         left: 1rem;
-        background: #D4A017;
+        background: linear-gradient(135deg, #D4A017, #E8B923);
         color: #0F2C59;
-        padding: 0.375rem 0.875rem;
+        padding: 0.4rem 1rem;
         border-radius: 999px;
         font-weight: 800;
-        font-size: 0.6875rem;
+        font-size: 0.7rem;
         letter-spacing: 0.5px;
         text-transform: uppercase;
+        box-shadow: 0 4px 15px rgba(212, 160, 23, 0.4);
     }
 
     .stats-bar {
         background: linear-gradient(135deg, #0F2C59, #1B3A6B);
         color: white;
-        padding: 3rem 0;
+        padding: 4rem 0;
         position: relative;
         overflow: hidden;
     }
+    .stats-bar::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(circle at 20% 50%, rgba(212, 160, 23, 0.15) 0%, transparent 50%),
+                          radial-gradient(circle at 80% 50%, rgba(212, 160, 23, 0.15) 0%, transparent 50%);
+        animation: pulseBg 5s ease-in-out infinite;
+    }
+    @keyframes pulseBg {
+        0%, 100% { opacity: 0.5; }
+        50% { opacity: 1; }
+    }
 
     .activity-card {
-        border-radius: 1rem;
+        border-radius: 1.25rem;
         overflow: hidden;
         position: relative;
         cursor: pointer;
         box-shadow: 0 6px 20px rgba(0,0,0,0.1);
         transition: all 0.4s;
+        text-decoration: none;
+        display: block;
     }
-    .activity-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+    .activity-card:hover { transform: translateY(-10px) scale(1.03); box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
     .activity-card img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.5s; display: block; }
-    .activity-card:hover img { transform: scale(1.12); }
+    .activity-card:hover img { transform: scale(1.15); }
     .activity-label {
         position: absolute;
         bottom: 0;
@@ -298,7 +386,7 @@ tailwind.config = {
         right: 0;
         background: linear-gradient(to top, rgba(15, 44, 89, 0.98) 0%, rgba(15, 44, 89, 0.7) 60%, transparent 100%);
         color: white;
-        padding: 2rem 1rem 1rem;
+        padding: 2.5rem 1rem 1rem;
         font-weight: 800;
         text-transform: uppercase;
         font-size: 0.75rem;
@@ -307,82 +395,126 @@ tailwind.config = {
         align-items: center;
         gap: 0.5rem;
     }
-    .activity-label i { color: #D4A017; }
+    .activity-label i { color: #D4A017; font-size: 1rem; }
 
     .resource-card {
         background: white;
         padding: 2rem;
-        border-radius: 1rem;
+        border-radius: 1.25rem;
         box-shadow: 0 4px 20px rgba(15, 44, 89, 0.08);
         transition: all 0.4s;
         display: flex;
         flex-direction: column;
         height: 100%;
         text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        border-top: 4px solid transparent;
     }
+    .resource-card::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 0;
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.05), rgba(212, 160, 23, 0.02));
+        transition: height 0.4s;
+    }
+    .resource-card:hover::before { height: 100%; }
     body.dark .resource-card { background: #1a1a2e; }
-    .resource-card:hover { transform: translateY(-8px); box-shadow: 0 20px 45px rgba(15, 44, 89, 0.15); }
+    .resource-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(15, 44, 89, 0.15); border-top-color: #D4A017; }
     .resource-icon {
-        width: 64px;
-        height: 64px;
-        border-radius: 1rem;
+        width: 68px;
+        height: 68px;
+        border-radius: 1.25rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.75rem;
+        font-size: 1.9rem;
         color: white;
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
+        transition: all 0.4s;
+        position: relative;
+        z-index: 1;
     }
+    .resource-card:hover .resource-icon { transform: scale(1.1) rotate(8deg); }
 
     .testimonial-card {
         background: white;
-        padding: 1.75rem;
-        border-radius: 1rem;
+        padding: 2rem;
+        border-radius: 1.25rem;
         border-left: 4px solid #D4A017;
         box-shadow: 0 4px 20px rgba(15, 44, 89, 0.08);
         transition: all 0.3s;
         position: relative;
         height: 100%;
     }
+    .testimonial-card::before {
+        content: '"';
+        position: absolute;
+        top: 1rem;
+        right: 1.5rem;
+        font-size: 5rem;
+        color: rgba(212, 160, 23, 0.1);
+        font-family: Georgia, serif;
+        line-height: 1;
+    }
     body.dark .testimonial-card { background: #1a1a2e; }
-    .testimonial-card:hover { transform: translateY(-6px); box-shadow: 0 20px 45px rgba(15, 44, 89, 0.15); }
+    .testimonial-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(15, 44, 89, 0.15); }
 
     .cta-section {
         background: linear-gradient(135deg, #0F2C59, #1B3A6B);
         color: white;
-        padding: 3rem;
+        padding: 3.5rem;
         border-radius: 1.5rem;
         position: relative;
         overflow: hidden;
     }
+    .cta-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -20%;
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, rgba(212, 160, 23, 0.2), transparent);
+        border-radius: 50%;
+        animation: floatCircle 8s ease-in-out infinite;
+    }
+    @keyframes floatCircle {
+        0%, 100% { transform: translate(0, 0); }
+        50% { transform: translate(-30px, 30px); }
+    }
 
-    .footer { background: #0F2C59; color: white; padding-top: 4rem; }
+    .footer { background: linear-gradient(180deg, #0F2C59, #0a1a3a); color: white; padding-top: 4rem; position: relative; overflow: hidden; }
     body.dark .footer { background: #05080f; }
     .footer a { color: rgba(255,255,255,0.75); transition: all 0.2s; font-size: 0.875rem; display: inline-block; text-decoration: none; }
-    .footer a:hover { color: #D4A017; padding-left: 4px; }
+    .footer a:hover { color: #D4A017; padding-left: 6px; }
     .footer-title {
         color: white;
         font-weight: 800;
         text-transform: uppercase;
         font-size: 0.8125rem;
         letter-spacing: 1.5px;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.5rem;
         position: relative;
-        padding-bottom: 0.5rem;
+        padding-bottom: 0.75rem;
     }
     .footer-title::after {
         content: '';
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 30px;
-        height: 2px;
-        background: #D4A017;
+        width: 40px;
+        height: 3px;
+        background: linear-gradient(90deg, #D4A017, #E8B923);
+        border-radius: 3px;
     }
 
     .social-icon {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         background: rgba(255,255,255,0.1);
         display: flex;
@@ -391,35 +523,52 @@ tailwind.config = {
         transition: all 0.3s;
         color: white;
         text-decoration: none;
+        border: 1px solid rgba(255,255,255,0.15);
     }
-    .social-icon:hover { background: #D4A017; color: #0F2C59; transform: translateY(-4px) scale(1.1); }
+    .social-icon:hover { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; transform: translateY(-6px) scale(1.15); border-color: transparent; }
 
     .section-label {
         color: #D4A017;
         font-weight: 800;
-        font-size: 0.6875rem;
-        letter-spacing: 0.25em;
+        font-size: 0.7rem;
+        letter-spacing: 0.3em;
         text-transform: uppercase;
-        margin-bottom: 0.625rem;
+        margin-bottom: 0.75rem;
         display: inline-block;
+        padding: 0.4rem 1rem;
+        background: rgba(212, 160, 23, 0.1);
+        border-radius: 999px;
     }
 
     .section-title {
-        font-size: 1.875rem;
+        font-size: 2rem;
         font-weight: 900;
         color: #0F2C59;
         line-height: 1.2;
         margin-bottom: 1rem;
     }
     body.dark .section-title { color: white; }
-    @media (min-width: 768px) { .section-title { font-size: 2.25rem; } }
-    @media (min-width: 1024px) { .section-title { font-size: 2.75rem; } }
+    @media (min-width: 768px) { .section-title { font-size: 2.5rem; } }
+    @media (min-width: 1024px) { .section-title { font-size: 3rem; } }
 
-    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar { width: 12px; }
     ::-webkit-scrollbar-track { background: #F8F9FC; }
-    ::-webkit-scrollbar-thumb { background: #D4A017; border-radius: 5px; }
+    ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #D4A017, #E8B923); border-radius: 6px; border: 2px solid #F8F9FC; }
 
-    @media (max-width: 768px) { .hero-section { min-height: 550px; } }
+    .floating-shape {
+        position: absolute;
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.15), transparent);
+        pointer-events: none;
+        animation: floatAround 15s ease-in-out infinite;
+    }
+    @keyframes floatAround {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        33% { transform: translate(30px, -30px) rotate(120deg); }
+        66% { transform: translate(-20px, 20px) rotate(240deg); }
+    }
+
+    @media (max-width: 768px) { .hero-section { min-height: 600px; } }
 </style>
 </head>
 <body>
@@ -448,23 +597,23 @@ tailwind.config = {
         <div class="container-wide">
             <div class="h-20 flex items-center justify-between">
                 <a href="#home" class="flex items-center space-x-3">
-                    <div class="w-14 h-14 bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg border-2 border-brand-gold/30 flex items-center justify-center p-1">
-                        <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-2xl\'></i>'">
+                    <div class="logo-wrap">
+                        <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
                     </div>
                     <div class="hidden sm:block">
-                        <h1 class="text-xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
-                        <p class="text-xs text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
+                        <h1 class="text-2xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
+                        <p class="text-xs text-brand-gold font-bold mt-1.5">ඉගෙනුමට නව මඟක්</p>
                     </div>
                 </a>
 
                 <nav class="hidden lg:flex items-center space-x-1">
-                    <a href="#home" class="nav-link active">මුල් පිටුව</a>
-                    <a href="#about" class="nav-link">අප ගැන</a>
-                    <a href="#grades" class="nav-link">ශ්‍රේණි</a>
-                    <a href="#activities" class="nav-link">ක්‍රියාකාරකම්</a>
-                    <a href="/resources.html" class="nav-link">සම්පත්</a>
-                    <a href="/papers.html" class="nav-link">ප්‍රශ්න පත්‍ර</a>
-                    <a href="/videos.html" class="nav-link">වීඩියෝ</a>
+                    <a href="#home" class="nav-link active"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
+                    <a href="#about" class="nav-link"><i class="fa-solid fa-info-circle"></i>අප ගැන</a>
+                    <a href="#grades" class="nav-link"><i class="fa-solid fa-layer-group"></i>ශ්‍රේණි</a>
+                    <a href="#activities" class="nav-link"><i class="fa-solid fa-futbol"></i>ක්‍රියාකාරකම්</a>
+                    <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book"></i>සම්පත්</a>
+                    <a href="/papers.html" class="nav-link"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
+                    <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
                 </nav>
 
                 <div class="flex items-center space-x-2 md:space-x-3">
@@ -479,8 +628,8 @@ tailwind.config = {
                         <i class="fa-solid fa-shield-halved"></i>
                         <span>Admin</span>
                     </a>
-                    <button onclick="toggleMobileMenu()" class="lg:hidden w-10 h-10 rounded-lg bg-brand-navy text-white flex items-center justify-center">
-                        <i class="fa-solid fa-bars"></i>
+                    <button onclick="toggleMobileMenu()" class="lg:hidden w-11 h-11 rounded-xl bg-brand-navy text-white flex items-center justify-center">
+                        <i class="fa-solid fa-bars text-lg"></i>
                     </button>
                 </div>
             </div>
@@ -502,6 +651,8 @@ tailwind.config = {
     <section id="home" class="hero-section">
         <div class="hero-bg"></div>
         <div class="hero-overlay"></div>
+        <div class="floating-shape" style="width: 200px; height: 200px; top: 15%; right: 10%;"></div>
+        <div class="floating-shape" style="width: 120px; height: 120px; bottom: 20%; right: 25%; animation-delay: 2s;"></div>
 
         <div class="hero-content">
             <div class="max-w-3xl">
@@ -594,7 +745,7 @@ tailwind.config = {
     <!-- FEATURES -->
     <section class="py-14 bg-white dark:bg-gray-900">
         <div class="container-wide">
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-5">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
                 <div class="feature-card" data-aos="fade-up">
                     <div class="feature-icon"><i class="fa-solid fa-graduation-cap"></i></div>
                     <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">ශ්‍රේණි 1-13</h3>
@@ -623,15 +774,14 @@ tailwind.config = {
             </div>
         </div>
     </section>
-
-    <!-- ABOUT -->
+        <!-- ABOUT -->
     <section id="about" class="py-20 bg-brand-light dark:bg-gray-950">
         <div class="container-wide">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                 <div data-aos="fade-right">
                     <div class="relative">
                         <img src="/images/about-school.jpg" alt="අප ගැන" class="rounded-2xl shadow-2xl w-full h-[400px] object-cover" onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800'">
-                        <div class="absolute -bottom-5 -right-5 bg-brand-gold text-brand-navy p-5 rounded-2xl shadow-2xl">
+                        <div class="absolute -bottom-5 -right-5 bg-gradient-to-br from-brand-gold to-brand-gold2 text-brand-navy p-6 rounded-2xl shadow-2xl">
                             <div class="text-4xl font-black">10+</div>
                             <div class="text-xs font-bold uppercase mt-2">වසර අත්දැකීම්</div>
                         </div>
@@ -646,25 +796,25 @@ tailwind.config = {
                     </p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
                         <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center">
+                            <div class="w-9 h-9 rounded-lg bg-brand-gold flex items-center justify-center">
                                 <i class="fa-solid fa-check text-brand-navy text-xs"></i>
                             </div>
                             <span class="font-bold text-brand-navy dark:text-white text-sm">සරල හා වේගවත්</span>
                         </div>
                         <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center">
+                            <div class="w-9 h-9 rounded-lg bg-brand-gold flex items-center justify-center">
                                 <i class="fa-solid fa-check text-brand-navy text-xs"></i>
                             </div>
                             <span class="font-bold text-brand-navy dark:text-white text-sm">ශ්‍රේණි හා විෂය අනුව</span>
                         </div>
                         <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center">
+                            <div class="w-9 h-9 rounded-lg bg-brand-gold flex items-center justify-center">
                                 <i class="fa-solid fa-check text-brand-navy text-xs"></i>
                             </div>
                             <span class="font-bold text-brand-navy dark:text-white text-sm">ගුරු සම්පත් පහසුකම</span>
                         </div>
                         <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-lg bg-brand-gold flex items-center justify-center">
+                            <div class="w-9 h-9 rounded-lg bg-brand-gold flex items-center justify-center">
                                 <i class="fa-solid fa-check text-brand-navy text-xs"></i>
                             </div>
                             <span class="font-bold text-brand-navy dark:text-white text-sm">නොමිලේ ප්‍රවේශය</span>
@@ -701,7 +851,7 @@ tailwind.config = {
                         <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
                             මූලික අක්ෂර, ගණන් කිරීම සහ පරිසරය ගැන ඉගෙන ගනිමු.
                         </p>
-                        <a href="/resources.html" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?grades=1,2,3,4,5" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -717,7 +867,7 @@ tailwind.config = {
                         <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
                             විෂය මාලාව පුළුල් කරගනිමින් ගැඹුරු ඉගෙනීම.
                         </p>
-                        <a href="/resources.html" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?grades=6,7,8,9" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -733,7 +883,7 @@ tailwind.config = {
                         <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
                             සාමාන්‍ය පෙළ විභාගයට සූදානම් වීම.
                         </p>
-                        <a href="/papers.html" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?grades=10,11" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -749,7 +899,7 @@ tailwind.config = {
                         <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
                             උසස් පෙළ විභාගයට සහ විශ්වවිද්‍යාලයට සූදානම් වීම.
                         </p>
-                        <a href="/papers.html" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?grades=12,13" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -765,7 +915,7 @@ tailwind.config = {
                         <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
                             විශේෂ අවශ්‍යතා ඇති දරුවන්ට ගැලපෙන සම්පත්.
                         </p>
-                        <a href="/resources.html" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?special=1" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -781,7 +931,7 @@ tailwind.config = {
                         <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
                             ක්‍රීඩා, සංගීතය, චිත්‍ර ඇතුළු අමතර ක්‍රියාකාරකම්.
                         </p>
-                        <a href="#activities" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?activities=1" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -792,7 +942,7 @@ tailwind.config = {
 
     <!-- STATS BAR -->
     <section class="stats-bar">
-        <div class="container-wide">
+        <div class="container-wide relative z-10">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div data-aos="zoom-in">
                     <div class="text-3xl md:text-5xl font-black text-brand-gold mb-1.5" id="statLessons">0</div>
@@ -826,30 +976,30 @@ tailwind.config = {
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                <div class="activity-card" data-aos="fade-up">
+                <a href="/resources.html?activity=sports" class="activity-card" data-aos="fade-up">
                     <img src="/images/activity-sports.jpg" alt="ක්‍රීඩා" onerror="this.src='https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400'">
                     <div class="activity-label"><i class="fa-solid fa-futbol"></i>ක්‍රීඩා</div>
-                </div>
-                <div class="activity-card" data-aos="fade-up" data-aos-delay="100">
+                </a>
+                <a href="/resources.html?activity=music" class="activity-card" data-aos="fade-up" data-aos-delay="100">
                     <img src="/images/activity-music.jpg" alt="සංගීතය" onerror="this.src='https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400'">
                     <div class="activity-label"><i class="fa-solid fa-music"></i>සංගීතය</div>
-                </div>
-                <div class="activity-card" data-aos="fade-up" data-aos-delay="200">
+                </a>
+                <a href="/resources.html?activity=art" class="activity-card" data-aos="fade-up" data-aos-delay="200">
                     <img src="/images/activity-art.jpg" alt="චිත්‍ර" onerror="this.src='https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=400'">
                     <div class="activity-label"><i class="fa-solid fa-palette"></i>චිත්‍ර</div>
-                </div>
-                <div class="activity-card" data-aos="fade-up" data-aos-delay="300">
+                </a>
+                <a href="/resources.html?activity=reading" class="activity-card" data-aos="fade-up" data-aos-delay="300">
                     <img src="/images/activity-reading.jpg" alt="කියවීම" onerror="this.src='https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400'">
                     <div class="activity-label"><i class="fa-solid fa-book"></i>කියවීම</div>
-                </div>
-                <div class="activity-card" data-aos="fade-up" data-aos-delay="400">
+                </a>
+                <a href="/resources.html?activity=science" class="activity-card" data-aos="fade-up" data-aos-delay="400">
                     <img src="/images/activity-science.jpg" alt="විද්‍යාව" onerror="this.src='https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=400'">
                     <div class="activity-label"><i class="fa-solid fa-flask"></i>විද්‍යාව</div>
-                </div>
-                <div class="activity-card" data-aos="fade-up" data-aos-delay="500">
+                </a>
+                <a href="/resources.html?activity=dance" class="activity-card" data-aos="fade-up" data-aos-delay="500">
                     <img src="/images/activity-dance.jpg" alt="නර්තනය" onerror="this.src='https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400'">
                     <div class="activity-label"><i class="fa-solid fa-person-running"></i>නර්තනය</div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -940,8 +1090,7 @@ tailwind.config = {
             </div>
         </div>
     </section>
-
-    <!-- TESTIMONIALS -->
+        <!-- TESTIMONIALS -->
     <section class="py-20 bg-brand-light dark:bg-gray-950">
         <div class="container-wide">
             <div class="text-center mb-12" data-aos="fade-up">
@@ -1044,12 +1193,12 @@ tailwind.config = {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
                 <div>
                     <div class="flex items-center space-x-3 mb-6">
-                        <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center p-2">
-                            <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-2xl\'></i>'">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2 shadow-lg">
+                            <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
                         </div>
                         <div>
-                            <h3 class="text-xl font-black">අකුරු මංසල</h3>
-                            <p class="text-xs text-white/70">ඉගෙනුමට නව මඟක්</p>
+                            <h3 class="text-2xl font-black">අකුරු මංසල</h3>
+                            <p class="text-xs text-white/70 mt-1">ඉගෙනුමට නව මඟක්</p>
                         </div>
                     </div>
                     <p class="text-white/70 text-sm leading-relaxed mb-6">
@@ -1059,6 +1208,7 @@ tailwind.config = {
                         <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
                         <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
                         <a href="#" class="social-icon"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
                     </div>
                 </div>
 
@@ -1069,6 +1219,8 @@ tailwind.config = {
                         <li><a href="#about">අප ගැන</a></li>
                         <li><a href="#grades">ශ්‍රේණි</a></li>
                         <li><a href="/resources.html">සම්පත්</a></li>
+                        <li><a href="/papers.html">ප්‍රශ්න පත්‍ර</a></li>
+                        <li><a href="/videos.html">වීඩියෝ</a></li>
                     </ul>
                 </div>
 
@@ -1079,6 +1231,8 @@ tailwind.config = {
                         <li><a href="/resources.html">ගණිතය</a></li>
                         <li><a href="/resources.html">විද්‍යාව</a></li>
                         <li><a href="/resources.html">ඉංග්‍රීසි</a></li>
+                        <li><a href="/resources.html">ICT</a></li>
+                        <li><a href="/resources.html">ඉතිහාසය</a></li>
                     </ul>
                 </div>
 
@@ -1097,17 +1251,26 @@ tailwind.config = {
                             <i class="fa-solid fa-envelope text-brand-gold"></i>
                             <span class="text-white/80 text-sm">info@akurumansala.lk</span>
                         </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-clock text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">සඳුදා - සිකුරාදා</span>
+                        </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="pt-8 text-center text-xs text-white/60">
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60">
                 <p>© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="hover:text-brand-gold transition">ගිවිසුම්</a>
+                    <a href="#" class="hover:text-brand-gold transition">රහස්‍යතා ප්‍රතිපත්තිය</a>
+                    <a href="#" class="hover:text-brand-gold transition">සම්බන්ධ වන්න</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <button id="backToTop" onclick="scrollToTop()" class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-lg bg-brand-gold text-brand-navy shadow-2xl items-center justify-center hidden hover:scale-110 transition-all">
+    <button id="backToTop" onclick="scrollToTop()" class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-gold to-brand-gold2 text-brand-navy shadow-2xl items-center justify-center hidden hover:scale-110 transition-all">
         <i class="fa-solid fa-arrow-up text-lg"></i>
     </button>
 
