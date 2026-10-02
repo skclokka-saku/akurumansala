@@ -125,26 +125,6 @@
             25% { transform: translateX(-5px); }
             75% { transform: translateX(5px); }
         }
-        .tab-btn {
-            padding: 0.75rem 1.5rem;
-            font-weight: 800;
-            border-radius: 0.75rem;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-            flex: 1;
-            font-size: 0.875rem;
-        }
-        .tab-active {
-            background: linear-gradient(135deg, #a855f7, #6366f1);
-            color: white;
-            box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
-        }
-        .tab-inactive {
-            background: #f1f5f9;
-            color: #64748b;
-        }
-        .tab-inactive:hover { background: #e2e8f0; }
     </style>
 </head>
 <body class="login-bg">
@@ -165,41 +145,27 @@
                 </div>
             </div>
 
-            <div class="text-center mb-6">
+            <div class="text-center mb-8">
                 <h1 class="text-2xl md:text-3xl font-black mb-2" style="color: #0F2C59;">අකුරු මංසල</h1>
-                <p class="text-sm text-gray-500 font-semibold">ඔබේ ගිණුමට පිවිසෙන්න</p>
-            </div>
-
-            <!-- Tabs -->
-            <div id="tabsContainer" class="flex gap-2 mb-6 bg-gray-50 p-1.5 rounded-xl">
-                <button onclick="switchTab('login')" id="tabLogin" class="tab-btn tab-active">
-                    <i class="fa-solid fa-sign-in-alt mr-2"></i>පිවිසෙන්න
-                </button>
-                <button onclick="switchTab('signup')" id="tabSignup" class="tab-btn tab-inactive">
-                    <i class="fa-solid fa-user-plus mr-2"></i>ලියාපදිංචි
-                </button>
+                <p class="text-sm text-gray-500 font-semibold">පද්ධතියට පිවිසෙන්න</p>
+                <p class="text-xs text-gray-400 mt-2">(Admin / Teacher පමණි)</p>
             </div>
 
             <div id="messageBox" class="mb-5 hidden"></div>
 
             <!-- LOGIN FORM -->
-            <form id="loginForm" class="space-y-4">
+            <form id="loginForm" class="space-y-5">
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
                         <i class="fa-solid fa-envelope text-purple-500 mr-2"></i>විද්‍යුත් තැපෑල
                     </label>
-                    <input type="email" id="loginEmail" required class="form-input" placeholder="your@email.com">
+                    <input type="email" id="loginEmail" required class="form-input" placeholder="your@email.com" autocomplete="email">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
                         <i class="fa-solid fa-lock text-purple-500 mr-2"></i>මුරපදය
                     </label>
-                    <input type="password" id="loginPassword" required class="form-input" placeholder="••••••••">
-                </div>
-                <div class="text-right">
-                    <button type="button" onclick="switchTab('forgot')" class="text-sm text-purple-600 hover:text-purple-800 font-bold">
-                        මුරපදය අමතක වුණාද?
-                    </button>
+                    <input type="password" id="loginPassword" required class="form-input" placeholder="••••••••" autocomplete="current-password">
                 </div>
                 <button type="submit" id="loginBtn" class="btn-login">
                     <i class="fa-solid fa-sign-in-alt"></i>
@@ -207,79 +173,12 @@
                 </button>
             </form>
 
-            <!-- SIGNUP FORM -->
-            <form id="signupForm" class="space-y-4 hidden">
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fa-solid fa-user text-purple-500 mr-2"></i>සම්පූර්ණ නම
-                    </label>
-                    <input type="text" id="signupName" required class="form-input" placeholder="ඔබේ නම">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fa-solid fa-envelope text-purple-500 mr-2"></i>විද්‍යුත් තැපෑල
-                    </label>
-                    <div class="flex gap-2">
-                        <input type="email" id="signupEmail" required class="form-input" placeholder="your@email.com">
-                        <button type="button" id="sendEmailCodeBtn" onclick="sendEmailCode()" class="px-4 py-2 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 transition text-sm whitespace-nowrap">
-                            කේතය යවන්න
-                        </button>
-                    </div>
-                </div>
-                <div id="emailCodeField" class="hidden">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fa-solid fa-key text-purple-500 mr-2"></i>තහවුරු කිරීමේ කේතය (ඊමේල් එකට එවන ලදී)
-                    </label>
-                    <input type="text" id="signupEmailCode" class="form-input" placeholder="6 අංක කේතය" maxlength="6">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fa-solid fa-phone text-purple-500 mr-2"></i>දුරකථන අංකය
-                    </label>
-                    <input type="tel" id="signupPhone" required class="form-input" placeholder="0712345678" maxlength="10">
-                    <p class="text-xs text-gray-500 mt-1">උදා: 0712345678</p>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fa-solid fa-school text-purple-500 mr-2"></i>පාසල (අවශ්‍ය නැහැ)
-                    </label>
-                    <input type="text" id="signupSchool" class="form-input" placeholder="ඔබේ පාසලේ නම">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fa-solid fa-lock text-purple-500 mr-2"></i>මුරපදය
-                    </label>
-                    <input type="password" id="signupPassword" required class="form-input" placeholder="අවම 6 අක්ෂර" minlength="6">
-                </div>
-                <button type="submit" id="signupBtn" class="btn-login">
-                    <i class="fa-solid fa-user-plus"></i>
-                    <span>ලියාපදිංචි වන්න</span>
-                </button>
-            </form>
-
-            <!-- FORGOT PASSWORD FORM -->
-            <form id="forgotForm" class="space-y-4 hidden">
-                <div class="text-center mb-4">
-                    <div class="w-16 h-16 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center mx-auto mb-3">
-                        <i class="fa-solid fa-key text-2xl"></i>
-                    </div>
-                    <h3 class="font-black text-lg" style="color: #0F2C59;">මුරපදය අමතක වුණාද?</h3>
-                    <p class="text-sm text-gray-500 mt-1">ඔබේ විද්‍යුත් තැපෑල ඇතුළත් කරන්න</p>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fa-solid fa-envelope text-purple-500 mr-2"></i>විද්‍යුත් තැපෑල
-                    </label>
-                    <input type="email" id="forgotEmail" required class="form-input" placeholder="your@email.com">
-                </div>
-                <button type="submit" id="forgotBtn" class="btn-login">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    <span>Reset Link යවන්න</span>
-                </button>
-                <button type="button" onclick="switchTab('login')" class="w-full text-sm text-gray-500 hover:text-gray-700 font-bold py-2">
-                    ← පිවිසුම් පිටුවට
-                </button>
-            </form>
+            <div class="mt-6 pt-6 border-t text-center">
+                <p class="text-xs text-gray-400">
+                    <i class="fa-solid fa-info-circle mr-1"></i>
+                    මෙම පද්ධතියට පිවිසිය හැක්කේ අනුමත පරිශීලකයින්ට පමණි.
+                </p>
+            </div>
 
         </div>
     </div>
@@ -287,9 +186,6 @@
     <script>
         const API_BASE = '/api';
 
-        // ============================================
-        // MESSAGE DISPLAY
-        // ============================================
         function showMessage(message, type = 'error') {
             const box = document.getElementById('messageBox');
             const className = type === 'error' ? 'error-message' : 'success-message';
@@ -302,43 +198,6 @@
             setTimeout(() => box.classList.add('hidden'), 7000);
         }
 
-        // ============================================
-        // TAB SWITCHING
-        // ============================================
-        function switchTab(tab) {
-            const loginForm = document.getElementById('loginForm');
-            const signupForm = document.getElementById('signupForm');
-            const forgotForm = document.getElementById('forgotForm');
-            const tabsContainer = document.getElementById('tabsContainer');
-            const tabLogin = document.getElementById('tabLogin');
-            const tabSignup = document.getElementById('tabSignup');
-            const messageBox = document.getElementById('messageBox');
-
-            messageBox.classList.add('hidden');
-
-            loginForm.classList.add('hidden');
-            signupForm.classList.add('hidden');
-            forgotForm.classList.add('hidden');
-
-            if (tab === 'login') {
-                loginForm.classList.remove('hidden');
-                tabsContainer.classList.remove('hidden');
-                tabLogin.className = 'tab-btn tab-active';
-                tabSignup.className = 'tab-btn tab-inactive';
-            } else if (tab === 'signup') {
-                signupForm.classList.remove('hidden');
-                tabsContainer.classList.remove('hidden');
-                tabLogin.className = 'tab-btn tab-inactive';
-                tabSignup.className = 'tab-btn tab-active';
-            } else if (tab === 'forgot') {
-                forgotForm.classList.remove('hidden');
-                tabsContainer.classList.add('hidden');
-            }
-        }
-
-        // ============================================
-        // LOGIN
-        // ============================================
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -366,154 +225,13 @@
                 showMessage('සාර්ථකව පිවිසුණා! යොමු කරමින්...', 'success');
 
                 setTimeout(() => {
-                    if (['web_developer', 'admin', 'teacher'].includes(data.user.role)) {
-                        window.location.href = '/admin.html';
-                    } else {
-                        window.location.href = '/';
-                    }
+                    window.location.href = '/admin.html';
                 }, 800);
 
             } catch (err) {
                 showMessage(err.message, 'error');
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-solid fa-sign-in-alt"></i><span>පිවිසෙන්න</span>';
-            }
-        });
-
-        // ============================================
-        // SEND EMAIL CODE
-        // ============================================
-        async function sendEmailCode() {
-            const email = document.getElementById('signupEmail').value.trim();
-            const btn = document.getElementById('sendEmailCodeBtn');
-
-            if (!email) {
-                showMessage('විද්‍යුත් තැපෑල ඇතුළත් කරන්න', 'error');
-                return;
-            }
-
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showMessage('වලංගු විද්‍යුත් තැපෑලක් ඇතුළත් කරන්න', 'error');
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-
-            try {
-                const res = await fetch(`${API_BASE}/auth/send-email-code`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, purpose: 'signup' })
-                });
-
-                const data = await res.json();
-
-                if (!res.ok) throw new Error(data.error || 'කේතය යැවීම අසාර්ථකයි');
-
-                document.getElementById('emailCodeField').classList.remove('hidden');
-                showMessage(data.message, 'success');
-
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-redo"></i> නැවත යවන්න';
-
-            } catch (err) {
-                showMessage(err.message, 'error');
-                btn.disabled = false;
-                btn.innerHTML = 'කේතය යවන්න';
-            }
-        }
-
-        // ============================================
-        // SIGNUP
-        // ============================================
-        document.getElementById('signupForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
-            const phone = document.getElementById('signupPhone').value.trim();
-            const emailCode = document.getElementById('signupEmailCode').value.trim();
-            const school = document.getElementById('signupSchool').value.trim();
-            const password = document.getElementById('signupPassword').value;
-            const btn = document.getElementById('signupBtn');
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>ලියාපදිංචි වෙමින්...</span>';
-
-            try {
-                // Verify email code first
-                if (emailCode) {
-                    const verifyRes = await fetch(`${API_BASE}/auth/verify-email-code`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email, code: emailCode })
-                    });
-
-                    const verifyData = await verifyRes.json();
-                    if (!verifyRes.ok) throw new Error(verifyData.error || 'කේතය තහවුරු කිරීම අසාර්ථකයි');
-                } else {
-                    throw new Error('තහවුරු කිරීමේ කේතය ඇතුළත් කරන්න');
-                }
-
-                // Register
-                const res = await fetch(`${API_BASE}/auth/register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, school, phone, emailCode })
-                });
-
-                const data = await res.json();
-
-                if (!res.ok) throw new Error(data.error || 'ලියාපදිංචි වීම අසාර්ථකයි');
-
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', JSON.stringify(data.user));
-
-                showMessage('සාර්ථකව ලියාපදිංචි වුණා! යොමු කරමින්...', 'success');
-
-                setTimeout(() => {
-                    window.location.href = '/admin.html';
-                }, 1000);
-
-            } catch (err) {
-                showMessage(err.message, 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-user-plus"></i><span>ලියාපදිංචි වන්න</span>';
-            }
-        });
-
-        // ============================================
-        // FORGOT PASSWORD
-        // ============================================
-        document.getElementById('forgotForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('forgotEmail').value.trim();
-            const btn = document.getElementById('forgotBtn');
-
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>යවමින්...</span>';
-
-            try {
-                const res = await fetch(`${API_BASE}/auth/forgot-password`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email })
-                });
-
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'දෝෂයක්');
-
-                showMessage(data.message, 'success');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span>Reset Link යවන්න</span>';
-
-            } catch (err) {
-                showMessage(err.message, 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span>Reset Link යවන්න</span>';
             }
         });
     </script>
