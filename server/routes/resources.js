@@ -32,11 +32,11 @@ router.get('/stats', async (req, res) => {
 });
 
 // ============================================
-// GET /api/resources?type=lesson&grade_id=1
+// GET /api/resources?type=lesson&grades=1,2,3&activity=sports
 // ============================================
 router.get('/', async (req, res) => {
     try {
-        const { type, grade_id, subject_id, limit } = req.query;
+        const { type, grade_id, subject_id, grades, activity, special, limit } = req.query;
         const typeMap = { lesson: 'lessons', paper: 'papers', video: 'videos', article: 'articles' };
 
         if (!typeMap[type]) {
@@ -60,8 +60,49 @@ router.get('/', async (req, res) => {
         `;
         const params = [];
 
-        if (grade_id) { sql += ' AND t.grade_id = ?'; params.push(grade_id); }
-        if (subject_id) { sql += ' AND t.subject_id = ?'; params.push(subject_id); }
+        // Grade filter (single)
+        if (grade_id) { 
+            sql += ' AND t.grade_id = ?'; 
+            params.push(grade_id); 
+        }
+
+        // Multiple grades filter (for categories)
+        if (grades) {
+            const gradeNums = grades.split(',').map(g => g.trim()).filter(g => g);
+            if (gradeNums.length > 0) {
+                sql += ` AND g.grade_number IN (${gradeNums.map(() => '?').join(',')})`;
+                params.push(...gradeNums);
+            }
+        }
+
+        // Subject filter
+        if (subject_id) { 
+            sql += ' AND t.subject_id = ?'; 
+            params.push(subject_id); 
+        }
+
+        // Activity filter (using title or subject name)
+        if (activity) {
+            const activityMap = {
+                sports: ['ක්‍රීඩා', 'Sports', 'ක්‍රීඩාව'],
+                music: ['සංගීත', 'Music', 'සංගීතය'],
+                art: ['චිත්‍ර', 'Art', 'චිත්‍ර කලාව'],
+                reading: ['කියවීම', 'Reading', 'පොත්'],
+                science: ['විද්‍යා', 'Science', 'විද්‍යාව'],
+                dance: ['නර්තන', 'Dance', 'නර්තනය']
+            };
+            const keywords = activityMap[activity] || [activity];
+            const conditions = keywords.map(() => '(t.title LIKE ? OR s.subject_name LIKE ?)').join(' OR ');
+            sql += ` AND (${conditions})`;
+            keywords.forEach(k => {
+                params.push(`%${k}%`, `%${k}%`);
+            });
+        }
+
+        // Special education filter
+        if (special) {
+            sql += ` AND (t.title LIKE '%විශේෂ%' OR s.subject_name LIKE '%විශේෂ%')`;
+        }
 
         sql += ' ORDER BY t.created_at DESC';
 
