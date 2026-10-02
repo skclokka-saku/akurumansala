@@ -56,19 +56,16 @@ tailwind.config = {
             radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.06) 0%, transparent 50%);
     }
 
-    /* Container - FIXED FOR SCREEN FIT */
-       .container-wide {
+    .container-wide {
         width: 100%;
-        max-width: 1920px;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        max-width: 1600px;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
         margin: 0 auto;
     }
-    @media (min-width: 640px) { .container-wide { padding-left: 1rem; padding-right: 1rem; } }
-    @media (min-width: 1024px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
-    @media (min-width: 1440px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
+    @media (min-width: 640px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
+    @media (min-width: 1024px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
 
-    /* Top Bar */
     .top-bar { 
         background: linear-gradient(135deg, #0F2C59, #1B3A6B); 
         color: white; 
@@ -78,9 +75,6 @@ tailwind.config = {
     .top-bar a { color: rgba(255,255,255,0.9); transition: all 0.3s; text-decoration: none; }
     .top-bar a:hover { color: #D4A017; transform: translateY(-2px); }
 
-         /* ============================================ */
-    /* SOCIAL ICONS - UNIVERSAL (Header + Footer)  */
-    /* ============================================ */
     .social-icon {
         width: 44px;
         height: 44px;
@@ -116,59 +110,21 @@ tailwind.config = {
     }
     .social-icon:hover::before { opacity: 1; }
     .social-icon:hover i { transform: scale(1.2) rotate(-10deg); }
-
-    /* Brand Colors */
-    .social-icon.facebook { 
-        background: linear-gradient(135deg, #1877f2, #0e5fce); 
-        box-shadow: 0 6px 20px rgba(24, 119, 242, 0.5);
-    }
-    .social-icon.youtube { 
-        background: linear-gradient(135deg, #ff0000, #cc0000); 
-        box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5);
-    }
-    .social-icon.whatsapp { 
-        background: linear-gradient(135deg, #25d366, #128c7e); 
-        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
-    }
-    .social-icon.instagram { 
-        background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); 
-        box-shadow: 0 6px 20px rgba(221, 42, 123, 0.5);
-    }
-    .social-icon.twitter { 
-        background: linear-gradient(135deg, #1da1f2, #0d8ddb); 
-        box-shadow: 0 6px 20px rgba(29, 161, 242, 0.5);
-    }
-
-    /* Hover Animation */
+    .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); box-shadow: 0 6px 20px rgba(24, 119, 242, 0.5); }
+    .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); box-shadow: 0 6px 20px rgba(255, 0, 0, 0.5); }
+    .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5); }
+    .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); box-shadow: 0 6px 20px rgba(221, 42, 123, 0.5); }
+    .social-icon.twitter { background: linear-gradient(135deg, #1da1f2, #0d8ddb); box-shadow: 0 6px 20px rgba(29, 161, 242, 0.5); }
     .social-icon:hover { 
         transform: translateY(-6px) scale(1.15) rotate(-5deg); 
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
         border-color: transparent;
     }
+    .top-bar .social-icon { width: 38px; height: 38px; font-size: 0.95rem; border-radius: 0.7rem; }
+    .top-bar .social-icon i { font-size: 1rem; }
+    .footer .social-icon { width: 44px; height: 44px; font-size: 1.1rem; border-radius: 0.85rem; }
+    .footer .social-icon i { font-size: 1.15rem; }
 
-    /* Header Top Bar - Smaller Icons */
-    .top-bar .social-icon {
-        width: 38px;
-        height: 38px;
-        font-size: 0.95rem;
-        border-radius: 0.7rem;
-    }
-    .top-bar .social-icon i {
-        font-size: 1rem;
-    }
-
-    /* Footer - Standard Icons */
-    .footer .social-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 1.1rem;
-        border-radius: 0.85rem;
-    }
-    .footer .social-icon i {
-        font-size: 1.15rem;
-    }
-
-    /* Main Nav */
     .main-nav { 
         background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(20px);
@@ -180,7 +136,6 @@ tailwind.config = {
         border-bottom: 1px solid rgba(212, 160, 23, 0.15);
     }
 
-    /* Logo - LARGER */
     .logo-wrap {
         width: 80px;
         height: 80px;
@@ -201,9 +156,7 @@ tailwind.config = {
         box-shadow: 0 15px 40px rgba(15, 44, 89, 0.3);
     }
     .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
-    @media (max-width: 768px) { .logo-wrap { width: 65px; height: 65px; } }
 
-    /* Nav Links - LARGER with 3D touch animation */
     .nav-link {
         position: relative;
         font-weight: 700;
@@ -221,7 +174,6 @@ tailwind.config = {
     }
     body.dark .nav-link { color: #cbd5e1; }
     .nav-link i { font-size: 0.95rem; color: #D4A017; transition: transform 0.3s; }
-    
     .nav-link:hover { 
         color: #D4A017; 
         background: linear-gradient(135deg, rgba(212, 160, 23, 0.15), rgba(168, 85, 247, 0.1));
@@ -229,19 +181,16 @@ tailwind.config = {
         box-shadow: 0 10px 25px rgba(212, 160, 23, 0.3);
     }
     .nav-link:hover i { transform: scale(1.2) rotate(-15deg); }
-    
     .nav-link:active {
         transform: translateY(-2px) scale(0.98);
         box-shadow: 0 4px 10px rgba(212, 160, 23, 0.4);
     }
-    
     .nav-link.active { 
         color: #D4A017; 
         background: linear-gradient(135deg, rgba(212, 160, 23, 0.15), rgba(168, 85, 247, 0.1));
         box-shadow: 0 8px 20px rgba(212, 160, 23, 0.25);
     }
 
-    /* Dropdown Menu - 3D */
     .nav-item-dropdown { position: relative; }
     .nav-dropdown {
         position: absolute;
@@ -295,7 +244,6 @@ tailwind.config = {
     }
     .nav-dropdown a:hover i { color: #D4A017; transform: scale(1.2) rotate(-10deg); }
 
-    /* Theme Toggle - 3D */
     .theme-toggle {
         width: 52px;
         height: 52px;
@@ -319,7 +267,6 @@ tailwind.config = {
         transform: rotate(180deg) scale(0.95);
     }
 
-    /* Buttons - 3D */
     .btn-primary {
         background: linear-gradient(135deg, #D4A017, #E8B923);
         color: #0F2C59;
@@ -373,7 +320,6 @@ tailwind.config = {
         box-shadow: 0 20px 45px rgba(255, 255, 255, 0.3);
     }
 
-    /* Hero Section */
     .hero-section { 
         position: relative; 
         min-height: 720px; 
@@ -410,8 +356,6 @@ tailwind.config = {
         padding: 5rem 2rem 5rem 4rem; 
         width: 100%; 
     }
-    @media (max-width: 1280px) { .hero-content { padding: 5rem 2rem; } }
-    @media (max-width: 768px) { .hero-content { padding: 4rem 1.5rem; } }
 
     .hero-title { 
         text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); 
@@ -428,7 +372,6 @@ tailwind.config = {
         50% { transform: translateY(-10px); }
     }
 
-    /* Info Cards - 3D */
     .hero-info-cards { 
         position: relative; 
         z-index: 5; 
@@ -478,7 +421,6 @@ tailwind.config = {
         box-shadow: 0 12px 30px rgba(0,0,0,0.25);
     }
 
-    /* Feature Cards - 3D */
     .feature-card {
         background: white;
         padding: 2rem 1.5rem;
@@ -520,7 +462,6 @@ tailwind.config = {
         box-shadow: 0 15px 35px rgba(212, 160, 23, 0.4);
     }
 
-    /* Program Cards - 3D */
     .program-card {
         background: white;
         border-radius: 1.5rem;
@@ -569,7 +510,6 @@ tailwind.config = {
         z-index: 2;
     }
 
-    /* Stats Bar */
     .stats-bar {
         background: linear-gradient(135deg, #0F2C59, #1B3A6B);
         color: white;
@@ -579,7 +519,6 @@ tailwind.config = {
         border-radius: 2rem;
     }
 
-    /* Activity Cards - 3D */
     .activity-card {
         border-radius: 1.5rem;
         overflow: hidden;
@@ -621,7 +560,6 @@ tailwind.config = {
     }
     .activity-label i { color: #D4A017; font-size: 1.2rem; }
 
-    /* Resource Cards - 3D */
     .resource-card {
         background: white;
         padding: 2rem;
@@ -663,7 +601,6 @@ tailwind.config = {
         box-shadow: 0 15px 35px rgba(0,0,0,0.25);
     }
 
-    /* Testimonial Cards */
     .testimonial-card {
         background: white;
         padding: 2rem;
@@ -680,7 +617,6 @@ tailwind.config = {
         box-shadow: 0 30px 60px rgba(15, 44, 89, 0.2);
     }
 
-    /* CTA */
     .cta-section {
         background: linear-gradient(135deg, #0F2C59, #1B3A6B);
         color: white;
@@ -691,7 +627,6 @@ tailwind.config = {
         box-shadow: 0 25px 60px rgba(15, 44, 89, 0.3);
     }
 
-    /* Footer */
     .footer { 
         background: linear-gradient(180deg, #0F2C59, #0a1a3a); 
         color: white; 
@@ -734,7 +669,6 @@ tailwind.config = {
         border-radius: 3px;
     }
 
-    /* Section Labels */
     .section-label {
         color: #D4A017;
         font-weight: 800;
@@ -757,10 +691,7 @@ tailwind.config = {
         margin-bottom: 1rem;
     }
     body.dark .section-title { color: white; }
-    @media (min-width: 768px) { .section-title { font-size: 3rem; } }
-    @media (min-width: 1024px) { .section-title { font-size: 3.5rem; } }
 
-    /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 14px; }
     ::-webkit-scrollbar-track { background: #F8F9FC; }
     ::-webkit-scrollbar-thumb { 
@@ -769,7 +700,6 @@ tailwind.config = {
         border: 3px solid #F8F9FC;
     }
 
-    /* Floating Shapes */
     .floating-shape {
         position: absolute;
         border-radius: 50%;
@@ -782,11 +712,90 @@ tailwind.config = {
         33% { transform: translate(30px, -30px) rotate(120deg); }
         66% { transform: translate(-20px, 20px) rotate(240deg); }
     }
+
+    /* ============================================ */
+    /* MOBILE RESPONSIVE - COMPREHENSIVE           */
+    /* ============================================ */
+    @media (max-width: 1024px) {
+        .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .section-title { font-size: 2.5rem; }
+        .hero-content { padding: 5rem 2rem; }
+    }
+    
+    @media (max-width: 768px) {
+        .container-wide { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .hero-section { min-height: 600px; border-radius: 0 0 2rem 2rem; }
+        .hero-content { padding: 3rem 1.25rem; }
+        .hero-title { font-size: 2.5rem !important; }
+        .hero-info-cards { margin-top: -2rem; }
+        .section-title { font-size: 2rem !important; }
+        .section-label { font-size: 0.65rem; padding: 0.35rem 0.85rem; }
+        .info-card-3d { padding: 1.25rem; gap: 1rem; }
+        .info-card-icon { width: 60px; height: 60px; font-size: 1.6rem; }
+        .feature-card { padding: 1.25rem 1rem; }
+        .feature-icon { width: 60px; height: 60px; font-size: 1.5rem; }
+        .program-card .img-wrap { height: 180px; }
+        .activity-card img { height: 180px; }
+        .resource-card { padding: 1.5rem; }
+        .resource-icon { width: 60px; height: 60px; font-size: 1.6rem; }
+        .testimonial-card { padding: 1.5rem; }
+        .cta-section { padding: 2.5rem 1.5rem; border-radius: 1.5rem; }
+        .footer { padding-top: 3rem; }
+        .footer-title { font-size: 0.8rem; margin-bottom: 1rem; }
+        .nav-link { font-size: 0.8rem; padding: 0.5rem 0.75rem; }
+        .logo-wrap { width: 50px; height: 50px; }
+        .btn-primary { padding: 0.75rem 1.5rem; font-size: 0.7rem; }
+        .btn-outline { padding: 0.75rem 1.5rem; font-size: 0.7rem; }
+        .stats-bar { padding: 3rem 0; border-radius: 1.5rem; }
+    }
+    
+    @media (max-width: 640px) {
+        .container-wide { padding-left: 1rem; padding-right: 1rem; }
+        .hero-section { min-height: 550px; }
+        .hero-content { padding: 2.5rem 1rem; }
+        .hero-title { font-size: 2rem !important; line-height: 1.1; }
+        .hero-info-cards { margin-top: -1.5rem; }
+        .section-title { font-size: 1.75rem !important; }
+        .info-card-3d { padding: 1rem; gap: 0.85rem; flex-direction: row; align-items: center; }
+        .info-card-icon { width: 52px; height: 52px; font-size: 1.4rem; }
+        .info-card-3d h3 { font-size: 1rem !important; }
+        .info-card-3d p { font-size: 0.75rem !important; }
+        .feature-card { padding: 1rem 0.75rem; }
+        .feature-icon { width: 52px; height: 52px; font-size: 1.3rem; }
+        .feature-card h3 { font-size: 0.7rem !important; }
+        .program-card .img-wrap { height: 160px; }
+        .program-badge { font-size: 0.65rem; padding: 0.35rem 0.85rem; }
+        .program-card h3 { font-size: 1.1rem !important; }
+        .activity-card img { height: 150px; }
+        .activity-label { font-size: 0.7rem; padding: 2rem 0.85rem 0.85rem; }
+        .resource-card { padding: 1.25rem; }
+        .resource-icon { width: 52px; height: 52px; font-size: 1.4rem; margin-bottom: 1rem; }
+        .resource-card h3 { font-size: 1.1rem !important; }
+        .testimonial-card { padding: 1.25rem; }
+        .testimonial-card p { font-size: 0.85rem !important; }
+        .cta-section { padding: 2rem 1.25rem; border-radius: 1.25rem; }
+        .cta-section h2 { font-size: 1.5rem !important; }
+        .footer { padding-top: 2.5rem; }
+        .footer-title { font-size: 0.75rem; }
+        .footer a { font-size: 0.85rem; }
+        .social-icon { width: 38px; height: 38px; font-size: 0.9rem; }
+        .theme-toggle { width: 40px; height: 40px; font-size: 0.95rem; }
+        .btn-primary { padding: 0.7rem 1.25rem; font-size: 0.65rem; letter-spacing: 1px; }
+        .btn-outline { padding: 0.7rem 1.25rem; font-size: 0.65rem; }
+    }
+    
+    @media (max-width: 480px) {
+        .hero-title { font-size: 1.75rem !important; }
+        .section-title { font-size: 1.5rem !important; }
+        .info-card-icon { width: 48px; height: 48px; font-size: 1.25rem; }
+        .feature-card { padding: 0.85rem 0.5rem; }
+        .feature-icon { width: 46px; height: 46px; font-size: 1.15rem; }
+    }
 </style>
 </head>
 <body>
 
-            <!-- TOP BAR -->
+    <!-- TOP BAR -->
     <div class="top-bar py-3 hidden md:block">
         <div class="container-wide">
             <div class="flex items-center justify-between">
@@ -892,7 +901,7 @@ tailwind.config = {
                         <div class="nav-dropdown">
                             <a href="/resources.html"><i class="fa-solid fa-book"></i>පාඩම්</a>
                             <a href="/videos.html"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
-                            <a href="/resources.html"><i class="fa-solid fa-newspaper"></i>ලිපි</a>
+                            <a href="/articles.html"><i class="fa-solid fa-newspaper"></i>ලිපි</a>
                             <a href="/quizzes.html"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
                         </div>
                     </div>
@@ -964,7 +973,6 @@ tailwind.config = {
         <div class="hero-bg"></div>
         <div class="hero-overlay"></div>
         
-        <!-- Floating decorative shapes -->
         <div class="floating-shape" style="width: 250px; height: 250px; top: 15%; right: 10%;"></div>
         <div class="floating-shape" style="width: 150px; height: 150px; bottom: 20%; right: 25%; animation-delay: 2s;"></div>
         <div class="floating-shape" style="width: 100px; height: 100px; top: 40%; right: 5%; animation-delay: 4s;"></div>
@@ -1513,7 +1521,7 @@ tailwind.config = {
         <div class="container-wide">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-12 border-b border-white/10">
                 
-                               <!-- Column 1: Brand -->
+                <!-- Column 1: Brand -->
                 <div>
                     <div class="flex items-center space-x-5 mb-6">
                         <div class="w-20 h-20 bg-white rounded-2xl flex items-center justify-center p-2 shadow-lg">
@@ -1669,7 +1677,6 @@ tailwind.config = {
                 const videos = stats.total_videos || 0;
                 const articles = stats.total_articles || 0;
 
-                // Info cards
                 const infoLessons = document.getElementById('infoLessons');
                 const infoPapers = document.getElementById('infoPapers');
                 const infoVideos = document.getElementById('infoVideos');
@@ -1677,7 +1684,6 @@ tailwind.config = {
                 if (infoPapers) infoPapers.textContent = papers;
                 if (infoVideos) infoVideos.textContent = videos;
 
-                // Stats bar
                 const statLessons = document.getElementById('statLessons');
                 const statPapers = document.getElementById('statPapers');
                 const statVideos = document.getElementById('statVideos');
@@ -1685,7 +1691,6 @@ tailwind.config = {
                 if (statPapers) statPapers.textContent = papers;
                 if (statVideos) statVideos.textContent = videos;
 
-                // Resources
                 const resLessons = document.getElementById('resLessons');
                 const resPapers = document.getElementById('resPapers');
                 const resVideos = document.getElementById('resVideos');
@@ -1713,7 +1718,6 @@ tailwind.config = {
                 const res = await fetch(`${API_BASE}/settings/public`);
                 const settings = await res.json();
 
-                // Update contact info
                 if (settings.site_email) {
                     document.querySelectorAll('[data-setting="email"]').forEach(el => {
                         el.textContent = settings.site_email;
@@ -1730,7 +1734,6 @@ tailwind.config = {
                     });
                 }
 
-                // Update social links
                 if (settings.site_facebook) {
                     document.querySelectorAll('.social-icon.facebook').forEach(el => el.href = settings.site_facebook);
                 }
