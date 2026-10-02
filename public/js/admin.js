@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     setTimeout(checkPendingCount, 1000);
     
-    // Show logs link only for web_developer
     if (state.user && state.user.role === 'web_developer') {
         const logsLink = document.getElementById('logsLink');
         if (logsLink) logsLink.style.display = 'flex';
@@ -51,7 +50,6 @@ function checkAuth() {
     try {
         state.user = JSON.parse(userStr);
         
-        // Allow web_developer, admin, and teacher
         const allowedRoles = ['web_developer', 'admin', 'teacher'];
         if (!allowedRoles.includes(state.user.role)) {
             alert('ඔබට මෙම පිටුවට ප්‍රවේශය නැත');
@@ -136,10 +134,7 @@ async function loadGrades() {
         const res = await fetch(`${API_BASE}/grades`);
         if (!res.ok) throw new Error('Grades fetch failed');
         const grades = await res.json();
-        
-        // Handle both array and object response
         state.grades = Array.isArray(grades) ? grades : (grades.grades || []);
-        
         console.log('✅ Grades loaded:', state.grades.length);
     } catch (err) {
         console.error('❌ Failed to load grades:', err);
@@ -152,10 +147,7 @@ async function loadSubjects() {
         const res = await fetch(`${API_BASE}/subjects`);
         if (!res.ok) throw new Error('Subjects fetch failed');
         const subjects = await res.json();
-        
-        // Handle both array and object response
         state.subjects = Array.isArray(subjects) ? subjects : (subjects.subjects || []);
-        
         console.log('✅ Subjects loaded:', state.subjects.length);
     } catch (err) {
         console.error('❌ Failed to load subjects:', err);
@@ -352,6 +344,274 @@ async function renderResourceTable(type) {
     }
 }
 
+// ============================================
+// FORM MODAL
+// ============================================
+function openForm(type) {
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modalBody');
+    
+    const labels = { lesson: 'පාඩම', paper: 'ප්‍රශ්න පත්‍රය', video: 'වීඩියෝව', article: 'ලිපිය' };
+    document.getElementById('modalTitle').textContent = `නව ${labels[type]}ක් එකතු කරන්න`;
+    
+    const gradeOptions = state.grades.map(g => `<option value="${g.id}">${g.grade_name}</option>`).join('');
+    const subjectOptions = state.subjects.map(s => `<option value="${s.id}">${s.subject_name}</option>`).join('');
+    
+    let formFields = '';
+    
+    if (type === 'lesson') {
+        formFields = `
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
+                    <input id="f_title" required class="form-input" placeholder="පාඩමේ නම">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">විස්තරය</label>
+                    <textarea id="f_desc" rows="5" class="form-input" placeholder="පාඩම පිළිබඳ සම්පූර්ණ විස්තරය"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">ශ්‍රේණිය *</label>
+                        <select id="f_grade" required class="form-input">${gradeOptions}</select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">විෂය *</label>
+                        <select id="f_subject" required class="form-input">${subjectOptions}</select>
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (type === 'paper') {
+        formFields = `
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
+                    <input id="f_title" required class="form-input" placeholder="ප්‍රශ්න පත්‍රයේ නම">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">ශ්‍රේණිය *</label>
+                        <select id="f_grade" required class="form-input">${gradeOptions}</select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">විෂය *</label>
+                        <select id="f_subject" required class="form-input">${subjectOptions}</select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">වර්ගය</label>
+                        <select id="f_type" class="form-input">
+                            <option value="term">වාර පරීක්ෂණය</option>
+                            <option value="school">පාසල් පරීක්ෂණය</option>
+                            <option value="practice">පුහුණු</option>
+                            <option value="exam">විභාගය</option>
+                            <option value="model">ආදර්ශ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">වර්ෂය</label>
+                        <input type="number" id="f_year" value="${new Date().getFullYear()}" class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">📄 PDF ගොනුව</label>
+                    <input type="file" id="f_pdf" accept=".pdf" class="form-input">
+                    <p class="text-xs text-gray-500 mt-1">උපරිම 50MB. PDF පමණයි.</p>
+                </div>
+            </div>
+        `;
+    } else if (type === 'video') {
+        formFields = `
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
+                    <input id="f_title" required class="form-input" placeholder="වීඩියෝවේ නම">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">විස්තරය</label>
+                    <textarea id="f_desc" rows="3" class="form-input" placeholder="වීඩියෝව පිළිබඳ කෙටි විස්තරයක්"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">ශ්‍රේණිය *</label>
+                        <select id="f_grade" required class="form-input">${gradeOptions}</select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">විෂය *</label>
+                        <select id="f_subject" required class="form-input">${subjectOptions}</select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">YouTube URL *</label>
+                    <input id="f_video_url" required class="form-input" placeholder="https://www.youtube.com/watch?v=...">
+                    <p class="text-xs text-gray-500 mt-1">උදා: https://www.youtube.com/watch?v=dQw4w9WgXcQ</p>
+                </div>
+            </div>
+        `;
+    } else if (type === 'article') {
+        formFields = `
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
+                    <input id="f_title" required class="form-input" placeholder="ලිපියේ නම">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">විස්තරය</label>
+                    <input id="f_desc" class="form-input" placeholder="කෙටි විස්තරයක්">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">අන්තර්ගතය *</label>
+                    <textarea id="f_content" required rows="8" class="form-input" placeholder="ලිපියේ සම්පූර්ණ අන්තර්ගතය"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">කාණ්ඩය</label>
+                        <input id="f_category" value="අධ්‍යාපනය" class="form-input">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">කර්තෘ</label>
+                        <input id="f_author" value="${state.user.name || 'Admin'}" class="form-input">
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    modalBody.innerHTML = `
+        <form id="dataForm" class="space-y-6">
+            ${formFields}
+            <div class="flex space-x-3 pt-4">
+                <button type="button" onclick="closeModal()" class="flex-1 py-3 border-2 border-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-50">
+                    අවලංගු කරන්න
+                </button>
+                <button type="submit" class="flex-1 py-3 bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy font-bold rounded-xl hover:shadow-lg">
+                    <i class="fa-solid fa-save mr-2"></i>සුරකින්න
+                </button>
+            </div>
+        </form>
+    `;
+    
+    modal.classList.remove('hidden');
+    
+    document.getElementById('dataForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await submitForm(type);
+    });
+}
+
+async function submitForm(type) {
+    const endpoint = type;
+    
+    try {
+        let body = {};
+        
+        if (type === 'lesson' || type === 'paper' || type === 'video') {
+            body = {
+                title: document.getElementById('f_title').value.trim(),
+                description: document.getElementById('f_desc')?.value.trim() || '',
+                grade_id: parseInt(document.getElementById('f_grade').value),
+                subject_id: parseInt(document.getElementById('f_subject').value)
+            };
+        }
+        
+        if (type === 'paper') {
+            body.paper_type = document.getElementById('f_type').value;
+            body.year = parseInt(document.getElementById('f_year').value);
+
+            const pdfInput = document.getElementById('f_pdf');
+            if (pdfInput && pdfInput.files.length > 0) {
+                const file = pdfInput.files[0];
+                
+                if (file.size > 50 * 1024 * 1024) {
+                    showToast('ෆයිල් එක 50MB ට වඩා විශාලයි', 'error');
+                    return;
+                }
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                showToast('PDF එක upload වෙමින්...', 'info');
+                
+                const uploadRes = await fetch(`${API_BASE}/upload`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${state.token}` },
+                    body: formData
+                });
+                
+                if (!uploadRes.ok) {
+                    const err = await uploadRes.json().catch(() => ({}));
+                    throw new Error('PDF upload failed: ' + (err.error || uploadRes.statusText));
+                }
+                
+                const uploadData = await uploadRes.json();
+                
+                if (uploadData.file && uploadData.file.url) {
+                    body.pdf_file = uploadData.file.url;
+                } else {
+                    throw new Error('PDF upload response invalid');
+                }
+            }
+        }
+        
+        if (type === 'video') {
+            const videoUrl = document.getElementById('f_video_url').value.trim();
+            if (!videoUrl) {
+                showToast('YouTube URL එක අවශ්‍යයි', 'error');
+                return;
+            }
+            body.video_url = videoUrl;
+        }
+        
+        if (type === 'article') {
+            body = {
+                title: document.getElementById('f_title').value.trim(),
+                description: document.getElementById('f_desc').value.trim(),
+                content: document.getElementById('f_content').value.trim(),
+                category: document.getElementById('f_category').value.trim(),
+                author: document.getElementById('f_author').value.trim()
+            };
+        }
+        
+        console.log('📤 Submitting:', endpoint, body);
+
+        const response = await api(`/resources/${endpoint}`, {
+            method: 'POST',
+            body: JSON.stringify(body)
+        });
+        
+        console.log('✅ Response:', response);
+
+        showToast('✅ සාර්ථකව එකතු කරන ලදී!', 'success');
+        closeModal();
+        
+        const tabMap = { lesson: 'lessons', paper: 'papers', video: 'videos', article: 'articles' };
+        showTab(tabMap[type]);
+        
+    } catch (err) {
+        console.error('❌ Submit error:', err);
+        showToast('දෝෂයක්: ' + err.message, 'error');
+    }
+}
+
+async function deleteItem(type, id) {
+    if (!confirm('ඔබට මෙය මකා දැමීමට අවශ්‍යද?')) return;
+    
+    try {
+        await api(`/resources/${type}/${id}`, { method: 'DELETE' });
+        showToast('සාර්ථකව මකා දමන ලදී', 'success');
+        
+        const tabMap = { lesson: 'lessons', paper: 'papers', video: 'videos', article: 'articles' };
+        showTab(tabMap[type]);
+    } catch (err) {
+        showToast('දෝෂයක්: ' + err.message, 'error');
+    }
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+}
 // ============================================
 // GRADES
 // ============================================
@@ -619,317 +879,22 @@ async function renderUsers() {
 }
 
 // ============================================
-// FORM MODAL
-// ============================================
-function openForm(type) {
-    const modal = document.getElementById('modal');
-    const modalBody = document.getElementById('modalBody');
-    
-    const labels = { lesson: 'පාඩම', paper: 'ප්‍රශ්න පත්‍රය', video: 'වීඩියෝව', article: 'ලිපිය' };
-    document.getElementById('modalTitle').textContent = `නව ${labels[type]}ක් එකතු කරන්න`;
-    
-    const gradeOptions = state.grades.map(g => `<option value="${g.id}">${g.grade_name}</option>`).join('');
-    const subjectOptions = state.subjects.map(s => `<option value="${s.id}">${s.subject_name}</option>`).join('');
-    
-    let formFields = '';
-    
-    if (type === 'lesson') {
-        formFields = `
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
-                    <input id="f_title" required class="form-input" placeholder="පාඩමේ නම">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold mb-2">විස්තරය</label>
-                    <textarea id="f_desc" rows="5" class="form-input" placeholder="පාඩම පිළිබඳ සම්පූර්ණ විස්තරය"></textarea>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold mb-2">ශ්‍රේණිය *</label>
-                        <select id="f_grade" required class="form-input">${gradeOptions}</select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2">විෂය *</label>
-                        <select id="f_subject" required class="form-input">${subjectOptions}</select>
-                    </div>
-                </div>
-            </div>
-        `;
-    } else if (type === 'paper') {
-        formFields = `
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
-                    <input id="f_title" required class="form-input" placeholder="ප්‍රශ්න පත්‍රයේ නම">
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold mb-2">ශ්‍රේණිය *</label>
-                        <select id="f_grade" required class="form-input">${gradeOptions}</select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2">විෂය *</label>
-                        <select id="f_subject" required class="form-input">${subjectOptions}</select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold mb-2">වර්ගය</label>
-                        <select id="f_type" class="form-input">
-                            <option value="term">වාර පරීක්ෂණය</option>
-                            <option value="school">පාසල් පරීක්ෂණය</option>
-                            <option value="practice">පුහුණු</option>
-                            <option value="exam">විභාගය</option>
-                            <option value="model">ආදර්ශ</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2">වර්ෂය</label>
-                        <input type="number" id="f_year" value="${new Date().getFullYear()}" class="form-input">
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold mb-2">📄 PDF ගොනුව</label>
-                    <input type="file" id="f_pdf" accept=".pdf" class="form-input">
-                    <p class="text-xs text-gray-500 mt-1">උපරිම 50MB. PDF පමණයි.</p>
-                </div>
-            </div>
-        `;
-    } else if (type === 'video') {
-        formFields = `
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
-                    <input id="f_title" required class="form-input" placeholder="වීඩියෝවේ නම">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold mb-2">විස්තරය</label>
-                    <textarea id="f_desc" rows="3" class="form-input" placeholder="වීඩියෝව පිළිබඳ කෙටි විස්තරයක්"></textarea>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold mb-2">ශ්‍රේණිය *</label>
-                        <select id="f_grade" required class="form-input">${gradeOptions}</select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2">විෂය *</label>
-                        <select id="f_subject" required class="form-input">${subjectOptions}</select>
-                    </div>
-                </div>
-                <div>
-                    <label class="block text-sm font-bold mb-2">YouTube URL *</label>
-                    <input id="f_video_url" required class="form-input" placeholder="https://www.youtube.com/watch?v=...">
-                </div>
-            </div>
-        `;
-    } else if (type === 'article') {
-        formFields = `
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
-                    <input id="f_title" required class="form-input" placeholder="ලිපියේ නම">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold mb-2">විස්තරය</label>
-                    <input id="f_desc" class="form-input" placeholder="කෙටි විස්තරයක්">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold mb-2">අන්තර්ගතය *</label>
-                    <textarea id="f_content" required rows="8" class="form-input" placeholder="ලිපියේ සම්පූර්ණ අන්තර්ගතය"></textarea>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold mb-2">කාණ්ඩය</label>
-                        <input id="f_category" value="අධ්‍යාපනය" class="form-input">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-bold mb-2">කර්තෘ</label>
-                        <input id="f_author" value="${state.user.name || 'Admin'}" class="form-input">
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-    
-    modalBody.innerHTML = `
-        <form id="dataForm" class="space-y-6">
-            ${formFields}
-            <div class="flex space-x-3 pt-4">
-                <button type="button" onclick="closeModal()" class="flex-1 py-3 border-2 border-gray-200 text-gray-600 font-bold rounded-xl hover:bg-gray-50">
-                    අවලංගු කරන්න
-                </button>
-                <button type="submit" class="flex-1 py-3 bg-gradient-to-r from-brand-gold to-brand-gold2 text-brand-navy font-bold rounded-xl hover:shadow-lg">
-                    <i class="fa-solid fa-save mr-2"></i>සුරකින්න
-                </button>
-            </div>
-        </form>
-    `;
-    
-    modal.classList.remove('hidden');
-    
-    document.getElementById('dataForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await submitForm(type);
-    });
-}
-
-async function submitForm(type) {
-    const endpoint = type;
-    
-    try {
-        let body = {};
-        
-        if (type === 'lesson' || type === 'paper' || type === 'video') {
-            body = {
-                title: document.getElementById('f_title').value,
-                description: document.getElementById('f_desc')?.value || '',
-                grade_id: parseInt(document.getElementById('f_grade').value),
-                subject_id: parseInt(document.getElementById('f_subject').value)
-            };
-        }
-        
-        if (type === 'paper') {
-            body.paper_type = document.getElementById('f_type').value;
-            body.year = parseInt(document.getElementById('f_year').value);
-
-            const pdfInput = document.getElementById('f_pdf');
-            if (pdfInput && pdfInput.files.length > 0) {
-                const file = pdfInput.files[0];
-                
-                if (file.size > 50 * 1024 * 1024) {
-                    showToast('ෆයිල් එක 50MB ට වඩා විශාලයි', 'error');
-                    return;
-                }
-                
-                const formData = new FormData();
-                formData.append('file', file);
-                
-                showToast('PDF එක upload වෙමින්...', 'info');
-                
-                const uploadRes = await fetch(`${API_BASE}/upload`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${state.token}` },
-                    body: formData
-                });
-                
-                if (!uploadRes.ok) {
-                    const err = await uploadRes.json().catch(() => ({}));
-                    throw new Error('PDF upload failed: ' + (err.error || uploadRes.statusText));
-                }
-                
-                const uploadData = await uploadRes.json();
-                
-                if (uploadData.file && uploadData.file.url) {
-                    body.pdf_file = uploadData.file.url;
-                } else {
-                    throw new Error('PDF upload response invalid');
-                }
-            }
-        }
-        
-        if (type === 'video') {
-            body.video_url = document.getElementById('f_video_url').value;
-        }
-        
-        if (type === 'article') {
-            body = {
-                title: document.getElementById('f_title').value,
-                description: document.getElementById('f_desc').value,
-                content: document.getElementById('f_content').value,
-                category: document.getElementById('f_category').value,
-                author: document.getElementById('f_author').value
-            };
-        }
-        
-        const response = await api(`/resources/${endpoint}`, {
-            method: 'POST',
-            body: JSON.stringify(body)
-        });
-        
-        showToast('✅ සාර්ථකව එකතු කරන ලදී!', 'success');
-        closeModal();
-        
-        const tabMap = { lesson: 'lessons', paper: 'papers', video: 'videos', article: 'articles' };
-        showTab(tabMap[type]);
-        
-    } catch (err) {
-        console.error('Submit error:', err);
-        showToast('දෝෂයක්: ' + err.message, 'error');
-    }
-}
-
-async function deleteItem(type, id) {
-    if (!confirm('ඔබට මෙය මකා දැමීමට අවශ්‍යද?')) return;
-    
-    try {
-        await api(`/resources/${type}/${id}`, { method: 'DELETE' });
-        showToast('සාර්ථකව මකා දමන ලදී', 'success');
-        
-        const tabMap = { lesson: 'lessons', paper: 'papers', video: 'videos', article: 'articles' };
-        showTab(tabMap[type]);
-    } catch (err) {
-        showToast('දෝෂයක්: ' + err.message, 'error');
-    }
-}
-
-function closeModal() {
-    document.getElementById('modal').classList.add('hidden');
-}
-
-// ============================================
-// TOAST
-// ============================================
-function showToast(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    const icons = {
-        success: 'fa-check-circle',
-        error: 'fa-exclamation-circle',
-        info: 'fa-info-circle'
-    };
-    
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `
-        <i class="fa-solid ${icons[type]}"></i>
-        <span>${message}</span>
-    `;
-    
-    toast.classList.remove('hidden');
-    setTimeout(() => toast.classList.add('hidden'), 3000);
-}
-
-// ============================================
-// THEME
-// ============================================
-function toggleTheme() {
-    const body = document.body;
-    const icon = document.getElementById('themeIcon');
-    body.classList.toggle('dark');
-    
-    if (body.classList.contains('dark')) {
-        icon.className = 'fa-solid fa-sun text-brand-navy';
-        localStorage.setItem('theme', 'dark');
-    } else {
-        icon.className = 'fa-solid fa-moon text-brand-navy';
-        localStorage.setItem('theme', 'light');
-    }
-}
-
-function loadTheme() {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark') {
-        document.body.classList.add('dark');
-        const icon = document.getElementById('themeIcon');
-        if (icon) icon.className = 'fa-solid fa-sun text-brand-navy';
-    }
-}
-
-// ============================================
 // SETTINGS
 // ============================================
 async function renderSettings() {
     const content = document.getElementById('tabContent');
     content.innerHTML = `<div class="text-center py-12"><div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
+    
+    if (state.user.role !== 'web_developer') {
+        content.innerHTML = `
+            <div class="stat-card text-center py-16">
+                <i class="fa-solid fa-lock text-6xl text-red-300 mb-4"></i>
+                <p class="text-red-500 text-lg font-bold">ඔබට මෙම කොටසට ප්‍රවේශය නැත</p>
+                <p class="text-gray-500 text-sm mt-2">මෙය වෙනස් කළ හැක්කේ Web Developer ට විතරයි</p>
+            </div>
+        `;
+        return;
+    }
     
     try {
         const settings = await api('/settings');
@@ -1270,7 +1235,6 @@ async function renderLogs() {
             <div class="stat-card text-center py-16">
                 <i class="fa-solid fa-lock text-6xl text-red-300 mb-4"></i>
                 <p class="text-red-500 text-lg font-bold">ඔබට මෙම කොටසට ප්‍රවේශය නැත</p>
-                <p class="text-gray-500 text-sm mt-2">මෙය බලන්න පුළුවන් Web Developer ට විතරයි</p>
             </div>
         `;
         return;
@@ -1367,6 +1331,53 @@ async function clearAllLogs() {
         renderLogs();
     } catch (err) {
         showToast('දෝෂයක්: ' + err.message, 'error');
+    }
+}
+
+// ============================================
+// TOAST
+// ============================================
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-circle',
+        info: 'fa-info-circle'
+    };
+    
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <i class="fa-solid ${icons[type]}"></i>
+        <span>${message}</span>
+    `;
+    
+    toast.classList.remove('hidden');
+    setTimeout(() => toast.classList.add('hidden'), 3000);
+}
+
+// ============================================
+// THEME
+// ============================================
+function toggleTheme() {
+    const body = document.body;
+    const icon = document.getElementById('themeIcon');
+    body.classList.toggle('dark');
+    
+    if (body.classList.contains('dark')) {
+        icon.className = 'fa-solid fa-sun text-brand-navy';
+        localStorage.setItem('theme', 'dark');
+    } else {
+        icon.className = 'fa-solid fa-moon text-brand-navy';
+        localStorage.setItem('theme', 'light');
+    }
+}
+
+function loadTheme() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+        document.body.classList.add('dark');
+        const icon = document.getElementById('themeIcon');
+        if (icon) icon.className = 'fa-solid fa-sun text-brand-navy';
     }
 }
 
