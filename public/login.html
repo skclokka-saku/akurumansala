@@ -219,24 +219,25 @@
                     <label class="block text-sm font-bold text-gray-700 mb-2">
                         <i class="fa-solid fa-envelope text-purple-500 mr-2"></i>විද්‍යුත් තැපෑල
                     </label>
-                    <input type="email" id="signupEmail" required class="form-input" placeholder="your@email.com">
+                    <div class="flex gap-2">
+                        <input type="email" id="signupEmail" required class="form-input" placeholder="your@email.com">
+                        <button type="button" id="sendEmailCodeBtn" onclick="sendEmailCode()" class="px-4 py-2 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 transition text-sm whitespace-nowrap">
+                            කේතය යවන්න
+                        </button>
+                    </div>
+                </div>
+                <div id="emailCodeField" class="hidden">
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                        <i class="fa-solid fa-key text-purple-500 mr-2"></i>තහවුරු කිරීමේ කේතය (ඊමේල් එකට එවන ලදී)
+                    </label>
+                    <input type="text" id="signupEmailCode" class="form-input" placeholder="6 අංක කේතය" maxlength="6">
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
                         <i class="fa-solid fa-phone text-purple-500 mr-2"></i>දුරකථන අංකය
                     </label>
-                    <div class="flex gap-2">
-                        <input type="tel" id="signupPhone" required class="form-input" placeholder="0712345678" maxlength="10">
-                        <button type="button" id="sendOtpBtn" onclick="sendOTP()" class="px-4 py-2 bg-purple-600 text-white font-bold rounded-xl hover:bg-purple-700 transition text-sm whitespace-nowrap">
-                            OTP යවන්න
-                        </button>
-                    </div>
-                </div>
-                <div id="otpField" class="hidden">
-                    <label class="block text-sm font-bold text-gray-700 mb-2">
-                        <i class="fa-solid fa-key text-purple-500 mr-2"></i>OTP කේතය
-                    </label>
-                    <input type="text" id="signupOtp" class="form-input" placeholder="6 අංක කේතය" maxlength="6">
+                    <input type="tel" id="signupPhone" required class="form-input" placeholder="0712345678" maxlength="10">
+                    <p class="text-xs text-gray-500 mt-1">උදා: 0712345678</p>
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-gray-700 mb-2">
@@ -285,10 +286,9 @@
 
     <script>
         const API_BASE = '/api';
-        let phoneVerified = false;
 
         // ============================================
-        // THEME
+        // MESSAGE DISPLAY
         // ============================================
         function showMessage(message, type = 'error') {
             const box = document.getElementById('messageBox');
@@ -299,9 +299,12 @@
             box.innerHTML = `<i class="fa-solid ${icon}"></i><span>${message}</span>`;
             box.classList.remove('hidden');
             
-            setTimeout(() => box.classList.add('hidden'), 5000);
+            setTimeout(() => box.classList.add('hidden'), 7000);
         }
 
+        // ============================================
+        // TAB SWITCHING
+        // ============================================
         function switchTab(tab) {
             const loginForm = document.getElementById('loginForm');
             const signupForm = document.getElementById('signupForm');
@@ -378,14 +381,20 @@
         });
 
         // ============================================
-        // SEND OTP
+        // SEND EMAIL CODE
         // ============================================
-        async function sendOTP() {
-            const phone = document.getElementById('signupPhone').value.trim();
-            const btn = document.getElementById('sendOtpBtn');
+        async function sendEmailCode() {
+            const email = document.getElementById('signupEmail').value.trim();
+            const btn = document.getElementById('sendEmailCodeBtn');
 
-            if (!phone) {
-                showMessage('දුරකථන අංකය ඇතුළත් කරන්න', 'error');
+            if (!email) {
+                showMessage('විද්‍යුත් තැපෑල ඇතුළත් කරන්න', 'error');
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('වලංගු විද්‍යුත් තැපෑලක් ඇතුළත් කරන්න', 'error');
                 return;
             }
 
@@ -393,18 +402,18 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
 
             try {
-                const res = await fetch(`${API_BASE}/auth/send-otp`, {
+                const res = await fetch(`${API_BASE}/auth/send-email-code`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ phone, purpose: 'signup' })
+                    body: JSON.stringify({ email, purpose: 'signup' })
                 });
 
                 const data = await res.json();
 
-                if (!res.ok) throw new Error(data.error || 'OTP යැවීම අසාර්ථකයි');
+                if (!res.ok) throw new Error(data.error || 'කේතය යැවීම අසාර්ථකයි');
 
-                document.getElementById('otpField').classList.remove('hidden');
-                showMessage(`OTP යවන ලදී! (Dev: ${data.dev_otp})`, 'success');
+                document.getElementById('emailCodeField').classList.remove('hidden');
+                showMessage(data.message, 'success');
 
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-solid fa-redo"></i> නැවත යවන්න';
@@ -412,7 +421,7 @@
             } catch (err) {
                 showMessage(err.message, 'error');
                 btn.disabled = false;
-                btn.innerHTML = 'OTP යවන්න';
+                btn.innerHTML = 'කේතය යවන්න';
             }
         }
 
@@ -425,7 +434,7 @@
             const name = document.getElementById('signupName').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
             const phone = document.getElementById('signupPhone').value.trim();
-            const otpCode = document.getElementById('signupOtp').value.trim();
+            const emailCode = document.getElementById('signupEmailCode').value.trim();
             const school = document.getElementById('signupSchool').value.trim();
             const password = document.getElementById('signupPassword').value;
             const btn = document.getElementById('signupBtn');
@@ -434,21 +443,25 @@
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>ලියාපදිංචි වෙමින්...</span>';
 
             try {
-                // Verify OTP first
-                const verifyRes = await fetch(`${API_BASE}/auth/verify-otp`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ phone, code: otpCode })
-                });
+                // Verify email code first
+                if (emailCode) {
+                    const verifyRes = await fetch(`${API_BASE}/auth/verify-email-code`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email, code: emailCode })
+                    });
 
-                const verifyData = await verifyRes.json();
-                if (!verifyRes.ok) throw new Error(verifyData.error || 'OTP තහවුරු කිරීම අසාර්ථකයි');
+                    const verifyData = await verifyRes.json();
+                    if (!verifyRes.ok) throw new Error(verifyData.error || 'කේතය තහවුරු කිරීම අසාර්ථකයි');
+                } else {
+                    throw new Error('තහවුරු කිරීමේ කේතය ඇතුළත් කරන්න');
+                }
 
                 // Register
                 const res = await fetch(`${API_BASE}/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password, school, phone, otpCode })
+                    body: JSON.stringify({ name, email, password, school, phone, emailCode })
                 });
 
                 const data = await res.json();
@@ -493,7 +506,7 @@
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'දෝෂයක්');
 
-                showMessage(data.message + (data.dev_token ? ` (Dev: ${data.dev_token})` : ''), 'success');
+                showMessage(data.message, 'success');
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span>Reset Link යවන්න</span>';
 
@@ -501,14 +514,6 @@
                 showMessage(err.message, 'error');
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span>Reset Link යවන්න</span>';
-            }
-        });
-
-        // Check URL for reset token
-        window.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            if (params.get('reset')) {
-                showMessage('Reset link එකක් ලැබුණි. මුරපදය වෙනස් කිරීමට ඉදිරියට යන්න.', 'success');
             }
         });
     </script>
