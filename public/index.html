@@ -9,7 +9,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
@@ -25,10 +25,26 @@ tailwind.config = {
                     gold: '#D4A017',
                     gold2: '#E8B923',
                     light: '#F8F9FC',
+                    pink: '#ec4899',
+                    purple: '#a855f7',
+                    teal: '#14b8a6',
+                    orange: '#f97316',
                 }
             },
             fontFamily: {
                 sinhala: ['"Noto Serif Sinhala"', 'sans-serif'],
+            },
+            animation: {
+                'float': 'float 6s ease-in-out infinite',
+                'pulse-slow': 'pulse 4s ease-in-out infinite',
+                'bounce-slow': 'bounce 3s ease-in-out infinite',
+                'spin-slow': 'spin 8s linear infinite',
+            },
+            keyframes: {
+                float: {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-20px)' },
+                }
             }
         }
     }
@@ -44,75 +60,195 @@ tailwind.config = {
         background: #F8F9FC;
         color: #1e293b;
         transition: background-color 0.3s, color 0.3s;
+        background-image: 
+            radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.05) 0%, transparent 50%),
+            radial-gradient(circle at 50% 50%, rgba(20, 184, 166, 0.03) 0%, transparent 50%);
     }
-    body.dark { background: #0a0f1e; color: #e2e8f0; }
+    body.dark { 
+        background: #0a0f1e; 
+        color: #e2e8f0;
+        background-image: 
+            radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.08) 0%, transparent 50%);
+    }
 
+    /* Container */
     .container-wide {
         width: 100%;
-        max-width: 1400px;
+        max-width: 1440px;
         padding-left: 1.5rem;
         padding-right: 1.5rem;
         margin: 0 auto;
     }
-    @media (min-width: 768px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
-    @media (min-width: 1280px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
+    @media (min-width: 768px) { .container-wide { padding-left: 2.5rem; padding-right: 2.5rem; } }
+    @media (min-width: 1280px) { .container-wide { padding-left: 4rem; padding-right: 4rem; } }
 
-    .top-bar { background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; font-size: 0.75rem; }
-    .top-bar a { color: rgba(255,255,255,0.85); transition: color 0.2s; text-decoration: none; }
-    .top-bar a:hover { color: #D4A017; }
+    /* Top Bar */
+    .top-bar { 
+        background: linear-gradient(135deg, #0F2C59, #1B3A6B); 
+        color: white; 
+        font-size: 0.8rem;
+        border-bottom: 1px solid rgba(212, 160, 23, 0.2);
+    }
+    .top-bar a { color: rgba(255,255,255,0.9); transition: all 0.2s; text-decoration: none; }
+    .top-bar a:hover { color: #D4A017; transform: translateY(-2px); }
 
-    .main-nav { background: white; box-shadow: 0 2px 20px rgba(15, 44, 89, 0.08); }
-    body.dark .main-nav { background: #1a1a2e; }
+    /* Main Nav */
+    .main-nav { 
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
+        border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+    }
+    body.dark .main-nav { 
+        background: rgba(26, 26, 46, 0.95);
+        border-bottom: 1px solid rgba(212, 160, 23, 0.15);
+    }
 
+    /* Logo - LARGER */
     .logo-wrap {
-        width: 65px;
-        height: 65px;
+        width: 70px;
+        height: 70px;
         background: linear-gradient(135deg, #ffffff, #f8f9fc);
-        border-radius: 1.1rem;
-        box-shadow: 0 4px 15px rgba(15, 44, 89, 0.15);
-        border: 2px solid rgba(212, 160, 23, 0.3);
+        border-radius: 1.2rem;
+        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.2);
+        border: 2px solid rgba(212, 160, 23, 0.4);
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 0.4rem;
-        transition: all 0.3s;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
     }
-    .logo-wrap:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(15, 44, 89, 0.25); }
-    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .logo-wrap::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, transparent, rgba(212, 160, 23, 0.1));
+        opacity: 0;
+        transition: opacity 0.4s;
+    }
+    .logo-wrap:hover { 
+        transform: scale(1.08) rotate(-3deg); 
+        box-shadow: 0 12px 35px rgba(15, 44, 89, 0.3);
+    }
+    .logo-wrap:hover::before { opacity: 1; }
+    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; position: relative; z-index: 1; }
 
+    /* Nav Links - LARGER with 3D effect */
     .nav-link {
         position: relative;
         font-weight: 700;
         color: #0F2C59;
-        font-size: 0.8125rem;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        transition: color 0.3s;
-        padding: 0.6rem 0.9rem;
+        font-size: 0.95rem;
+        letter-spacing: 0.3px;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        padding: 0.7rem 1.1rem;
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
-        border-radius: 0.5rem;
+        gap: 0.5rem;
+        border-radius: 0.75rem;
+        margin: 0 0.15rem;
     }
     body.dark .nav-link { color: #cbd5e1; }
-    .nav-link i { font-size: 0.7rem; color: #D4A017; }
-    .nav-link::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        width: 0;
-        height: 3px;
-        background: #D4A017;
-        border-radius: 3px;
-        transition: all 0.3s ease;
-        transform: translateX(-50%);
+    .nav-link i { font-size: 0.9rem; color: #D4A017; transition: transform 0.3s; }
+    .nav-link:hover { 
+        color: #D4A017; 
+        background: rgba(212, 160, 23, 0.1); 
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(212, 160, 23, 0.2);
     }
-    .nav-link:hover, .nav-link.active { color: #D4A017; background: rgba(212, 160, 23, 0.08); }
-    .nav-link:hover::after, .nav-link.active::after { width: 50%; }
+    .nav-link:hover i { transform: scale(1.2) rotate(-10deg); }
+    .nav-link.active { 
+        color: #D4A017; 
+        background: rgba(212, 160, 23, 0.12);
+        box-shadow: 0 6px 15px rgba(212, 160, 23, 0.2);
+    }
 
-    .hero-section { position: relative; min-height: 700px; background: #0F2C59; overflow: hidden; }
+    /* Sub-Menu (Drop-down) */
+    .nav-item-dropdown {
+        position: relative;
+    }
+    .nav-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 240px;
+        background: white;
+        border-radius: 1rem;
+        box-shadow: 0 20px 50px rgba(15, 44, 89, 0.25);
+        padding: 0.75rem;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 100;
+        border: 1px solid rgba(212, 160, 23, 0.15);
+    }
+    body.dark .nav-dropdown { background: #1e293b; }
+    .nav-item-dropdown:hover .nav-dropdown {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+    .nav-dropdown a {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        color: #0F2C59;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.875rem;
+        transition: all 0.3s;
+    }
+    body.dark .nav-dropdown a { color: #cbd5e1; }
+    .nav-dropdown a:hover {
+        background: rgba(212, 160, 23, 0.1);
+        color: #D4A017;
+        padding-left: 1.5rem;
+    }
+    .nav-dropdown a i {
+        width: 24px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #a855f7;
+    }
+    .nav-dropdown a:hover i { color: #D4A017; transform: scale(1.15); }
+
+    /* Theme Toggle - 3D */
+    .theme-toggle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4), inset 0 -3px 6px rgba(0,0,0,0.1);
+        font-size: 1.1rem;
+    }
+    .theme-toggle:hover { 
+        transform: rotate(180deg) scale(1.15); 
+        box-shadow: 0 10px 30px rgba(212, 160, 23, 0.6);
+    }
+
+    /* Hero Section */
+    .hero-section { 
+        position: relative; 
+        min-height: 700px; 
+        background: #0F2C59; 
+        overflow: hidden;
+        border-radius: 0 0 3rem 3rem;
+    }
     .hero-bg {
         position: absolute;
         inset: 0;
@@ -120,39 +256,64 @@ tailwind.config = {
         background-size: cover;
         background-position: center;
         z-index: 1;
-        animation: zoomIn 20s ease-in-out infinite;
+        animation: heroZoom 20s ease-in-out infinite;
     }
-    @keyframes zoomIn {
+    @keyframes heroZoom {
         0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.08); }
+        50% { transform: scale(1.1); }
     }
     .hero-overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(90deg, rgba(15, 44, 89, 0.96) 0%, rgba(15, 44, 89, 0.88) 35%, rgba(15, 44, 89, 0.6) 55%, rgba(15, 44, 89, 0.3) 75%, rgba(15, 44, 89, 0.05) 100%);
+        background: linear-gradient(90deg, 
+            rgba(15, 44, 89, 0.96) 0%, 
+            rgba(15, 44, 89, 0.88) 35%, 
+            rgba(15, 44, 89, 0.6) 55%, 
+            rgba(15, 44, 89, 0.3) 75%, 
+            rgba(15, 44, 89, 0.05) 100%);
         z-index: 2;
     }
-    body.dark .hero-overlay {
-        background: linear-gradient(90deg, rgba(10, 15, 30, 0.98) 0%, rgba(10, 15, 30, 0.92) 35%, rgba(10, 15, 30, 0.65) 55%, rgba(10, 15, 30, 0.35) 75%, rgba(10, 15, 30, 0.15) 100%);
+    .hero-content { 
+        position: relative; 
+        z-index: 3; 
+        padding: 5rem 3rem 5rem 5rem; 
+        width: 100%; 
     }
-    .hero-content { position: relative; z-index: 3; padding: 5rem 3rem 5rem 5rem; width: 100%; }
     @media (max-width: 1280px) { .hero-content { padding: 5rem 2rem; } }
     @media (max-width: 768px) { .hero-content { padding: 4rem 1.5rem; } }
 
-    .hero-title { text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); letter-spacing: -0.02em; line-height: 1.05; }
-    .hero-gold-text { text-shadow: 0 2px 20px rgba(212, 160, 23, 0.6); display: inline-block; animation: floatUp 3s ease-in-out infinite; }
-    @keyframes floatUp {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-8px); }
+    .hero-title { 
+        text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); 
+        letter-spacing: -0.02em; 
+        line-height: 1.05; 
     }
-    .hero-info-cards { position: relative; z-index: 5; margin-top: -4rem; padding-bottom: 2rem; }
+    .hero-gold-text { 
+        text-shadow: 0 2px 20px rgba(212, 160, 23, 0.6); 
+        display: inline-block; 
+        animation: floatText 3s ease-in-out infinite;
+    }
+    @keyframes floatText {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    /* Info Cards - 3D */
+    .hero-info-cards { 
+        position: relative; 
+        z-index: 5; 
+        margin-top: -4rem; 
+        padding-bottom: 3rem; 
+    }
     .info-card-3d {
         background: white;
-        border-radius: 1.25rem;
+        border-radius: 1.5rem;
         padding: 1.75rem;
-        box-shadow: 0 10px 40px rgba(15, 44, 89, 0.15);
-        border-left: 5px solid #D4A017;
-        transition: all 0.4s;
+        box-shadow: 
+            0 15px 35px rgba(15, 44, 89, 0.15),
+            0 5px 15px rgba(15, 44, 89, 0.1),
+            inset 0 -3px 6px rgba(0,0,0,0.03);
+        border-left: 6px solid #D4A017;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         display: flex;
         align-items: center;
         gap: 1.25rem;
@@ -163,42 +324,57 @@ tailwind.config = {
     .info-card-3d::before {
         content: '';
         position: absolute;
-        top: 0;
-        right: 0;
-        width: 100px;
-        height: 100px;
+        top: -50%;
+        right: -50%;
+        width: 200px;
+        height: 200px;
         background: radial-gradient(circle, rgba(212, 160, 23, 0.1), transparent);
         border-radius: 50%;
+        transition: all 0.5s;
     }
-    body.dark .info-card-3d { background: #1a1a2e; }
-    .info-card-3d:hover { transform: translateY(-10px); box-shadow: 0 25px 60px rgba(15, 44, 89, 0.25); }
+    body.dark .info-card-3d { 
+        background: #1a1a2e; 
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+    .info-card-3d:hover { 
+        transform: translateY(-12px) scale(1.02); 
+        box-shadow: 0 25px 60px rgba(15, 44, 89, 0.25);
+    }
+    .info-card-3d:hover::before { top: -20%; right: -20%; }
     .info-card-icon {
-        width: 68px;
-        height: 68px;
+        width: 75px;
+        height: 75px;
         border-radius: 1.25rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.9rem;
+        font-size: 2rem;
         flex-shrink: 0;
-        transition: all 0.4s;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     }
-    .info-card-3d:hover .info-card-icon { transform: scale(1.1) rotate(-8deg); }
+    .info-card-3d:hover .info-card-icon { 
+        transform: scale(1.15) rotate(-10deg); 
+        box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
 
+    /* Buttons - 3D */
     .btn-primary {
         background: linear-gradient(135deg, #D4A017, #E8B923);
         color: #0F2C59;
-        padding: 0.9rem 2rem;
-        border-radius: 0.75rem;
+        padding: 1rem 2.5rem;
+        border-radius: 1rem;
         font-weight: 800;
         text-transform: uppercase;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         letter-spacing: 1.5px;
-        transition: all 0.4s;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         display: inline-flex;
         align-items: center;
         gap: 0.75rem;
-        box-shadow: 0 8px 25px rgba(212, 160, 23, 0.4);
+        box-shadow: 
+            0 10px 25px rgba(212, 160, 23, 0.4),
+            inset 0 -3px 6px rgba(0,0,0,0.1);
         cursor: pointer;
         border: none;
         text-decoration: none;
@@ -212,24 +388,27 @@ tailwind.config = {
         left: 50%;
         width: 0;
         height: 0;
-        background: rgba(255,255,255,0.3);
+        background: rgba(255,255,255,0.4);
         border-radius: 50%;
         transform: translate(-50%, -50%);
         transition: width 0.6s, height 0.6s;
     }
     .btn-primary:hover::before { width: 300px; height: 300px; }
-    .btn-primary:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 15px 35px rgba(212, 160, 23, 0.6); }
+    .btn-primary:hover { 
+        transform: translateY(-5px) scale(1.03); 
+        box-shadow: 0 20px 45px rgba(212, 160, 23, 0.6);
+    }
 
     .btn-outline {
-        border: 2px solid white;
+        border: 3px solid white;
         color: white;
-        padding: 0.9rem 2rem;
-        border-radius: 0.75rem;
+        padding: 1rem 2.5rem;
+        border-radius: 1rem;
         font-weight: 800;
         text-transform: uppercase;
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         letter-spacing: 1.5px;
-        transition: all 0.4s;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         display: inline-flex;
         align-items: center;
         gap: 0.75rem;
@@ -238,52 +417,25 @@ tailwind.config = {
         cursor: pointer;
         text-decoration: none;
     }
-    .btn-outline:hover { background: white; color: #0F2C59; transform: translateY(-4px); }
-
-    .btn-navy {
-        background: #0F2C59;
-        color: white;
-        padding: 0.75rem 1.75rem;
-        border-radius: 0.75rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 1.5px;
-        transition: all 0.3s;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.75rem;
-        cursor: pointer;
-        border: none;
-        text-decoration: none;
+    .btn-outline:hover { 
+        background: white; 
+        color: #0F2C59; 
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 20px 45px rgba(255, 255, 255, 0.3);
     }
-    .btn-navy:hover { background: #1B3A6B; transform: translateY(-3px); }
 
-    .theme-toggle {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: rgba(212, 160, 23, 0.12);
-        color: #D4A017;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s;
-        border: 2px solid #D4A017;
-    }
-    .theme-toggle:hover { background: #D4A017; color: #0F2C59; transform: rotate(180deg) scale(1.1); }
-
+    /* Feature Cards - 3D */
     .feature-card {
         background: white;
         padding: 2rem 1.5rem;
-        border-radius: 1.25rem;
+        border-radius: 1.5rem;
         text-align: center;
-        border-bottom: 4px solid transparent;
-        transition: all 0.4s;
-        box-shadow: 0 4px 15px rgba(15, 44, 89, 0.08);
+        border-bottom: 5px solid transparent;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.08);
         position: relative;
         overflow: hidden;
+        cursor: pointer;
     }
     .feature-card::before {
         content: '';
@@ -292,73 +444,105 @@ tailwind.config = {
         right: -50%;
         width: 200px;
         height: 200px;
-        background: radial-gradient(circle, rgba(212, 160, 23, 0.1), transparent);
+        background: radial-gradient(circle, rgba(168, 85, 247, 0.15), transparent);
         border-radius: 50%;
         transition: all 0.5s;
         opacity: 0;
     }
-    .feature-card:hover::before { opacity: 1; top: -20%; right: -20%; }
     body.dark .feature-card { background: #1a1a2e; }
-    .feature-card:hover { border-bottom-color: #D4A017; transform: translateY(-10px); }
+    .feature-card:hover::before { opacity: 1; top: -20%; right: -20%; }
+    .feature-card:hover { 
+        border-bottom-color: #D4A017; 
+        transform: translateY(-12px) scale(1.03);
+        box-shadow: 0 25px 50px rgba(15, 44, 89, 0.15);
+    }
     .feature-icon {
-        width: 72px;
-        height: 72px;
+        width: 80px;
+        height: 80px;
         margin: 0 auto 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.9rem;
+        font-size: 2rem;
         color: #D4A017;
-        background: linear-gradient(135deg, rgba(212, 160, 23, 0.15), rgba(212, 160, 23, 0.05));
-        border-radius: 1.25rem;
-        transition: all 0.4s;
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.15), rgba(168, 85, 247, 0.08));
+        border-radius: 1.5rem;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        z-index: 1;
     }
-    .feature-card:hover .feature-icon { transform: scale(1.15) rotate(-10deg); background: linear-gradient(135deg, #D4A017, #E8B923); color: white; }
+    .feature-card:hover .feature-icon { 
+        transform: scale(1.2) rotate(-12deg); 
+        background: linear-gradient(135deg, #D4A017, #E8B923); 
+        color: white;
+        box-shadow: 0 15px 35px rgba(212, 160, 23, 0.4);
+    }
 
+    /* Program Cards - 3D */
     .program-card {
         background: white;
-        border-radius: 1.25rem;
+        border-radius: 1.5rem;
         overflow: hidden;
-        box-shadow: 0 6px 25px rgba(15, 44, 89, 0.08);
-        transition: all 0.5s;
+        box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
+        transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         display: flex;
         flex-direction: column;
         height: 100%;
         position: relative;
+        border: 1px solid rgba(212, 160, 23, 0.1);
     }
     body.dark .program-card { background: #1a1a2e; }
-    .program-card:hover { transform: translateY(-12px); box-shadow: 0 30px 60px rgba(15, 44, 89, 0.25); }
-    .program-card .img-wrap { position: relative; height: 220px; overflow: hidden; }
-    .program-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
-    .program-card:hover img { transform: scale(1.15); }
+    .program-card:hover { 
+        transform: translateY(-15px) scale(1.02); 
+        box-shadow: 0 35px 70px rgba(15, 44, 89, 0.25);
+        border-color: rgba(212, 160, 23, 0.3);
+    }
+    .program-card .img-wrap { 
+        position: relative; 
+        height: 220px; 
+        overflow: hidden; 
+        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+    }
+    .program-card img { 
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover; 
+        transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .program-card:hover img { transform: scale(1.2) rotate(2deg); }
     .program-badge {
         position: absolute;
         top: 1rem;
         left: 1rem;
         background: linear-gradient(135deg, #D4A017, #E8B923);
         color: #0F2C59;
-        padding: 0.4rem 1rem;
+        padding: 0.5rem 1.2rem;
         border-radius: 999px;
         font-weight: 800;
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         letter-spacing: 0.5px;
         text-transform: uppercase;
-        box-shadow: 0 4px 15px rgba(212, 160, 23, 0.4);
+        box-shadow: 0 6px 20px rgba(212, 160, 23, 0.5);
+        z-index: 2;
     }
 
+    /* Stats Bar */
     .stats-bar {
         background: linear-gradient(135deg, #0F2C59, #1B3A6B);
         color: white;
         padding: 4rem 0;
         position: relative;
         overflow: hidden;
+        border-radius: 2rem;
+        margin: 3rem 0;
     }
     .stats-bar::before {
         content: '';
         position: absolute;
         inset: 0;
-        background-image: radial-gradient(circle at 20% 50%, rgba(212, 160, 23, 0.15) 0%, transparent 50%),
-                          radial-gradient(circle at 80% 50%, rgba(212, 160, 23, 0.15) 0%, transparent 50%);
+        background-image: 
+            radial-gradient(circle at 20% 50%, rgba(212, 160, 23, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 50%, rgba(168, 85, 247, 0.15) 0%, transparent 50%);
         animation: pulseBg 5s ease-in-out infinite;
     }
     @keyframes pulseBg {
@@ -366,19 +550,29 @@ tailwind.config = {
         50% { opacity: 1; }
     }
 
+    /* Activity Cards - 3D */
     .activity-card {
-        border-radius: 1.25rem;
+        border-radius: 1.5rem;
         overflow: hidden;
         position: relative;
         cursor: pointer;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-        transition: all 0.4s;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         text-decoration: none;
         display: block;
     }
-    .activity-card:hover { transform: translateY(-10px) scale(1.03); box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
-    .activity-card img { width: 100%; height: 220px; object-fit: cover; transition: transform 0.5s; display: block; }
-    .activity-card:hover img { transform: scale(1.15); }
+    .activity-card:hover { 
+        transform: translateY(-12px) scale(1.05) rotate(1deg); 
+        box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    }
+    .activity-card img { 
+        width: 100%; 
+        height: 240px; 
+        object-fit: cover; 
+        transition: transform 0.6s; 
+        display: block; 
+    }
+    .activity-card:hover img { transform: scale(1.2); }
     .activity-label {
         position: absolute;
         bottom: 0;
@@ -386,30 +580,31 @@ tailwind.config = {
         right: 0;
         background: linear-gradient(to top, rgba(15, 44, 89, 0.98) 0%, rgba(15, 44, 89, 0.7) 60%, transparent 100%);
         color: white;
-        padding: 2.5rem 1rem 1rem;
+        padding: 3rem 1.25rem 1.25rem;
         font-weight: 800;
         text-transform: uppercase;
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         letter-spacing: 1.5px;
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
-    .activity-label i { color: #D4A017; font-size: 1rem; }
+    .activity-label i { color: #D4A017; font-size: 1.2rem; }
 
+    /* Resource Cards - 3D */
     .resource-card {
         background: white;
         padding: 2rem;
-        border-radius: 1.25rem;
-        box-shadow: 0 4px 20px rgba(15, 44, 89, 0.08);
-        transition: all 0.4s;
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         display: flex;
         flex-direction: column;
         height: 100%;
         text-decoration: none;
         position: relative;
         overflow: hidden;
-        border-top: 4px solid transparent;
+        border-top: 5px solid transparent;
     }
     .resource-card::before {
         content: '';
@@ -418,58 +613,72 @@ tailwind.config = {
         left: 0;
         right: 0;
         height: 0;
-        background: linear-gradient(135deg, rgba(212, 160, 23, 0.05), rgba(212, 160, 23, 0.02));
-        transition: height 0.4s;
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.08), rgba(168, 85, 247, 0.05));
+        transition: height 0.5s;
     }
-    .resource-card:hover::before { height: 100%; }
     body.dark .resource-card { background: #1a1a2e; }
-    .resource-card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(15, 44, 89, 0.15); border-top-color: #D4A017; }
+    .resource-card:hover::before { height: 100%; }
+    .resource-card:hover { 
+        transform: translateY(-12px); 
+        box-shadow: 0 30px 60px rgba(15, 44, 89, 0.2); 
+        border-top-color: #D4A017;
+    }
     .resource-icon {
-        width: 68px;
-        height: 68px;
+        width: 75px;
+        height: 75px;
         border-radius: 1.25rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.9rem;
+        font-size: 2rem;
         color: white;
         margin-bottom: 1.25rem;
-        transition: all 0.4s;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         position: relative;
         z-index: 1;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
     }
-    .resource-card:hover .resource-icon { transform: scale(1.1) rotate(8deg); }
+    .resource-card:hover .resource-icon { 
+        transform: scale(1.15) rotate(10deg);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+    }
 
+    /* Testimonial Cards - 3D */
     .testimonial-card {
         background: white;
         padding: 2rem;
-        border-radius: 1.25rem;
-        border-left: 4px solid #D4A017;
-        box-shadow: 0 4px 20px rgba(15, 44, 89, 0.08);
-        transition: all 0.3s;
+        border-radius: 1.5rem;
+        border-left: 5px solid #D4A017;
+        box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         position: relative;
         height: 100%;
     }
     .testimonial-card::before {
         content: '"';
         position: absolute;
-        top: 1rem;
+        top: 0.5rem;
         right: 1.5rem;
-        font-size: 5rem;
-        color: rgba(212, 160, 23, 0.1);
+        font-size: 6rem;
+        color: rgba(212, 160, 23, 0.15);
         font-family: Georgia, serif;
         line-height: 1;
     }
     body.dark .testimonial-card { background: #1a1a2e; }
-    .testimonial-card:hover { transform: translateY(-8px); box-shadow: 0 25px 50px rgba(15, 44, 89, 0.15); }
+    .testimonial-card:hover { 
+        transform: translateY(-10px) scale(1.02); 
+        box-shadow: 0 30px 60px rgba(15, 44, 89, 0.2);
+    }
 
+    /* CTA Section */
     .cta-section {
         background: linear-gradient(135deg, #0F2C59, #1B3A6B);
         color: white;
-        padding: 3.5rem;
-        border-radius: 1.5rem;
+        padding: 4rem;
+        border-radius: 2rem;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 25px 60px rgba(15, 44, 89, 0.3);
     }
     .cta-section::before {
         content: '';
@@ -487,15 +696,34 @@ tailwind.config = {
         50% { transform: translate(-30px, 30px); }
     }
 
-    .footer { background: linear-gradient(180deg, #0F2C59, #0a1a3a); color: white; padding-top: 4rem; position: relative; overflow: hidden; }
+    /* Footer */
+    .footer { 
+        background: linear-gradient(180deg, #0F2C59, #0a1a3a); 
+        color: white; 
+        padding-top: 5rem; 
+        position: relative; 
+        overflow: hidden;
+        border-radius: 3rem 3rem 0 0;
+        margin-top: 4rem;
+    }
     body.dark .footer { background: #05080f; }
-    .footer a { color: rgba(255,255,255,0.75); transition: all 0.2s; font-size: 0.875rem; display: inline-block; text-decoration: none; }
-    .footer a:hover { color: #D4A017; padding-left: 6px; }
+    .footer a { 
+        color: rgba(255,255,255,0.75); 
+        transition: all 0.3s; 
+        font-size: 0.9rem; 
+        display: inline-block; 
+        text-decoration: none; 
+    }
+    .footer a:hover { 
+        color: #D4A017; 
+        padding-left: 8px; 
+        transform: translateX(3px);
+    }
     .footer-title {
         color: white;
         font-weight: 800;
         text-transform: uppercase;
-        font-size: 0.8125rem;
+        font-size: 0.9rem;
         letter-spacing: 1.5px;
         margin-bottom: 1.5rem;
         position: relative;
@@ -506,59 +734,82 @@ tailwind.config = {
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 40px;
+        width: 50px;
         height: 3px;
         background: linear-gradient(90deg, #D4A017, #E8B923);
         border-radius: 3px;
     }
 
+    /* Social Icons - BEAUTIFUL */
     .social-icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: rgba(255,255,255,0.1);
+        width: 50px;
+        height: 50px;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         color: white;
         text-decoration: none;
         border: 1px solid rgba(255,255,255,0.15);
+        font-size: 1.1rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
     }
-    .social-icon:hover { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; transform: translateY(-6px) scale(1.15); border-color: transparent; }
+    .social-icon:hover { 
+        transform: translateY(-8px) scale(1.15) rotate(-5deg); 
+        border-color: transparent;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        color: white;
+    }
+    .social-icon.facebook:hover { background: linear-gradient(135deg, #1877f2, #0e5fce); }
+    .social-icon.youtube:hover { background: linear-gradient(135deg, #ff0000, #cc0000); }
+    .social-icon.whatsapp:hover { background: linear-gradient(135deg, #25d366, #128c7e); }
+    .social-icon.instagram:hover { background: linear-gradient(135deg, #e1306c, #c13584); }
 
+    /* Section Labels */
     .section-label {
         color: #D4A017;
         font-weight: 800;
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         letter-spacing: 0.3em;
         text-transform: uppercase;
         margin-bottom: 0.75rem;
         display: inline-block;
-        padding: 0.4rem 1rem;
+        padding: 0.4rem 1.2rem;
         background: rgba(212, 160, 23, 0.1);
         border-radius: 999px;
+        border: 1px solid rgba(212, 160, 23, 0.2);
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 2.25rem;
         font-weight: 900;
         color: #0F2C59;
         line-height: 1.2;
         margin-bottom: 1rem;
     }
     body.dark .section-title { color: white; }
-    @media (min-width: 768px) { .section-title { font-size: 2.5rem; } }
-    @media (min-width: 1024px) { .section-title { font-size: 3rem; } }
+    @media (min-width: 768px) { .section-title { font-size: 2.75rem; } }
+    @media (min-width: 1024px) { .section-title { font-size: 3.25rem; } }
 
-    ::-webkit-scrollbar { width: 12px; }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 14px; }
     ::-webkit-scrollbar-track { background: #F8F9FC; }
-    ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #D4A017, #E8B923); border-radius: 6px; border: 2px solid #F8F9FC; }
+    ::-webkit-scrollbar-thumb { 
+        background: linear-gradient(135deg, #D4A017, #E8B923); 
+        border-radius: 7px; 
+        border: 3px solid #F8F9FC;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #E8B923, #a855f7);
+    }
 
+    /* Floating Shapes */
     .floating-shape {
         position: absolute;
         border-radius: 50%;
-        background: linear-gradient(135deg, rgba(212, 160, 23, 0.15), transparent);
+        background: linear-gradient(135deg, rgba(212, 160, 23, 0.15), rgba(168, 85, 247, 0.1));
         pointer-events: none;
         animation: floatAround 15s ease-in-out infinite;
     }
@@ -568,25 +819,33 @@ tailwind.config = {
         66% { transform: translate(-20px, 20px) rotate(240deg); }
     }
 
-    @media (max-width: 768px) { .hero-section { min-height: 600px; } }
+    /* Responsive */
+    @media (max-width: 768px) { 
+        .hero-section { min-height: 550px; border-radius: 0 0 2rem 2rem; }
+        .logo-wrap { width: 60px; height: 60px; }
+        .nav-link { font-size: 0.85rem; padding: 0.6rem 0.8rem; }
+        .stats-bar { border-radius: 1.5rem; padding: 3rem 0; }
+        .cta-section { padding: 2.5rem 1.5rem; border-radius: 1.5rem; }
+        .footer { border-radius: 2rem 2rem 0 0; }
+    }
 </style>
 </head>
 <body>
 
     <!-- TOP BAR -->
-    <div class="top-bar py-2 hidden md:block">
+    <div class="top-bar py-2.5 hidden md:block">
         <div class="container-wide">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-6">
-                    <span><i class="fa-solid fa-location-dot text-brand-gold mr-2"></i>කොළඹ, ශ්‍රී ලංකාව</span>
-                    <span><i class="fa-solid fa-phone text-brand-gold mr-2"></i>+94 11 234 5678</span>
-                    <span><i class="fa-solid fa-envelope text-brand-gold mr-2"></i>info@akurumansala.lk</span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-brand-gold"></i>කොළඹ, ශ්‍රී ලංකාව</span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-phone text-brand-gold"></i>+94 767512666</span>
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-envelope text-brand-gold"></i>info@akurumansala.lk</span>
                 </div>
                 <div class="flex items-center space-x-4">
                     <span class="font-bold text-brand-gold">Follow Us:</span>
-                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
-                    <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="#" class="social-icon facebook" style="width: 32px; height: 32px; border-radius: 0.5rem; font-size: 0.85rem;"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon youtube" style="width: 32px; height: 32px; border-radius: 0.5rem; font-size: 0.85rem;"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#" class="social-icon whatsapp" style="width: 32px; height: 32px; border-radius: 0.5rem; font-size: 0.85rem;"><i class="fa-brands fa-whatsapp"></i></a>
                 </div>
             </div>
         </div>
@@ -595,55 +854,145 @@ tailwind.config = {
     <!-- HEADER -->
     <header class="main-nav sticky top-0 z-50">
         <div class="container-wide">
-            <div class="h-20 flex items-center justify-between">
-                <a href="#home" class="flex items-center space-x-3">
+            <div class="h-24 flex items-center justify-between">
+                
+                <!-- LOGO -->
+                <a href="/" class="flex items-center space-x-4">
                     <div class="logo-wrap">
                         <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
                     </div>
                     <div class="hidden sm:block">
                         <h1 class="text-2xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
-                        <p class="text-xs text-brand-gold font-bold mt-1.5">ඉගෙනුමට නව මඟක්</p>
+                        <p class="text-sm text-brand-gold font-bold mt-1.5">ඉගෙනුමට නව මඟක්</p>
                     </div>
                 </a>
 
+                <!-- NAVIGATION -->
                 <nav class="hidden lg:flex items-center space-x-1">
-                    <a href="#home" class="nav-link active"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
-                    <a href="#about" class="nav-link"><i class="fa-solid fa-info-circle"></i>අප ගැන</a>
-                    <a href="#grades" class="nav-link"><i class="fa-solid fa-layer-group"></i>ශ්‍රේණි</a>
-                    <a href="#activities" class="nav-link"><i class="fa-solid fa-futbol"></i>ක්‍රියාකාරකම්</a>
-                    <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book"></i>සම්පත්</a>
-                    <a href="/papers.html" class="nav-link"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
-                    <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
+                    
+                    <!-- Home -->
+                    <a href="/" class="nav-link active">
+                        <i class="fa-solid fa-home"></i>මුල් පිටුව
+                    </a>
+                    
+                    <!-- About Dropdown -->
+                    <div class="nav-item-dropdown">
+                        <a href="#about" class="nav-link">
+                            <i class="fa-solid fa-info-circle"></i>අප ගැන
+                            <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem;"></i>
+                        </a>
+                        <div class="nav-dropdown">
+                            <a href="#about"><i class="fa-solid fa-users"></i>අපි කවුද?</a>
+                            <a href="#about"><i class="fa-solid fa-bullseye"></i>අපේ අරමුණ</a>
+                            <a href="#about"><i class="fa-solid fa-eye"></i>දැක්ම</a>
+                            <a href="#about"><i class="fa-solid fa-envelope"></i>සම්බන්ධ වන්න</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Grades Dropdown -->
+                    <div class="nav-item-dropdown">
+                        <a href="#grades" class="nav-link">
+                            <i class="fa-solid fa-layer-group"></i>ශ්‍රේණි
+                            <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem;"></i>
+                        </a>
+                        <div class="nav-dropdown">
+                            <a href="/resources.html?grades=1,2,3,4,5"><i class="fa-solid fa-child"></i>ප්‍රාථමික (1-5)</a>
+                            <a href="/resources.html?grades=6,7,8,9"><i class="fa-solid fa-book"></i>මධ්‍යම (6-9)</a>
+                            <a href="/resources.html?grades=10,11"><i class="fa-solid fa-graduation-cap"></i>සා.පෙළ (10-11)</a>
+                            <a href="/resources.html?grades=12,13"><i class="fa-solid fa-award"></i>උ.පෙළ (12-13)</a>
+                            <a href="/resources.html?special=1"><i class="fa-solid fa-hands-holding-child"></i>විශේෂ අධ්‍යාපනය</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Activities Dropdown -->
+                    <div class="nav-item-dropdown">
+                        <a href="#activities" class="nav-link">
+                            <i class="fa-solid fa-futbol"></i>ක්‍රියාකාරකම්
+                            <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem;"></i>
+                        </a>
+                        <div class="nav-dropdown">
+                            <a href="/resources.html?activity=sports"><i class="fa-solid fa-futbol"></i>ක්‍රීඩා</a>
+                            <a href="/resources.html?activity=music"><i class="fa-solid fa-music"></i>සංගීතය</a>
+                            <a href="/resources.html?activity=art"><i class="fa-solid fa-palette"></i>චිත්‍ර</a>
+                            <a href="/resources.html?activity=reading"><i class="fa-solid fa-book-open"></i>කියවීම</a>
+                            <a href="/resources.html?activity=science"><i class="fa-solid fa-flask"></i>විද්‍යාව</a>
+                            <a href="/resources.html?activity=dance"><i class="fa-solid fa-person-running"></i>නර්තනය</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Resources Dropdown -->
+                    <div class="nav-item-dropdown">
+                        <a href="/resources.html" class="nav-link">
+                            <i class="fa-solid fa-book-open"></i>සම්පත්
+                            <i class="fa-solid fa-chevron-down" style="font-size: 0.6rem;"></i>
+                        </a>
+                        <div class="nav-dropdown">
+                            <a href="/resources.html"><i class="fa-solid fa-book"></i>පාඩම්</a>
+                            <a href="/videos.html"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
+                            <a href="/resources.html"><i class="fa-solid fa-newspaper"></i>ලිපි</a>
+                            <a href="/quizzes.html"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Papers -->
+                    <a href="/papers.html" class="nav-link">
+                        <i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර
+                    </a>
+                    
+                    <!-- Videos -->
+                    <a href="/videos.html" class="nav-link">
+                        <i class="fa-solid fa-video"></i>වීඩියෝ
+                    </a>
+                    
                 </nav>
 
-                <div class="flex items-center space-x-2 md:space-x-3">
-                    <button onclick="toggleTheme()" class="theme-toggle">
+                <!-- RIGHT ACTIONS -->
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleTheme()" class="theme-toggle" title="Theme එක මාරු කරන්න">
                         <i id="themeIcon" class="fa-solid fa-moon"></i>
                     </button>
-                    <a href="/login.html" class="hidden md:inline-flex btn-navy" style="padding: 0.6rem 1.25rem;">
-                        <i class="fa-solid fa-user"></i>
-                        <span>පිවිසෙන්න</span>
-                    </a>
-                    <a href="/admin.html" class="hidden md:inline-flex btn-primary" style="padding: 0.6rem 1.25rem;">
-                        <i class="fa-solid fa-shield-halved"></i>
+                    
+                    <a href="/login.html" class="hidden md:inline-flex btn-primary" style="padding: 0.75rem 1.5rem;">
+                        <i class="fa-solid fa-user-shield"></i>
                         <span>Admin</span>
                     </a>
-                    <button onclick="toggleMobileMenu()" class="lg:hidden w-11 h-11 rounded-xl bg-brand-navy text-white flex items-center justify-center">
-                        <i class="fa-solid fa-bars text-lg"></i>
+                    
+                    <button onclick="toggleMobileMenu()" class="lg:hidden w-12 h-12 rounded-xl bg-brand-navy text-white flex items-center justify-center shadow-lg">
+                        <i class="fa-solid fa-bars text-xl"></i>
                     </button>
                 </div>
             </div>
         </div>
 
-        <div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t px-4 py-4 space-y-2">
-            <a href="#home" class="block px-4 py-3 rounded-lg bg-brand-navy text-white font-bold">මුල් පිටුව</a>
-            <a href="#about" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">අප ගැන</a>
-            <a href="#grades" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">ශ්‍රේණි</a>
-            <a href="#activities" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">ක්‍රියාකාරකම්</a>
-            <a href="/resources.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">සම්පත්</a>
-            <a href="/papers.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">ප්‍රශ්න පත්‍ර</a>
-            <a href="/videos.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">වීඩියෝ</a>
-            <a href="/quizzes.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">ප්‍රශ්නාවලි</a>
+        <!-- MOBILE MENU -->
+        <div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t px-4 py-4 space-y-2 shadow-xl">
+            <a href="/" class="block px-4 py-3 rounded-lg bg-brand-navy text-white font-bold">
+                <i class="fa-solid fa-home mr-2"></i>මුල් පිටුව
+            </a>
+            <a href="#about" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+                <i class="fa-solid fa-info-circle mr-2 text-brand-gold"></i>අප ගැන
+            </a>
+            <a href="#grades" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+                <i class="fa-solid fa-layer-group mr-2 text-brand-gold"></i>ශ්‍රේණි
+            </a>
+            <a href="#activities" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+                <i class="fa-solid fa-futbol mr-2 text-brand-gold"></i>ක්‍රියාකාරකම්
+            </a>
+            <a href="/resources.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+                <i class="fa-solid fa-book-open mr-2 text-brand-gold"></i>සම්පත්
+            </a>
+            <a href="/papers.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+                <i class="fa-solid fa-file-lines mr-2 text-brand-gold"></i>ප්‍රශ්න පත්‍ර
+            </a>
+            <a href="/videos.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+                <i class="fa-solid fa-video mr-2 text-brand-gold"></i>වීඩියෝ
+            </a>
+            <a href="/quizzes.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+                <i class="fa-solid fa-bullseye mr-2 text-brand-gold"></i>ප්‍රශ්නාවලි
+            </a>
+            <a href="/login.html" class="block px-4 py-3 rounded-lg bg-brand-gold text-brand-navy font-bold text-center">
+                <i class="fa-solid fa-user-shield mr-2"></i>Admin Panel
+            </a>
         </div>
     </header>
 
@@ -651,23 +1000,27 @@ tailwind.config = {
     <section id="home" class="hero-section">
         <div class="hero-bg"></div>
         <div class="hero-overlay"></div>
-        <div class="floating-shape" style="width: 200px; height: 200px; top: 15%; right: 10%;"></div>
-        <div class="floating-shape" style="width: 120px; height: 120px; bottom: 20%; right: 25%; animation-delay: 2s;"></div>
+        
+        <!-- Floating decorative shapes -->
+        <div class="floating-shape" style="width: 250px; height: 250px; top: 15%; right: 10%;"></div>
+        <div class="floating-shape" style="width: 150px; height: 150px; bottom: 20%; right: 25%; animation-delay: 2s;"></div>
+        <div class="floating-shape" style="width: 100px; height: 100px; top: 40%; right: 5%; animation-delay: 4s;"></div>
 
         <div class="hero-content">
             <div class="max-w-3xl">
-                <p class="text-brand-gold font-bold text-xs md:text-sm tracking-[0.15em] uppercase mb-4" data-aos="fade-up">
-                    <i class="fa-solid fa-graduation-cap mr-2"></i>ශ්‍රී ලංකාවේ අංක 1 අධ්‍යාපනික වේදිකාව
+                <p class="text-brand-gold font-bold text-sm md:text-base tracking-[0.15em] uppercase mb-5 flex items-center gap-3" data-aos="fade-up">
+                    <i class="fa-solid fa-graduation-cap text-xl"></i>
+                    ශ්‍රී ලංකාවේ අංක 1 අධ්‍යාපනික වේදිකාව
                 </p>
-                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 hero-title" data-aos="fade-up" data-aos-delay="100">
-                    <span class="block mb-2">දැනුමට</span>
-                    <span class="block text-brand-gold hero-gold-text mb-2">අකුරු</span>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-7 hero-title" data-aos="fade-up" data-aos-delay="100">
+                    <span class="block mb-3">දැනුමට</span>
+                    <span class="block text-brand-gold hero-gold-text mb-3">අකුරු</span>
                     <span class="block">එකතු කරමු.</span>
                 </h1>
-                <p class="text-base md:text-lg text-white/95 mb-8 max-w-2xl leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+                <p class="text-lg md:text-xl text-white/95 mb-10 max-w-2xl leading-relaxed" data-aos="fade-up" data-aos-delay="200">
                     <strong class="text-brand-gold">1 සිට 13 ශ්‍රේණි දක්වා</strong> සිසුන්ට ඉගෙනීමට, ගුරුවරුන්ට අධ්‍යාපනික සම්පත් බෙදා ගැනීමට නිර්මාණය කළ අධ්‍යාපනික වේදිකාවක්.
                 </p>
-                <div class="flex flex-wrap gap-4 mb-8" data-aos="fade-up" data-aos-delay="300">
+                <div class="flex flex-wrap gap-5 mb-10" data-aos="fade-up" data-aos-delay="300">
                     <a href="/resources.html" class="btn-primary">
                         <i class="fa-solid fa-rocket"></i>
                         <span>ඉගෙනීම අරඹන්න</span>
@@ -677,24 +1030,24 @@ tailwind.config = {
                         <span>තව දැනගන්න</span>
                     </a>
                 </div>
-                <div class="flex flex-wrap gap-5 pt-6 border-t border-white/20" data-aos="fade-up" data-aos-delay="400">
-                    <div class="flex items-center space-x-2.5">
-                        <div class="w-9 h-9 rounded-full bg-brand-gold flex items-center justify-center flex-shrink-0">
-                            <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                <div class="flex flex-wrap gap-6 pt-8 border-t border-white/20" data-aos="fade-up" data-aos-delay="400">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-11 h-11 rounded-full bg-brand-gold flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <i class="fa-solid fa-check text-brand-navy text-sm"></i>
                         </div>
-                        <span class="text-white font-bold text-xs md:text-sm">නොමිලේ ප්‍රවේශය</span>
+                        <span class="text-white font-bold text-sm md:text-base">නොමිලේ ප්‍රවේශය</span>
                     </div>
-                    <div class="flex items-center space-x-2.5">
-                        <div class="w-9 h-9 rounded-full bg-brand-gold flex items-center justify-center flex-shrink-0">
-                            <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-11 h-11 rounded-full bg-brand-gold flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <i class="fa-solid fa-check text-brand-navy text-sm"></i>
                         </div>
-                        <span class="text-white font-bold text-xs md:text-sm">ශ්‍රේණි 1-13</span>
+                        <span class="text-white font-bold text-sm md:text-base">ශ්‍රේණි 1-13</span>
                     </div>
-                    <div class="flex items-center space-x-2.5">
-                        <div class="w-9 h-9 rounded-full bg-brand-gold flex items-center justify-center flex-shrink-0">
-                            <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-11 h-11 rounded-full bg-brand-gold flex items-center justify-center flex-shrink-0 shadow-lg">
+                            <i class="fa-solid fa-check text-brand-navy text-sm"></i>
                         </div>
-                        <span class="text-white font-bold text-xs md:text-sm">විශ්වාසනීය</span>
+                        <span class="text-white font-bold text-sm md:text-base">විශ්වාසනීය</span>
                     </div>
                 </div>
             </div>
@@ -704,15 +1057,16 @@ tailwind.config = {
     <!-- INFO CARDS -->
     <section class="hero-info-cards">
         <div class="container-wide">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <a href="/resources.html" class="info-card-3d" data-aos="fade-up">
                     <div class="info-card-icon" style="background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59;">
                         <i class="fa-solid fa-book-open"></i>
                     </div>
                     <div>
-                        <h3 class="font-black text-brand-navy dark:text-white text-lg mb-1">පාඩම් මාලාවන්</h3>
-                        <p class="text-brand-navy dark:text-gray-400 text-sm font-bold">
-                            <i class="fa-solid fa-arrow-trend-up mr-2 text-brand-gold"></i><span id="infoLessons">0</span>+ පාඩම්
+                        <h3 class="font-black text-brand-navy dark:text-white text-xl mb-1">පාඩම් මාලාවන්</h3>
+                        <p class="text-brand-navy dark:text-gray-400 text-sm font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-trend-up text-brand-gold"></i>
+                            <span id="infoLessons">0</span>+ පාඩම්
                         </p>
                     </div>
                 </a>
@@ -721,9 +1075,10 @@ tailwind.config = {
                         <i class="fa-solid fa-file-lines"></i>
                     </div>
                     <div>
-                        <h3 class="font-black text-brand-navy dark:text-white text-lg mb-1">ප්‍රශ්න පත්‍ර</h3>
-                        <p class="text-brand-navy dark:text-gray-400 text-sm font-bold">
-                            <i class="fa-solid fa-arrow-trend-up mr-2 text-brand-gold"></i><span id="infoPapers">0</span>+ ප්‍රශ්න පත්‍ර
+                        <h3 class="font-black text-brand-navy dark:text-white text-xl mb-1">ප්‍රශ්න පත්‍ර</h3>
+                        <p class="text-brand-navy dark:text-gray-400 text-sm font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-trend-up text-brand-gold"></i>
+                            <span id="infoPapers">0</span>+ ප්‍රශ්න පත්‍ර
                         </p>
                     </div>
                 </a>
@@ -732,9 +1087,10 @@ tailwind.config = {
                         <i class="fa-solid fa-video"></i>
                     </div>
                     <div>
-                        <h3 class="font-black text-brand-navy dark:text-white text-lg mb-1">වීඩියෝ පාඩම්</h3>
-                        <p class="text-brand-navy dark:text-gray-400 text-sm font-bold">
-                            <i class="fa-solid fa-arrow-trend-up mr-2 text-brand-gold"></i><span id="infoVideos">0</span>+ වීඩියෝ
+                        <h3 class="font-black text-brand-navy dark:text-white text-xl mb-1">වීඩියෝ පාඩම්</h3>
+                        <p class="text-brand-navy dark:text-gray-400 text-sm font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-arrow-trend-up text-brand-gold"></i>
+                            <span id="infoVideos">0</span>+ වීඩියෝ
                         </p>
                     </div>
                 </a>
@@ -743,47 +1099,47 @@ tailwind.config = {
     </section>
 
     <!-- FEATURES -->
-    <section class="py-14 bg-white dark:bg-gray-900">
+    <section class="py-16 bg-white dark:bg-gray-900">
         <div class="container-wide">
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
                 <div class="feature-card" data-aos="fade-up">
                     <div class="feature-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">ශ්‍රේණි 1-13</h3>
+                    <h3 class="font-black text-brand-navy dark:text-white text-sm uppercase mb-2">ශ්‍රේණි 1-13</h3>
                     <p class="text-xs text-gray-500">සියලුම ශ්‍රේණි සඳහා</p>
                 </div>
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="feature-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">දක්ෂ ගුරුවරු</h3>
+                    <h3 class="font-black text-brand-navy dark:text-white text-sm uppercase mb-2">දක්ෂ ගුරුවරු</h3>
                     <p class="text-xs text-gray-500">පළපුරුදු මණ්ඩලය</p>
                 </div>
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="feature-icon"><i class="fa-solid fa-globe"></i></div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">ඕනෑම තැනක</h3>
+                    <h3 class="font-black text-brand-navy dark:text-white text-sm uppercase mb-2">ඕනෑම තැනක</h3>
                     <p class="text-xs text-gray-500">ඕනෑම උපාංගයකින්</p>
                 </div>
                 <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="feature-icon"><i class="fa-solid fa-trophy"></i></div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">ගුණාත්මක</h3>
+                    <h3 class="font-black text-brand-navy dark:text-white text-sm uppercase mb-2">ගුණාත්මක</h3>
                     <p class="text-xs text-gray-500">උසස් තත්ත්වයේ</p>
                 </div>
                 <div class="feature-card col-span-2 md:col-span-1" data-aos="fade-up" data-aos-delay="400">
                     <div class="feature-icon"><i class="fa-solid fa-heart"></i></div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-xs uppercase mb-1.5">ළමා හිතකාමී</h3>
+                    <h3 class="font-black text-brand-navy dark:text-white text-sm uppercase mb-2">ළමා හිතකාමී</h3>
                     <p class="text-xs text-gray-500">දරුවන්ට ගැලපෙන</p>
                 </div>
             </div>
         </div>
     </section>
         <!-- ABOUT -->
-    <section id="about" class="py-20 bg-brand-light dark:bg-gray-950">
+    <section id="about" class="py-24 bg-brand-light dark:bg-gray-950">
         <div class="container-wide">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <div data-aos="fade-right">
                     <div class="relative">
-                        <img src="/images/about-school.jpg" alt="අප ගැන" class="rounded-2xl shadow-2xl w-full h-[400px] object-cover" onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800'">
-                        <div class="absolute -bottom-5 -right-5 bg-gradient-to-br from-brand-gold to-brand-gold2 text-brand-navy p-6 rounded-2xl shadow-2xl">
-                            <div class="text-4xl font-black">10+</div>
-                            <div class="text-xs font-bold uppercase mt-2">වසර අත්දැකීම්</div>
+                        <img src="/images/about-school.jpg" alt="අප ගැන" class="rounded-3xl shadow-2xl w-full h-[450px] object-cover" onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800'">
+                        <div class="absolute -bottom-6 -right-6 bg-gradient-to-br from-brand-gold to-brand-gold2 text-brand-navy p-7 rounded-3xl shadow-2xl border-4 border-white">
+                            <div class="text-5xl font-black">10+</div>
+                            <div class="text-sm font-bold uppercase mt-2 tracking-wider">වසර අත්දැකීම්</div>
                         </div>
                     </div>
                 </div>
@@ -791,36 +1147,36 @@ tailwind.config = {
                 <div data-aos="fade-left">
                     <span class="section-label">අප ගැන</span>
                     <h2 class="section-title">ඉගෙනීම සරල කරමු.</h2>
-                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed mb-8 text-lg">
                         "අකුරු මංසල" යනු ශ්‍රී ලංකාවේ සිසුන්ට සහ ගුරුවරුන්ට අධ්‍යාපනික සම්පත් පහසුවෙන් සොයාගැනීමට, භාවිතා කිරීමට සහ බෙදා ගැනීමට නිර්මාණය කළ වේදිකාවකි.
                     </p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-brand-gold flex items-center justify-center">
-                                <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                        <div class="flex items-center space-x-3 p-3 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-check text-brand-navy"></i>
                             </div>
-                            <span class="font-bold text-brand-navy dark:text-white text-sm">සරල හා වේගවත්</span>
+                            <span class="font-bold text-brand-navy dark:text-white">සරල හා වේගවත්</span>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-brand-gold flex items-center justify-center">
-                                <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                        <div class="flex items-center space-x-3 p-3 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-check text-brand-navy"></i>
                             </div>
-                            <span class="font-bold text-brand-navy dark:text-white text-sm">ශ්‍රේණි හා විෂය අනුව</span>
+                            <span class="font-bold text-brand-navy dark:text-white">ශ්‍රේණි හා විෂය අනුව</span>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-brand-gold flex items-center justify-center">
-                                <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                        <div class="flex items-center space-x-3 p-3 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-check text-brand-navy"></i>
                             </div>
-                            <span class="font-bold text-brand-navy dark:text-white text-sm">ගුරු සම්පත් පහසුකම</span>
+                            <span class="font-bold text-brand-navy dark:text-white">ගුරු සම්පත් පහසුකම</span>
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <div class="w-9 h-9 rounded-lg bg-brand-gold flex items-center justify-center">
-                                <i class="fa-solid fa-check text-brand-navy text-xs"></i>
+                        <div class="flex items-center space-x-3 p-3 rounded-xl bg-white dark:bg-gray-800 shadow-sm">
+                            <div class="w-10 h-10 rounded-lg bg-brand-gold flex items-center justify-center flex-shrink-0">
+                                <i class="fa-solid fa-check text-brand-navy"></i>
                             </div>
-                            <span class="font-bold text-brand-navy dark:text-white text-sm">නොමිලේ ප්‍රවේශය</span>
+                            <span class="font-bold text-brand-navy dark:text-white">නොමිලේ ප්‍රවේශය</span>
                         </div>
                     </div>
-                    <a href="#grades" class="btn-navy">
+                    <a href="#grades" class="btn-primary">
                         <i class="fa-solid fa-arrow-right"></i>
                         <span>තව දැනගන්න</span>
                     </a>
@@ -830,28 +1186,28 @@ tailwind.config = {
     </section>
 
     <!-- GRADES -->
-    <section id="grades" class="py-20 bg-white dark:bg-gray-900">
+    <section id="grades" class="py-24 bg-white dark:bg-gray-900">
         <div class="container-wide">
-            <div class="text-center mb-12" data-aos="fade-up">
+            <div class="text-center mb-16" data-aos="fade-up">
                 <span class="section-label">ACADEMIC PROGRAMS</span>
                 <h2 class="section-title">සෑම ශ්‍රේණියකටම විශේෂිත</h2>
-                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
                     ඔබේ දරුවාගේ ශ්‍රේණියට ගැලපෙන සම්පත් තෝරන්න
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="program-card" data-aos="fade-up">
                     <div class="img-wrap">
                         <img src="/images/grade-1-5.jpg" alt="ප්‍රාථමික" onerror="this.src='https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600'">
                         <span class="program-badge">ශ්‍රේණි 1-5</span>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">ප්‍රාථමික අධ්‍යාපනය</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                    <div class="p-7 flex-1 flex flex-col">
+                        <h3 class="text-xl font-black text-brand-navy dark:text-white mb-3">ප්‍රාථමික අධ්‍යාපනය</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-5 flex-1">
                             මූලික අක්ෂර, ගණන් කිරීම සහ පරිසරය ගැන ඉගෙන ගනිමු.
                         </p>
-                        <a href="/resources.html?grades=1,2,3,4,5" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?grades=1,2,3,4,5" class="text-brand-gold font-black text-sm uppercase hover:gap-3 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -862,12 +1218,12 @@ tailwind.config = {
                         <img src="/images/grade-6-9.jpg" alt="මධ්‍යම" onerror="this.src='https://images.unsplash.com/photo-1509062522246-3755977927d7?w=600'">
                         <span class="program-badge">ශ්‍රේණි 6-9</span>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">මධ්‍යම අධ්‍යාපනය</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                    <div class="p-7 flex-1 flex flex-col">
+                        <h3 class="text-xl font-black text-brand-navy dark:text-white mb-3">මධ්‍යම අධ්‍යාපනය</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-5 flex-1">
                             විෂය මාලාව පුළුල් කරගනිමින් ගැඹුරු ඉගෙනීම.
                         </p>
-                        <a href="/resources.html?grades=6,7,8,9" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?grades=6,7,8,9" class="text-brand-gold font-black text-sm uppercase hover:gap-3 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -878,12 +1234,12 @@ tailwind.config = {
                         <img src="/images/grade-10-11.jpg" alt="සා.පෙළ" onerror="this.src='https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=600'">
                         <span class="program-badge">ශ්‍රේණි 10-11</span>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">සාමාන්‍ය පෙළ</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                    <div class="p-7 flex-1 flex flex-col">
+                        <h3 class="text-xl font-black text-brand-navy dark:text-white mb-3">සාමාන්‍ය පෙළ</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-5 flex-1">
                             සාමාන්‍ය පෙළ විභාගයට සූදානම් වීම.
                         </p>
-                        <a href="/resources.html?grades=10,11" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?grades=10,11" class="text-brand-gold font-black text-sm uppercase hover:gap-3 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -894,12 +1250,12 @@ tailwind.config = {
                         <img src="/images/grade-12-13.jpg" alt="උ.පෙළ" onerror="this.src='https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600'">
                         <span class="program-badge">ශ්‍රේණි 12-13</span>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">උසස් පෙළ</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                    <div class="p-7 flex-1 flex flex-col">
+                        <h3 class="text-xl font-black text-brand-navy dark:text-white mb-3">උසස් පෙළ</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-5 flex-1">
                             උසස් පෙළ විභාගයට සහ විශ්වවිද්‍යාලයට සූදානම් වීම.
                         </p>
-                        <a href="/resources.html?grades=12,13" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?grades=12,13" class="text-brand-gold font-black text-sm uppercase hover:gap-3 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -910,12 +1266,12 @@ tailwind.config = {
                         <img src="/images/grade-special.jpg" alt="විශේෂ" onerror="this.src='https://images.unsplash.com/photo-1580894732444-8ecded7900cd?w=600'">
                         <span class="program-badge">විශේෂ</span>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">විශේෂ අධ්‍යාපනය</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                    <div class="p-7 flex-1 flex flex-col">
+                        <h3 class="text-xl font-black text-brand-navy dark:text-white mb-3">විශේෂ අධ්‍යාපනය</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-5 flex-1">
                             විශේෂ අවශ්‍යතා ඇති දරුවන්ට ගැලපෙන සම්පත්.
                         </p>
-                        <a href="/resources.html?special=1" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="/resources.html?special=1" class="text-brand-gold font-black text-sm uppercase hover:gap-3 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -926,12 +1282,12 @@ tailwind.config = {
                         <img src="/images/grade-activity.jpg" alt="ක්‍රියාකාරකම්" onerror="this.src='https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=600'">
                         <span class="program-badge">ක්‍රියාකාරකම්</span>
                     </div>
-                    <div class="p-6 flex-1 flex flex-col">
-                        <h3 class="text-lg font-black text-brand-navy dark:text-white mb-2">අමතර ක්‍රියාකාරකම්</h3>
-                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4 flex-1">
+                    <div class="p-7 flex-1 flex flex-col">
+                        <h3 class="text-xl font-black text-brand-navy dark:text-white mb-3">අමතර ක්‍රියාකාරකම්</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-5 flex-1">
                             ක්‍රීඩා, සංගීතය, චිත්‍ර ඇතුළු අමතර ක්‍රියාකාරකම්.
                         </p>
-                        <a href="/resources.html?activities=1" class="text-brand-gold font-black text-xs uppercase hover:gap-2 transition-all inline-flex items-center">
+                        <a href="#activities" class="text-brand-gold font-black text-sm uppercase hover:gap-3 transition-all inline-flex items-center">
                             තව දැනගන්න <i class="fa-solid fa-arrow-right ml-2"></i>
                         </a>
                     </div>
@@ -941,41 +1297,43 @@ tailwind.config = {
     </section>
 
     <!-- STATS BAR -->
-    <section class="stats-bar">
-        <div class="container-wide relative z-10">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                <div data-aos="zoom-in">
-                    <div class="text-3xl md:text-5xl font-black text-brand-gold mb-1.5" id="statLessons">0</div>
-                    <div class="text-xs font-bold uppercase tracking-wider">පාඩම්</div>
-                </div>
-                <div data-aos="zoom-in" data-aos-delay="100">
-                    <div class="text-3xl md:text-5xl font-black text-brand-gold mb-1.5" id="statPapers">0</div>
-                    <div class="text-xs font-bold uppercase tracking-wider">ප්‍රශ්න පත්‍ර</div>
-                </div>
-                <div data-aos="zoom-in" data-aos-delay="200">
-                    <div class="text-3xl md:text-5xl font-black text-brand-gold mb-1.5" id="statVideos">0</div>
-                    <div class="text-xs font-bold uppercase tracking-wider">වීඩියෝ</div>
-                </div>
-                <div data-aos="zoom-in" data-aos-delay="300">
-                    <div class="text-3xl md:text-5xl font-black text-brand-gold mb-1.5">13</div>
-                    <div class="text-xs font-bold uppercase tracking-wider">ශ්‍රේණි</div>
+    <section class="container-wide">
+        <div class="stats-bar">
+            <div class="container-wide relative z-10">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div data-aos="zoom-in">
+                        <div class="text-5xl md:text-6xl font-black text-brand-gold mb-3" id="statLessons">0</div>
+                        <div class="text-sm font-bold uppercase tracking-wider">පාඩම්</div>
+                    </div>
+                    <div data-aos="zoom-in" data-aos-delay="100">
+                        <div class="text-5xl md:text-6xl font-black text-brand-gold mb-3" id="statPapers">0</div>
+                        <div class="text-sm font-bold uppercase tracking-wider">ප්‍රශ්න පත්‍ර</div>
+                    </div>
+                    <div data-aos="zoom-in" data-aos-delay="200">
+                        <div class="text-5xl md:text-6xl font-black text-brand-gold mb-3" id="statVideos">0</div>
+                        <div class="text-sm font-bold uppercase tracking-wider">වීඩියෝ</div>
+                    </div>
+                    <div data-aos="zoom-in" data-aos-delay="300">
+                        <div class="text-5xl md:text-6xl font-black text-brand-gold mb-3">13</div>
+                        <div class="text-sm font-bold uppercase tracking-wider">ශ්‍රේණි</div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ACTIVITIES -->
-    <section id="activities" class="py-20 bg-brand-light dark:bg-gray-950">
+    <section id="activities" class="py-24 bg-brand-light dark:bg-gray-950">
         <div class="container-wide">
-            <div class="text-center mb-12" data-aos="fade-up">
+            <div class="text-center mb-16" data-aos="fade-up">
                 <span class="section-label">BEYOND CLASSROOM</span>
                 <h2 class="section-title">පන්තියෙන් පිටත ක්‍රියාකාරකම්</h2>
-                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
                     ක්‍රීඩා, කලා, සංගීතය සහ තවත් බොහෝ ක්‍රියාකාරකම්
                 </p>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
                 <a href="/resources.html?activity=sports" class="activity-card" data-aos="fade-up">
                     <img src="/images/activity-sports.jpg" alt="ක්‍රීඩා" onerror="this.src='https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400'">
                     <div class="activity-label"><i class="fa-solid fa-futbol"></i>ක්‍රීඩා</div>
@@ -1005,26 +1363,26 @@ tailwind.config = {
     </section>
 
     <!-- RESOURCES -->
-    <section id="resources" class="py-20 bg-white dark:bg-gray-900">
+    <section id="resources" class="py-24 bg-white dark:bg-gray-900">
         <div class="container-wide">
-            <div class="text-center mb-12" data-aos="fade-up">
+            <div class="text-center mb-16" data-aos="fade-up">
                 <span class="section-label">LEARNING LIBRARY</span>
                 <h2 class="section-title">අධ්‍යාපනික සම්පත්</h2>
-                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto text-lg">
                     ඔබට අවශ්‍ය සම්පත් තෝරන්න
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <a href="/resources.html" class="resource-card" data-aos="fade-up">
                     <div class="resource-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
                         <i class="fa-solid fa-book-open"></i>
                     </div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">පාඩම්</h3>
-                    <p class="text-gray-500 text-sm mb-4 flex-1">විෂය අනුව සකස් කළ පාඩම්</p>
-                    <div class="flex items-center justify-between pt-4 border-t">
-                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resLessons">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
-                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xl mb-3">පාඩම්</h3>
+                    <p class="text-gray-500 mb-5 flex-1">විෂය අනුව සකස් කළ පාඩම්</p>
+                    <div class="flex items-center justify-between pt-5 border-t">
+                        <span class="text-3xl font-black text-brand-navy dark:text-white"><span id="resLessons">0</span> <span class="text-base font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold flex items-center gap-2">බලන්න <i class="fa-solid fa-arrow-right"></i></span>
                     </div>
                 </a>
 
@@ -1032,11 +1390,11 @@ tailwind.config = {
                     <div class="resource-icon" style="background: linear-gradient(135deg, #14b8a6, #0d9488);">
                         <i class="fa-solid fa-file-lines"></i>
                     </div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">විෂය සටහන්</h3>
-                    <p class="text-gray-500 text-sm mb-4 flex-1">කෙටි, පැහැදිලි සටහන්</p>
-                    <div class="flex items-center justify-between pt-4 border-t">
-                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resNotes">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
-                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xl mb-3">විෂය සටහන්</h3>
+                    <p class="text-gray-500 mb-5 flex-1">කෙටි, පැහැදිලි සටහන්</p>
+                    <div class="flex items-center justify-between pt-5 border-t">
+                        <span class="text-3xl font-black text-brand-navy dark:text-white"><span id="resNotes">0</span> <span class="text-base font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold flex items-center gap-2">බලන්න <i class="fa-solid fa-arrow-right"></i></span>
                     </div>
                 </a>
 
@@ -1044,11 +1402,11 @@ tailwind.config = {
                     <div class="resource-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);">
                         <i class="fa-solid fa-file-pdf"></i>
                     </div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">ප්‍රශ්න පත්‍ර</h3>
-                    <p class="text-gray-500 text-sm mb-4 flex-1">පාසල් පරීක්ෂණ සහ පුහුණු පත්‍ර</p>
-                    <div class="flex items-center justify-between pt-4 border-t">
-                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resPapers">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
-                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xl mb-3">ප්‍රශ්න පත්‍ර</h3>
+                    <p class="text-gray-500 mb-5 flex-1">පාසල් පරීක්ෂණ සහ පුහුණු පත්‍ර</p>
+                    <div class="flex items-center justify-between pt-5 border-t">
+                        <span class="text-3xl font-black text-brand-navy dark:text-white"><span id="resPapers">0</span> <span class="text-base font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold flex items-center gap-2">බලන්න <i class="fa-solid fa-arrow-right"></i></span>
                     </div>
                 </a>
 
@@ -1056,11 +1414,11 @@ tailwind.config = {
                     <div class="resource-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
                         <i class="fa-solid fa-video"></i>
                     </div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">වීඩියෝ පාඩම්</h3>
-                    <p class="text-gray-500 text-sm mb-4 flex-1">දෘශ්‍යමය ඉගෙනුම්</p>
-                    <div class="flex items-center justify-between pt-4 border-t">
-                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resVideos">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
-                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xl mb-3">වීඩියෝ පාඩම්</h3>
+                    <p class="text-gray-500 mb-5 flex-1">දෘශ්‍යමය ඉගෙනුම්</p>
+                    <div class="flex items-center justify-between pt-5 border-t">
+                        <span class="text-3xl font-black text-brand-navy dark:text-white"><span id="resVideos">0</span> <span class="text-base font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold flex items-center gap-2">බලන්න <i class="fa-solid fa-arrow-right"></i></span>
                     </div>
                 </a>
 
@@ -1068,11 +1426,11 @@ tailwind.config = {
                     <div class="resource-icon" style="background: linear-gradient(135deg, #a855f7, #9333ea);">
                         <i class="fa-solid fa-newspaper"></i>
                     </div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">ලිපි</h3>
-                    <p class="text-gray-500 text-sm mb-4 flex-1">අධ්‍යාපනික ලිපි</p>
-                    <div class="flex items-center justify-between pt-4 border-t">
-                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resArticles">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
-                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xl mb-3">ලිපි</h3>
+                    <p class="text-gray-500 mb-5 flex-1">අධ්‍යාපනික ලිපි</p>
+                    <div class="flex items-center justify-between pt-5 border-t">
+                        <span class="text-3xl font-black text-brand-navy dark:text-white"><span id="resArticles">0</span> <span class="text-base font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold flex items-center gap-2">බලන්න <i class="fa-solid fa-arrow-right"></i></span>
                     </div>
                 </a>
 
@@ -1080,80 +1438,80 @@ tailwind.config = {
                     <div class="resource-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
                         <i class="fa-solid fa-bullseye"></i>
                     </div>
-                    <h3 class="font-black text-brand-navy dark:text-white text-lg mb-2">ප්‍රශ්නාවලි</h3>
-                    <p class="text-gray-500 text-sm mb-4 flex-1">Online quizzes</p>
-                    <div class="flex items-center justify-between pt-4 border-t">
-                        <span class="text-2xl font-black text-brand-navy dark:text-white"><span id="resQuizzes">0</span> <span class="text-sm font-normal text-gray-500">සම්පත්</span></span>
-                        <span class="text-brand-gold font-bold text-sm">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                    <h3 class="font-black text-brand-navy dark:text-white text-xl mb-3">ප්‍රශ්නාවලි</h3>
+                    <p class="text-gray-500 mb-5 flex-1">Online quizzes</p>
+                    <div class="flex items-center justify-between pt-5 border-t">
+                        <span class="text-3xl font-black text-brand-navy dark:text-white"><span id="resQuizzes">0</span> <span class="text-base font-normal text-gray-500">සම්පත්</span></span>
+                        <span class="text-brand-gold font-bold flex items-center gap-2">බලන්න <i class="fa-solid fa-arrow-right"></i></span>
                     </div>
                 </a>
             </div>
         </div>
     </section>
         <!-- TESTIMONIALS -->
-    <section class="py-20 bg-brand-light dark:bg-gray-950">
+    <section class="py-24 bg-brand-light dark:bg-gray-950">
         <div class="container-wide">
-            <div class="text-center mb-12" data-aos="fade-up">
+            <div class="text-center mb-16" data-aos="fade-up">
                 <span class="section-label">TESTIMONIALS</span>
                 <h2 class="section-title">දෙමාපියන්ගේ අදහස්</h2>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="testimonial-card" data-aos="fade-up">
-                    <div class="flex mb-4">
+                    <div class="flex mb-4 gap-1">
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                     </div>
-                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic text-sm">
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic text-base leading-relaxed">
                         "අකුරු මංසල මගේ දරුවාට ඉගෙනීමට ඉතාම හොඳ තැනක්. ගුරුවරුන් ඉතාම කැපවීමෙන් වැඩ කරනවා."
                     </p>
-                    <div class="flex items-center space-x-3 pt-4 border-t">
-                        <img src="/images/parent-1.jpg" class="w-12 h-12 rounded-full object-cover" alt="Parent" onerror="this.src='https://ui-avatars.com/api/?name=PS&background=D4A017&color=0F2C59'">
+                    <div class="flex items-center space-x-3 pt-5 border-t">
+                        <img src="/images/parent-1.jpg" class="w-14 h-14 rounded-full object-cover" alt="Parent" onerror="this.src='https://ui-avatars.com/api/?name=PS&background=D4A017&color=0F2C59&size=128'">
                         <div>
-                            <p class="font-black text-brand-navy dark:text-white text-sm">ප්‍රියා ෂර්මා</p>
+                            <p class="font-black text-brand-navy dark:text-white">ප්‍රියා ෂර්මා</p>
                             <p class="text-xs text-gray-500">8 ශ්‍රේණියේ මව</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="flex mb-4">
+                    <div class="flex mb-4 gap-1">
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                     </div>
-                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic text-sm">
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic text-base leading-relaxed">
                         "අධ්‍යාපනික සම්පත් රැසක් එකම තැනකින්. මගේ දරුවාට ගණිතයට තිබුණු බය නැති වුණා."
                     </p>
-                    <div class="flex items-center space-x-3 pt-4 border-t">
-                        <img src="/images/parent-2.jpg" class="w-12 h-12 rounded-full object-cover" alt="Parent" onerror="this.src='https://ui-avatars.com/api/?name=RM&background=0F2C59&color=D4A017'">
+                    <div class="flex items-center space-x-3 pt-5 border-t">
+                        <img src="/images/parent-2.jpg" class="w-14 h-14 rounded-full object-cover" alt="Parent" onerror="this.src='https://ui-avatars.com/api/?name=RM&background=0F2C59&color=D4A017&size=128'">
                         <div>
-                            <p class="font-black text-brand-navy dark:text-white text-sm">රොහිත් මහතා</p>
+                            <p class="font-black text-brand-navy dark:text-white">රොහිත් මහතා</p>
                             <p class="text-xs text-gray-500">10 ශ්‍රේණියේ පියා</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="flex mb-4">
+                    <div class="flex mb-4 gap-1">
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                         <i class="fa-solid fa-star text-brand-gold"></i>
                     </div>
-                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic text-sm">
+                    <p class="text-gray-700 dark:text-gray-300 mb-6 italic text-base leading-relaxed">
                         "ගුරුවරුන්ගේ සහාය ඉතාම හොඳයි. මගේ දුවට පාසල් වැඩවලට ලොකු උපකාරයක්."
                     </p>
-                    <div class="flex items-center space-x-3 pt-4 border-t">
-                        <img src="/images/parent-3.jpg" class="w-12 h-12 rounded-full object-cover" alt="Parent" onerror="this.src='https://ui-avatars.com/api/?name=AP&background=D4A017&color=0F2C59'">
+                    <div class="flex items-center space-x-3 pt-5 border-t">
+                        <img src="/images/parent-3.jpg" class="w-14 h-14 rounded-full object-cover" alt="Parent" onerror="this.src='https://ui-avatars.com/api/?name=AP&background=D4A017&color=0F2C59&size=128'">
                         <div>
-                            <p class="font-black text-brand-navy dark:text-white text-sm">අනූෂා පෙරේරා</p>
+                            <p class="font-black text-brand-navy dark:text-white">අනූෂා පෙරේරා</p>
                             <p class="text-xs text-gray-500">6 ශ්‍රේණියේ මව</p>
                         </div>
                     </div>
@@ -1168,18 +1526,18 @@ tailwind.config = {
             <div class="cta-section" data-aos="zoom-in">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center relative z-10">
                     <div class="lg:col-span-2">
-                        <span class="text-brand-gold font-black text-xs tracking-[0.2em] uppercase mb-3 inline-block">FOR TEACHERS</span>
-                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-black mb-4 leading-tight">
+                        <span class="text-brand-gold font-black text-sm tracking-[0.2em] uppercase mb-4 inline-block">FOR TEACHERS</span>
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black mb-5 leading-tight">
                             ඔබේ සම්පත් තවත් දරුවන්ට ලබා දෙන්න.
                         </h2>
-                        <p class="text-white/85 leading-relaxed">
+                        <p class="text-white/90 leading-relaxed text-lg">
                             පාඩම්, සටහන්, ප්‍රශ්න පත්‍ර සහ වීඩියෝ අකුරු මංසල වෙත එකතු කරන්න.
                         </p>
                     </div>
                     <div class="text-center lg:text-right">
-                        <a href="/login.html" class="btn-primary inline-flex">
-                            <i class="fa-solid fa-user-plus"></i>
-                            <span>ගිණුමක් විවෘත කරන්න</span>
+                        <a href="/login.html" class="btn-primary inline-flex" style="background: white; color: #0F2C59;">
+                            <i class="fa-solid fa-user-shield"></i>
+                            <span>Admin Panel එකට</span>
                         </a>
                     </div>
                 </div>
@@ -1190,78 +1548,81 @@ tailwind.config = {
     <!-- FOOTER -->
     <footer class="footer">
         <div class="container-wide">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-12 border-b border-white/10">
+                
+                <!-- Column 1: Brand -->
                 <div>
-                    <div class="flex items-center space-x-3 mb-6">
+                    <div class="flex items-center space-x-4 mb-6">
                         <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2 shadow-lg">
                             <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
                         </div>
                         <div>
                             <h3 class="text-2xl font-black">අකුරු මංසල</h3>
-                            <p class="text-xs text-white/70 mt-1">ඉගෙනුමට නව මඟක්</p>
+                            <p class="text-sm text-white/70 mt-1">ඉගෙනුමට නව මඟක්</p>
                         </div>
                     </div>
-                    <p class="text-white/70 text-sm leading-relaxed mb-6">
+                    <p class="text-white/70 leading-relaxed mb-6">
                         ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
                     </p>
                     <div class="flex space-x-3">
-                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-icon facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-icon whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" class="social-icon instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
                     </div>
                 </div>
 
+                <!-- Column 2: Quick Links -->
                 <div>
                     <h4 class="footer-title">ඉක්මන් සබැඳි</h4>
                     <ul class="space-y-3">
-                        <li><a href="#home">මුල් පිටුව</a></li>
-                        <li><a href="#about">අප ගැන</a></li>
-                        <li><a href="#grades">ශ්‍රේණි</a></li>
-                        <li><a href="/resources.html">සම්පත්</a></li>
-                        <li><a href="/papers.html">ප්‍රශ්න පත්‍ර</a></li>
-                        <li><a href="/videos.html">වීඩියෝ</a></li>
+                        <li><a href="/"><i class="fa-solid fa-chevron-right text-brand-gold text-xs mr-2"></i>මුල් පිටුව</a></li>
+                        <li><a href="/resources.html"><i class="fa-solid fa-chevron-right text-brand-gold text-xs mr-2"></i>සම්පත්</a></li>
+                        <li><a href="/papers.html"><i class="fa-solid fa-chevron-right text-brand-gold text-xs mr-2"></i>ප්‍රශ්න පත්‍ර</a></li>
+                        <li><a href="/videos.html"><i class="fa-solid fa-chevron-right text-brand-gold text-xs mr-2"></i>වීඩියෝ</a></li>
+                        <li><a href="/quizzes.html"><i class="fa-solid fa-chevron-right text-brand-gold text-xs mr-2"></i>ප්‍රශ්නාවලි</a></li>
                     </ul>
                 </div>
 
+                <!-- Column 3: Subjects -->
                 <div>
                     <h4 class="footer-title">විෂය මාලාව</h4>
                     <ul class="space-y-3">
-                        <li><a href="/resources.html">සිංහල භාෂාව</a></li>
-                        <li><a href="/resources.html">ගණිතය</a></li>
-                        <li><a href="/resources.html">විද්‍යාව</a></li>
-                        <li><a href="/resources.html">ඉංග්‍රීසි</a></li>
-                        <li><a href="/resources.html">ICT</a></li>
-                        <li><a href="/resources.html">ඉතිහාසය</a></li>
+                        <li><a href="/resources.html"><i class="fa-solid fa-chevron-right text-brand-gold text-xs mr-2"></i>සිංහල භාෂාව</a></li>
+                        <li><a href="/resources.html"><i class="fa-solid fa-chevron-right text-brand-gold text-xs mr-2"></i>ගණිතය</a></li>
+                        <li><a href="/resources.html"><i class="fa-solid fa-chevron-right text-brand-gold text-xs mr-2"></i>විද්‍යාව</a></li>
+                        <li><a href="/resources.html"><i class="fa-solid fa-chevron-right text-brand-gold text-xs mr-2"></i>ඉංග්‍රීසි</a></li>
+                        <li><a href="/resources.html"><i class="fa-solid fa-chevron-right text-brand-gold text-xs mr-2"></i>ICT</a></li>
                     </ul>
                 </div>
 
+                <!-- Column 4: Contact -->
                 <div>
                     <h4 class="footer-title">අප අමතන්න</h4>
                     <ul class="space-y-4">
                         <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
-                            <span class="text-white/80 text-sm">කොළඹ, ශ්‍රී ලංකාව</span>
+                            <i class="fa-solid fa-location-dot text-brand-gold mt-1 text-lg"></i>
+                            <span class="text-white/80" data-setting="address">කොළඹ, ශ්‍රී ලංකාව</span>
                         </li>
                         <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-phone text-brand-gold"></i>
-                            <span class="text-white/80 text-sm">+94 11 234 5678</span>
+                            <i class="fa-solid fa-phone text-brand-gold text-lg"></i>
+                            <span class="text-white/80" data-setting="phone">+94 767512666</span>
                         </li>
                         <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-envelope text-brand-gold"></i>
-                            <span class="text-white/80 text-sm">info@akurumansala.lk</span>
+                            <i class="fa-solid fa-envelope text-brand-gold text-lg"></i>
+                            <span class="text-white/80" data-setting="email">info@akurumansala.lk</span>
                         </li>
                         <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-clock text-brand-gold"></i>
-                            <span class="text-white/80 text-sm">සඳුදා - සිකුරාදා</span>
+                            <i class="fa-solid fa-clock text-brand-gold text-lg"></i>
+                            <span class="text-white/80">සඳුදා - සිකුරාදා</span>
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60">
+            <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-white/60">
                 <p>© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
-                <div class="flex space-x-4">
+                <div class="flex space-x-6">
                     <a href="#" class="hover:text-brand-gold transition">ගිවිසුම්</a>
                     <a href="#" class="hover:text-brand-gold transition">රහස්‍යතා ප්‍රතිපත්තිය</a>
                     <a href="#" class="hover:text-brand-gold transition">සම්බන්ධ වන්න</a>
@@ -1270,10 +1631,12 @@ tailwind.config = {
         </div>
     </footer>
 
-    <button id="backToTop" onclick="scrollToTop()" class="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-xl bg-gradient-to-br from-brand-gold to-brand-gold2 text-brand-navy shadow-2xl items-center justify-center hidden hover:scale-110 transition-all">
-        <i class="fa-solid fa-arrow-up text-lg"></i>
+    <!-- BACK TO TOP BUTTON -->
+    <button id="backToTop" onclick="scrollToTop()" class="fixed bottom-8 right-8 z-40 w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-gold to-brand-gold2 text-brand-navy shadow-2xl items-center justify-center hidden hover:scale-110 transition-all border-4 border-white/30">
+        <i class="fa-solid fa-arrow-up text-xl"></i>
     </button>
 
+    <!-- SCRIPTS -->
     <script>
         const API_BASE = '/api';
 
@@ -1331,7 +1694,7 @@ tailwind.config = {
         });
 
         // ============================================
-        // LOAD STATISTICS
+        // LOAD STATISTICS FROM DATABASE
         // ============================================
         async function loadStats() {
             try {
@@ -1343,22 +1706,84 @@ tailwind.config = {
                 const videos = stats.total_videos || 0;
                 const articles = stats.total_articles || 0;
 
-                document.getElementById('infoLessons').textContent = lessons;
-                document.getElementById('infoPapers').textContent = papers;
-                document.getElementById('infoVideos').textContent = videos;
+                // Info cards
+                const infoLessons = document.getElementById('infoLessons');
+                const infoPapers = document.getElementById('infoPapers');
+                const infoVideos = document.getElementById('infoVideos');
+                if (infoLessons) infoLessons.textContent = lessons;
+                if (infoPapers) infoPapers.textContent = papers;
+                if (infoVideos) infoVideos.textContent = videos;
 
-                document.getElementById('statLessons').textContent = lessons;
-                document.getElementById('statPapers').textContent = papers;
-                document.getElementById('statVideos').textContent = videos;
+                // Stats bar
+                const statLessons = document.getElementById('statLessons');
+                const statPapers = document.getElementById('statPapers');
+                const statVideos = document.getElementById('statVideos');
+                if (statLessons) statLessons.textContent = lessons;
+                if (statPapers) statPapers.textContent = papers;
+                if (statVideos) statVideos.textContent = videos;
 
-                document.getElementById('resLessons').textContent = lessons;
-                document.getElementById('resPapers').textContent = papers;
-                document.getElementById('resVideos').textContent = videos;
-                document.getElementById('resArticles').textContent = articles;
-                document.getElementById('resQuizzes').textContent = '0';
-                document.getElementById('resNotes').textContent = '0';
+                // Resources
+                const resLessons = document.getElementById('resLessons');
+                const resPapers = document.getElementById('resPapers');
+                const resVideos = document.getElementById('resVideos');
+                const resArticles = document.getElementById('resArticles');
+                if (resLessons) resLessons.textContent = lessons;
+                if (resPapers) resPapers.textContent = papers;
+                if (resVideos) resVideos.textContent = videos;
+                if (resArticles) resArticles.textContent = articles;
+
+                const resQuizzes = document.getElementById('resQuizzes');
+                const resNotes = document.getElementById('resNotes');
+                if (resQuizzes) resQuizzes.textContent = '0';
+                if (resNotes) resNotes.textContent = '0';
+
             } catch (err) {
                 console.error('Stats load error:', err);
+            }
+        }
+
+        // ============================================
+        // LOAD SETTINGS FROM DATABASE
+        // ============================================
+        async function loadSiteSettings() {
+            try {
+                const res = await fetch(`${API_BASE}/settings/public`);
+                const settings = await res.json();
+
+                // Update contact info
+                if (settings.site_email) {
+                    document.querySelectorAll('[data-setting="email"]').forEach(el => {
+                        el.textContent = settings.site_email;
+                    });
+                }
+                if (settings.site_phone) {
+                    document.querySelectorAll('[data-setting="phone"]').forEach(el => {
+                        el.textContent = settings.site_phone;
+                    });
+                }
+                if (settings.site_address) {
+                    document.querySelectorAll('[data-setting="address"]').forEach(el => {
+                        el.textContent = settings.site_address;
+                    });
+                }
+
+                // Update social links
+                if (settings.site_facebook) {
+                    document.querySelectorAll('.social-icon.facebook').forEach(el => el.href = settings.site_facebook);
+                }
+                if (settings.site_youtube) {
+                    document.querySelectorAll('.social-icon.youtube').forEach(el => el.href = settings.site_youtube);
+                }
+                if (settings.site_whatsapp) {
+                    document.querySelectorAll('.social-icon.whatsapp').forEach(el => el.href = `https://wa.me/${settings.site_whatsapp.replace(/\D/g, '')}`);
+                }
+                if (settings.site_instagram) {
+                    document.querySelectorAll('.social-icon.instagram').forEach(el => el.href = settings.site_instagram);
+                }
+
+                console.log('✅ Site settings loaded');
+            } catch (err) {
+                console.error('Settings load error:', err);
             }
         }
 
@@ -1368,12 +1793,13 @@ tailwind.config = {
         document.addEventListener('DOMContentLoaded', () => {
             loadTheme();
             loadStats();
+            loadSiteSettings();
         });
     </script>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 800, once: true, offset: 100 });
+        AOS.init({ duration: 900, once: true, offset: 100, easing: 'ease-out-cubic' });
     </script>
     <script src="/js/ai-chat.js"></script>
 </body>
