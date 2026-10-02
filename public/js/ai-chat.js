@@ -5,9 +5,6 @@
 (function() {
     'use strict';
 
-    // ============================================
-    // CONFIGURATION
-    // ============================================
     const API_BASE = '/api';
     const CHAT_STORAGE_KEY = 'akuru_chat_history';
     const MAX_HISTORY = 20;
@@ -17,14 +14,12 @@
     let chatHistory = [];
 
     // ============================================
-    // LOAD CHAT HISTORY
+    // LOAD/SAVE CHAT HISTORY
     // ============================================
     function loadChatHistory() {
         try {
             const saved = localStorage.getItem(CHAT_STORAGE_KEY);
-            if (saved) {
-                chatHistory = JSON.parse(saved);
-            }
+            if (saved) chatHistory = JSON.parse(saved);
         } catch (e) {
             chatHistory = [];
         }
@@ -32,7 +27,6 @@
 
     function saveChatHistory() {
         try {
-            // Keep only last MAX_HISTORY messages
             if (chatHistory.length > MAX_HISTORY) {
                 chatHistory = chatHistory.slice(-MAX_HISTORY);
             }
@@ -43,21 +37,18 @@
     }
 
     // ============================================
-    // CREATE CHAT WIDGET HTML
+    // CREATE CHAT WIDGET
     // ============================================
     function createChatWidget() {
         const widget = document.createElement('div');
         widget.id = 'aiChatWidget';
         widget.innerHTML = `
-            <!-- Chat Button -->
-            <button id="aiChatButton" class="ai-chat-button" onclick="window.AIChat.toggle()" title="AI උදව්කරු">
+            <button id="aiChatButton" class="ai-chat-button" onclick="window.AIChat.toggle()" title="අකුරු AI">
                 <i class="fa-solid fa-robot"></i>
                 <span class="ai-chat-pulse"></span>
             </button>
 
-            <!-- Chat Window -->
             <div id="aiChatWindow" class="ai-chat-window">
-                <!-- Header -->
                 <div class="ai-chat-header">
                     <div class="ai-chat-header-info">
                         <div class="ai-chat-avatar">
@@ -78,17 +69,14 @@
                     </div>
                 </div>
 
-                <!-- Messages -->
                 <div id="aiChatMessages" class="ai-chat-messages"></div>
 
-                <!-- Suggestions -->
                 <div id="aiChatSuggestions" class="ai-chat-suggestions">
                     <button onclick="window.AIChat.send('ගණිතය ඉගෙන ගන්න පුළුවන් කොහොමද?')">ගණිතය ඉගෙන ගන්නේ කොහොමද?</button>
                     <button onclick="window.AIChat.send('පාඩම් මතක තියාගන්න උපදෙස් දෙන්න')">පාඩම් මතක තියාගන්න උපදෙස්</button>
                     <button onclick="window.AIChat.send('විභාග බය ගන්නේ කොහොමද?')">විභාග බය ගන්නේ කොහොමද?</button>
                 </div>
 
-                <!-- Input -->
                 <div class="ai-chat-input-wrap">
                     <input 
                         type="text" 
@@ -112,7 +100,6 @@
     function createChatStyles() {
         const styles = document.createElement('style');
         styles.textContent = `
-            /* AI Chat Button */
             .ai-chat-button {
                 position: fixed;
                 bottom: 90px;
@@ -152,7 +139,6 @@
                 50% { transform: scale(1.3); opacity: 0.7; }
             }
 
-            /* Chat Window */
             .ai-chat-window {
                 position: fixed;
                 bottom: 160px;
@@ -183,7 +169,6 @@
                 color: #e2e8f0;
             }
 
-            /* Header */
             .ai-chat-header {
                 background: linear-gradient(135deg, #a855f7, #6366f1);
                 color: white;
@@ -251,7 +236,6 @@
                 transform: scale(1.1);
             }
 
-            /* Messages */
             .ai-chat-messages {
                 flex: 1;
                 overflow-y: auto;
@@ -261,18 +245,13 @@
                 gap: 1rem;
                 background: #f8fafc;
             }
-            body.dark .ai-chat-messages {
-                background: #0f172a;
-            }
-            .ai-chat-messages::-webkit-scrollbar {
-                width: 6px;
-            }
+            body.dark .ai-chat-messages { background: #0f172a; }
+            .ai-chat-messages::-webkit-scrollbar { width: 6px; }
             .ai-chat-messages::-webkit-scrollbar-thumb {
                 background: #a855f7;
                 border-radius: 3px;
             }
 
-            /* Message Bubbles */
             .ai-message {
                 display: flex;
                 gap: 0.6rem;
@@ -314,12 +293,8 @@
                 box-shadow: 0 2px 8px rgba(0,0,0,0.06);
                 word-wrap: break-word;
             }
-            body.dark .ai-message-content {
-                background: #334155;
-            }
-            .ai-message.bot .ai-message-content {
-                border-top-left-radius: 0.25rem;
-            }
+            body.dark .ai-message-content { background: #334155; }
+            .ai-message.bot .ai-message-content { border-top-left-radius: 0.25rem; }
             .ai-message.user .ai-message-content {
                 background: linear-gradient(135deg, #D4A017, #E8B923);
                 color: #0F2C59;
@@ -327,7 +302,6 @@
                 font-weight: 600;
             }
 
-            /* Typing Indicator */
             .ai-typing {
                 display: flex;
                 gap: 0.4rem;
@@ -347,7 +321,6 @@
                 30% { transform: translateY(-8px); opacity: 1; }
             }
 
-            /* Suggestions */
             .ai-chat-suggestions {
                 padding: 0.75rem 1.25rem;
                 background: white;
@@ -380,7 +353,6 @@
                 transform: translateY(-2px);
             }
 
-            /* Input */
             .ai-chat-input-wrap {
                 padding: 1rem 1.25rem;
                 background: white;
@@ -431,12 +403,8 @@
                 transform: scale(1.1) rotate(-10deg);
                 box-shadow: 0 8px 20px rgba(168, 85, 247, 0.5);
             }
-            .ai-chat-send:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
+            .ai-chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
 
-            /* Mobile */
             @media (max-width: 640px) {
                 .ai-chat-button {
                     bottom: 80px;
@@ -467,7 +435,6 @@
         if (!messagesEl) return;
 
         if (chatHistory.length === 0) {
-            // Welcome message
             messagesEl.innerHTML = `
                 <div class="ai-message bot">
                     <div class="ai-message-avatar"><i class="fa-solid fa-robot"></i></div>
@@ -488,22 +455,15 @@
             </div>
         `).join('');
 
-        // Scroll to bottom
         messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
-    // ============================================
-    // ESCAPE HTML
-    // ============================================
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML.replace(/\n/g, '<br>');
     }
 
-    // ============================================
-    // SHOW TYPING INDICATOR
-    // ============================================
     function showTyping() {
         const messagesEl = document.getElementById('aiChatMessages');
         if (!messagesEl) return;
@@ -537,19 +497,15 @@
 
         if (!message) return;
 
-        // Clear input
         if (input) input.value = '';
 
-        // Hide suggestions
         const suggestions = document.getElementById('aiChatSuggestions');
         if (suggestions) suggestions.style.display = 'none';
 
-        // Add user message
         chatHistory.push({ role: 'user', content: message });
         renderMessages();
         saveChatHistory();
 
-        // Show typing
         isTyping = true;
         showTyping();
 
@@ -568,13 +524,9 @@
 
             const data = await res.json();
 
-            if (!res.ok) {
-                throw new Error(data.error || 'AI error');
-            }
+            if (!res.ok) throw new Error(data.error || 'AI error');
 
             hideTyping();
-
-            // Add bot message
             chatHistory.push({ role: 'assistant', content: data.response });
             renderMessages();
             saveChatHistory();
@@ -582,7 +534,6 @@
         } catch (err) {
             hideTyping();
             console.error('AI error:', err);
-            
             chatHistory.push({ 
                 role: 'assistant', 
                 content: 'සමාවෙන්න, දැන් ප්‍රතිචාර දැක්වීමට නොහැක. කරුණාකර නැවත උත්සාහ කරන්න.' 
@@ -596,32 +547,25 @@
         }
     }
 
-    // ============================================
-    // TOGGLE CHAT
-    // ============================================
     function toggleChat() {
-        const window = document.getElementById('aiChatWindow');
+        const windowEl = document.getElementById('aiChatWindow');
         const button = document.getElementById('aiChatButton');
         
         chatOpen = !chatOpen;
         
         if (chatOpen) {
-            window.classList.add('active');
+            windowEl.classList.add('active');
             button.style.transform = 'scale(0.9) rotate(180deg)';
-            
             setTimeout(() => {
                 const input = document.getElementById('aiChatInput');
                 if (input) input.focus();
             }, 300);
         } else {
-            window.classList.remove('active');
+            windowEl.classList.remove('active');
             button.style.transform = '';
         }
     }
 
-    // ============================================
-    // CLEAR CHAT
-    // ============================================
     function clearChat() {
         if (!confirm('සියලු chat messages මකා දැමීමට අවශ්‍යද?')) return;
         chatHistory = [];
@@ -632,9 +576,6 @@
         if (suggestions) suggestions.style.display = 'flex';
     }
 
-    // ============================================
-    // INIT
-    // ============================================
     function init() {
         createChatStyles();
         createChatWidget();
@@ -643,16 +584,12 @@
         console.log('✅ AI Chat initialized');
     }
 
-    // ============================================
-    // EXPOSE GLOBAL API
-    // ============================================
     window.AIChat = {
         toggle: toggleChat,
         send: sendMessage,
         clear: clearChat
     };
 
-    // Init when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
