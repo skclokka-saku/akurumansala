@@ -1,123 +1,107 @@
 const express = require('express');
 const router = express.Router();
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+// ============================================
+// SYSTEM PROMPT
+// ============================================
+const SYSTEM_PROMPT = `ඔබ "අකුරු AI" - ශ්‍රී ලංකාවේ දරුවන්ට උපකාර කරන අධ්‍යාපනික AI උදව්කරුවෙකි.
 
-// Model configuration - Qwen (හොඳම balance)
-const MODEL = 'qwen/qwen3.8-27b';
+ඔබේ ලක්ෂණ:
+- සිංහල භාෂාවෙන් පිළිතුරු දෙන්න (දරුවන්ට තේරුම් ගත හැකි ලෙස)
+- සරල, පැහැදිලි භාෂාවක් භාවිතා කරන්න
+- ගණිතය, විද්‍යාව, භාෂාව, ඉතිහාසය ආදී විෂයයන් සඳහා උදව් කරන්න
+- 1 සිට 13 ශ්‍රේණිය දක්වා සිසුන්ට ගැලපෙන ලෙස පිළිතුරු දෙන්න
+- ළමයින්ට ආදර්ශවත්, ධනාත්මක, දිරිගන්වන ලෙස කතා කරන්න
+- හානිකර, අනුචිත, හෝ නුසුදුසු කරුණු ගැන කතා නොකරන්න
+- සැක සහිත ප්‍රශ්න ඇත්නම්, වැඩිහිටියෙකුගෙන් උදව් ගන්න යැයි කියන්න
 
-const SYSTEM_PROMPT = `ඔබ "e-Akuru-AI" - ශ්‍රී ලංකාවේ "අකුරු මංසල" අධ්‍යාපනික වේදිකාවේ AI සහායකයා.
+ඔබ හැම විටම කෙටි, පැහැදිලි පිළිතුරු දෙන්න. උදාහරණ සමඟ පැහැදිලි කරන්න.`;
 
-වැදගත් උපදෙස්:
-- සිංහල භාෂාවෙන් පිළිතුරු දෙන්න
-- කෙටි, පැහැදිලි සහ ප්‍රයෝජනවත් උත්තර දෙන්න
-- ගණිත ගැටලු විසඳන්න
-- අධ්‍යාපනික උපදෙස් දෙන්න
-- සාමාන්‍ය දැනුම බෙදා ගන්න
-- විභාග උපදෙස් දෙන්න (O/L, A/L)
-- වෘත්තීය මාර්ගෝපදේශය දෙන්න
-- ඉගෙනීමේ ක්‍රම කියා දෙන්න
-
-ඔබේ උත්තර:
-- දරුවන්ට තේරෙන සරල භාෂාවෙන්
-- හැකි විට bullet points භාවිතා කරන්න
-- අවශ්‍ය නම් emojis භාවිතා කරන්න (📚, 🧮, ✅)
-- ගණිත ගණනය කරන විට කෙලින්ම උත්තරය දෙන්න
-
-වැදගත්:
-- හිංසනය, අපචාර ගැන උත්තර දෙන්න එපා
-- හැම විටම ගෞරවනීය සහ උපකාරී වන්න
-- ඔබට නොදන්නා දෙයක් නම් "මට ඒ ගැන තොරතුරු නැහැ" කියන්න`;
-
+// ============================================
 // POST /api/ai/chat
+// ============================================
 router.post('/chat', async (req, res) => {
     try {
-        const { message, history = [] } = req.body;
-        
-        if (!message || typeof message !== 'string') {
-            return res.status(400).json({ error: 'පණිවිඩය ලබා දෙන්න' });
+        const { message, history } = req.body;
+
+        if (!message) {
+            return res.status(400).json({ error: 'පණිවිඩය අවශ්‍යයි' });
         }
-        
+
+        const GROQ_API_KEY = process.env.GROQ_API_KEY;
+
         if (!GROQ_API_KEY) {
-            console.error('❌ GROQ_API_KEY not set');
+            console.error('GROQ_API_KEY is not set');
             return res.status(500).json({ 
-                error: 'AI සේවාව නොමැත. කරුණාකර පරිපාලක අමතන්න.' 
+                error: 'AI සේවාව නිසි ලෙස වින්‍යාස කර නැත' 
             });
         }
-        
+
+        // Build messages array
         const messages = [
-            { role: 'system', content: SYSTEM_PROMPT },
-            ...history.slice(-10),
-            { role: 'user', content: message }
+            { role: 'system', content: SYSTEM_PROMPT }
         ];
-        
-        const response = await fetch(GROQ_API_URL, {
+
+        // Add conversation history (last 10 messages)
+        if (history && Array.isArray(history)) {
+            const recentHistory = history.slice(-10);
+            recentHistory.forEach(msg => {
+                if (msg.role && msg.content) {
+                    messages.push({
+                        role: msg.role === 'assistant' ? 'assistant' : 'user',
+                        content: msg.content
+                    });
+                }
+            });
+        }
+
+        // Add current message
+        messages.push({ role: 'user', content: message });
+
+        console.log('📤 Sending to Groq:', message.substring(0, 50));
+
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${GROQ_API_KEY}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: MODEL,
+                model: 'llama-3.3-70b-versatile',
                 messages: messages,
                 temperature: 0.7,
-                max_tokens: 2048,
-                top_p: 1,
+                max_tokens: 1024,
+                top_p: 0.9,
                 stream: false
             })
         });
-        
+
         if (!response.ok) {
-            const errData = await response.text();
-            console.error('Groq API error:', response.status, errData);
-            
-            if (response.status === 429) {
-                return res.status(429).json({ 
-                    error: 'ඉතා බොහෝ ඉල්ලීම්. තත්පර කිහිපයකින් නැවත උත්සාහ කරන්න.' 
-                });
-            }
-            
-            return res.status(500).json({ 
-                error: 'AI සේවා දෝෂයක්. නැවත උත්සාහ කරන්න.' 
-            });
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Groq API error:', errorData);
+            throw new Error(errorData.error?.message || 'AI සේවාවේ දෝෂයක්');
         }
-        
+
         const data = await response.json();
-        const msg = data.choices?.[0]?.message;
-        
-        let aiResponse = msg?.content || '';
-        
-        if (!aiResponse && msg?.reasoning) {
-            aiResponse = msg.reasoning;
+        const aiResponse = data.choices?.[0]?.message?.content;
+
+        if (!aiResponse) {
+            throw new Error('AI ප්‍රතිචාරය හිස්');
         }
-        
-        if (!aiResponse || aiResponse.trim() === '') {
-            console.error('Empty AI response:', JSON.stringify(data, null, 2));
-            aiResponse = 'මට උත්තර දෙන්න බැහැ. කරුණාකර නැවත උත්සාහ කරන්න.';
-        }
-        
-        res.json({
-            response: aiResponse,
-            model: data.model,
-            usage: data.usage
+
+        console.log('✅ Groq response received');
+
+        res.json({ 
+            response: aiResponse.trim(),
+            model: data.model
         });
-        
+
     } catch (error) {
-        console.error('AI chat error:', error);
+        console.error('AI chat error:', error.message);
         res.status(500).json({ 
-            error: 'සේවා දෝෂයක්. කරුණාකර නැවත උත්සාහ කරන්න.' 
+            error: 'AI සේවාවේ දෝෂයක්: ' + error.message 
         });
     }
-});
-
-// GET /api/ai/status
-router.get('/status', (req, res) => {
-    res.json({
-        status: GROQ_API_KEY ? 'ready' : 'not_configured',
-        model: MODEL,
-        provider: 'Groq'
-    });
 });
 
 module.exports = router;
