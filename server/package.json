@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "seed": "node seed.js"
+    "seed": "node seed.js",
+    "postinstall": "npm install nodemailer@6.9.14 --no-save"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
