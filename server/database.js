@@ -2,233 +2,183 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 
+// ============================================
+// DATABASE PATH
+// ============================================
 const DB_DIR = path.join(__dirname, '..', 'database');
 const DB_PATH = path.join(DB_DIR, 'akuru.db');
 
+// Create database directory if it doesn't exist
 if (!fs.existsSync(DB_DIR)) {
     fs.mkdirSync(DB_DIR, { recursive: true });
+    console.log('✅ Created database directory:', DB_DIR);
 }
 
-const db = new Database(DB_PATH);
-db.pragma('journal_mode = WAL');
-db.pragma('foreign_keys = ON');
+// ============================================
+// INITIALIZE DATABASE
+// ============================================
+let db;
 
-console.log('✅ SQLite database connected:', DB_PATH);
+function getDb() {
+    if (!db) {
+        db = new Database(DB_PATH);
+        db.pragma('journal_mode = WAL');
+        db.pragma('foreign_keys = ON');
+        console.log('✅ SQLite database connected:', DB_PATH);
+    }
+    return db;
+}
 
-function initializeDatabase() {
+// ============================================
+// INITIALIZE TABLES
+// ============================================
+async function initializeDatabase() {
+    const database = getDb();
+
     try {
-        // Users
-        db.exec(`
+        // Users table
+        database.exec(`
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
                 email TEXT UNIQUE NOT NULL,
                 password TEXT NOT NULL,
-                role TEXT DEFAULT 'teacher' CHECK(role IN ('admin', 'teacher', 'student')),
-                phone TEXT,
+                role TEXT NOT NULL DEFAULT 'student',
                 school TEXT,
-                is_active INTEGER DEFAULT 1,
+                phone TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
+            )
         `);
 
-        // Grades
-        db.exec(`
+        // Grades table
+        database.exec(`
             CREATE TABLE IF NOT EXISTS grades (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 grade_number INTEGER UNIQUE NOT NULL,
                 grade_name TEXT NOT NULL,
                 grade_name_en TEXT,
-                description TEXT,
-                icon TEXT DEFAULT 'fa-graduation-cap',
-                color TEXT DEFAULT '#ec4899',
-                is_active INTEGER DEFAULT 1,
+                icon TEXT,
+                color TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
+            )
         `);
 
-        // Subjects
-        db.exec(`
+        // Subjects table
+        database.exec(`
             CREATE TABLE IF NOT EXISTS subjects (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 subject_name TEXT NOT NULL,
                 subject_name_en TEXT,
-                description TEXT,
-                icon TEXT DEFAULT 'fa-book',
-                color TEXT DEFAULT '#3b82f6',
-                is_active INTEGER DEFAULT 1,
+                icon TEXT,
+                color TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
+            )
         `);
 
-        // Grade-Subjects
-        db.exec(`
+        // Grade-Subjects mapping
+        database.exec(`
             CREATE TABLE IF NOT EXISTS grade_subjects (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 grade_id INTEGER NOT NULL,
                 subject_id INTEGER NOT NULL,
+                UNIQUE(grade_id, subject_id),
                 FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
-                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE,
-                UNIQUE(grade_id, subject_id)
-            );
+                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+            )
         `);
 
-        // Lessons
-        db.exec(`
+        // Lessons table
+        database.exec(`
             CREATE TABLE IF NOT EXISTS lessons (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
-                title_en TEXT,
                 description TEXT,
-                content TEXT,
-                grade_id INTEGER NOT NULL,
-                subject_id INTEGER NOT NULL,
-                lesson_number INTEGER,
-                duration INTEGER,
-                difficulty TEXT DEFAULT 'medium',
-                pdf_file TEXT,
-                video_url TEXT,
-                thumbnail TEXT,
-                views INTEGER DEFAULT 0,
+                grade_id INTEGER,
+                subject_id INTEGER,
                 is_published INTEGER DEFAULT 1,
-                status TEXT DEFAULT 'approved',
-                rejection_reason TEXT,
-                approved_by INTEGER,
-                approved_at DATETIME,
+                views INTEGER DEFAULT 0,
                 created_by INTEGER,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
-                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
-            );
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
         `);
 
-        // Notes
-        db.exec(`
-            CREATE TABLE IF NOT EXISTS notes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
-                description TEXT,
-                content TEXT,
-                grade_id INTEGER NOT NULL,
-                subject_id INTEGER NOT NULL,
-                pdf_file TEXT,
-                thumbnail TEXT,
-                views INTEGER DEFAULT 0,
-                is_published INTEGER DEFAULT 1,
-                status TEXT DEFAULT 'approved',
-                rejection_reason TEXT,
-                approved_by INTEGER,
-                approved_at DATETIME,
-                created_by INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
-                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
-            );
-        `);
-
-        // Papers
-        db.exec(`
+        // Papers table
+        database.exec(`
             CREATE TABLE IF NOT EXISTS papers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
                 description TEXT,
-                grade_id INTEGER NOT NULL,
-                subject_id INTEGER NOT NULL,
+                grade_id INTEGER,
+                subject_id INTEGER,
                 paper_type TEXT DEFAULT 'term',
                 term TEXT,
                 year INTEGER,
                 pdf_file TEXT,
                 answer_pdf TEXT,
-                thumbnail TEXT,
                 total_marks INTEGER,
                 duration_minutes INTEGER,
-                views INTEGER DEFAULT 0,
-                downloads INTEGER DEFAULT 0,
                 is_published INTEGER DEFAULT 1,
-                status TEXT DEFAULT 'approved',
-                rejection_reason TEXT,
-                approved_by INTEGER,
-                approved_at DATETIME,
+                views INTEGER DEFAULT 0,
                 created_by INTEGER,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
-                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
-            );
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
         `);
 
-        // Videos
-        db.exec(`
+        // Videos table
+        database.exec(`
             CREATE TABLE IF NOT EXISTS videos (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
                 description TEXT,
-                grade_id INTEGER NOT NULL,
-                subject_id INTEGER NOT NULL,
-                video_url TEXT NOT NULL,
+                grade_id INTEGER,
+                subject_id INTEGER,
+                video_url TEXT,
                 youtube_id TEXT,
-                thumbnail TEXT,
-                duration_minutes INTEGER,
-                views INTEGER DEFAULT 0,
+                duration TEXT,
                 is_published INTEGER DEFAULT 1,
-                status TEXT DEFAULT 'approved',
-                rejection_reason TEXT,
-                approved_by INTEGER,
-                approved_at DATETIME,
+                views INTEGER DEFAULT 0,
                 created_by INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
-                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
-            );
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
         `);
 
-        // Articles
-        db.exec(`
+        // Articles table
+        database.exec(`
             CREATE TABLE IF NOT EXISTS articles (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
                 description TEXT,
                 content TEXT,
-                category TEXT DEFAULT 'education',
-                tags TEXT,
-                thumbnail TEXT,
+                category TEXT DEFAULT 'අධ්‍යාපනය',
                 author TEXT,
-                views INTEGER DEFAULT 0,
+                image_url TEXT,
                 is_published INTEGER DEFAULT 1,
-                status TEXT DEFAULT 'approved',
-                rejection_reason TEXT,
-                approved_by INTEGER,
-                approved_at DATETIME,
+                views INTEGER DEFAULT 0,
                 created_by INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
         `);
 
-        // Quizzes
-        db.exec(`
+        // Quizzes table
+        database.exec(`
             CREATE TABLE IF NOT EXISTS quizzes (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 title TEXT NOT NULL,
                 description TEXT,
-                grade_id INTEGER NOT NULL,
-                subject_id INTEGER NOT NULL,
-                duration_minutes INTEGER DEFAULT 30,
-                total_questions INTEGER DEFAULT 0,
+                grade_id INTEGER,
+                subject_id INTEGER,
+                duration_minutes INTEGER DEFAULT 15,
                 is_published INTEGER DEFAULT 1,
                 created_by INTEGER,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (grade_id) REFERENCES grades(id) ON DELETE CASCADE,
-                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
-            );
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
         `);
 
-        // Quiz Questions
-        db.exec(`
+        // Quiz questions table
+        database.exec(`
             CREATE TABLE IF NOT EXISTS quiz_questions (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 quiz_id INTEGER NOT NULL,
@@ -239,99 +189,114 @@ function initializeDatabase() {
                 option_d TEXT NOT NULL,
                 correct_answer TEXT NOT NULL,
                 explanation TEXT,
-                marks INTEGER DEFAULT 1,
-                question_order INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
-            );
+            )
         `);
 
-        // Quiz Attempts
-        db.exec(`
-            CREATE TABLE IF NOT EXISTS quiz_attempts (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                quiz_id INTEGER NOT NULL,
-                user_name TEXT,
-                score INTEGER,
-                total_marks INTEGER,
-                percentage REAL,
-                answers TEXT,
-                completed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
-            );
-        `);
-
-        // Settings
-        db.exec(`
+        // Settings table
+        database.exec(`
             CREATE TABLE IF NOT EXISTS settings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 setting_key TEXT UNIQUE NOT NULL,
                 setting_value TEXT,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
+            )
         `);
 
-        // Activity Log
-        db.exec(`
-            CREATE TABLE IF NOT EXISTS activity_log (
+        // Activity logs table
+        database.exec(`
+            CREATE TABLE IF NOT EXISTS activity_logs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER,
+                user_email TEXT,
                 action TEXT NOT NULL,
-                entity_type TEXT,
-                entity_id INTEGER,
                 details TEXT,
                 ip_address TEXT,
+                user_agent TEXT,
+                status TEXT DEFAULT 'success',
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
+            )
+        `);
+
+        // OTP codes table
+        database.exec(`
+            CREATE TABLE IF NOT EXISTS otp_codes (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                phone TEXT NOT NULL,
+                code TEXT NOT NULL,
+                purpose TEXT DEFAULT 'signup',
+                expires_at DATETIME NOT NULL,
+                used INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        // Password resets table
+        database.exec(`
+            CREATE TABLE IF NOT EXISTS password_resets (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                email TEXT NOT NULL,
+                token TEXT NOT NULL,
+                expires_at DATETIME NOT NULL,
+                used INTEGER DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
         `);
 
         console.log('✅ All tables created successfully');
-        return Promise.resolve();
-    } catch (err) {
-        console.error('❌ Table creation error:', err);
-        return Promise.reject(err);
+    } catch (error) {
+        console.error('❌ Database initialization error:', error);
+        throw error;
     }
 }
 
-const dbRun = (sql, params = []) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const stmt = db.prepare(sql);
-            const info = stmt.run(...params);
-            resolve({ id: info.lastInsertRowid, changes: info.changes });
-        } catch (err) {
-            reject(err);
-        }
-    });
-};
+// ============================================
+// HELPER FUNCTIONS (Drop-in replacement for sqlite3)
+// ============================================
+async function dbRun(sql, params = []) {
+    const database = getDb();
+    try {
+        const stmt = database.prepare(sql);
+        const result = stmt.run(...params);
+        return {
+            id: result.lastInsertRowid,
+            changes: result.changes
+        };
+    } catch (error) {
+        console.error('dbRun error:', error.message, 'SQL:', sql);
+        throw error;
+    }
+}
 
-const dbGet = (sql, params = []) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const stmt = db.prepare(sql);
-            const row = stmt.get(...params);
-            resolve(row);
-        } catch (err) {
-            reject(err);
-        }
-    });
-};
+async function dbGet(sql, params = []) {
+    const database = getDb();
+    try {
+        const stmt = database.prepare(sql);
+        return stmt.get(...params);
+    } catch (error) {
+        console.error('dbGet error:', error.message, 'SQL:', sql);
+        throw error;
+    }
+}
 
-const dbAll = (sql, params = []) => {
-    return new Promise((resolve, reject) => {
-        try {
-            const stmt = db.prepare(sql);
-            const rows = stmt.all(...params);
-            resolve(rows);
-        } catch (err) {
-            reject(err);
-        }
-    });
-};
+async function dbAll(sql, params = []) {
+    const database = getDb();
+    try {
+        const stmt = database.prepare(sql);
+        return stmt.all(...params);
+    } catch (error) {
+        console.error('dbAll error:', error.message, 'SQL:', sql);
+        throw error;
+    }
+}
 
 module.exports = {
-    db,
+    getDb,
     initializeDatabase,
     dbRun,
     dbGet,
-    dbAll
+    dbAll,
+    DB_PATH
 };
