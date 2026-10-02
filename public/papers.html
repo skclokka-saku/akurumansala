@@ -6,92 +6,399 @@
     <title>ප්‍රශ්න පත්‍ර | අකුරු මංසල</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        'brand-navy': '#1e293b',
-                        'brand-gold': '#D4A017',
-                        'brand-gold2': '#fbbf24',
+                        brand: {
+                            navy: '#0F2C59',
+                            navy2: '#1B3A6B',
+                            gold: '#D4A017',
+                            gold2: '#E8B923',
+                            light: '#F8F9FC',
+                        }
                     },
-                    fontFamily: {
-                        'sinhala': ['Noto Sans Sinhala', 'sans-serif'],
-                    }
+                    fontFamily: { sinhala: ['"Noto Serif Sinhala"', 'sans-serif'] }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Noto Sans Sinhala', sans-serif; }
-        .stat-card {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            transition: all 0.3s ease;
+        body { 
+            font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; 
+            background: #F8F9FC;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.04) 0%, transparent 50%);
         }
-        .stat-card:hover {
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        body.dark { 
+            background: #0a0f1e; 
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.06) 0%, transparent 50%);
+        }
+
+        .container-wide {
+            width: 100%;
+            max-width: 1600px;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+            margin: 0 auto;
+        }
+        @media (min-width: 640px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
+        @media (min-width: 1024px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
+
+        .main-nav { 
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
+            border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+        }
+        body.dark .main-nav { background: rgba(26, 26, 46, 0.98); }
+
+        .logo-wrap {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ffffff, #f8f9fc);
+            border-radius: 1rem;
+            box-shadow: 0 6px 20px rgba(15, 44, 89, 0.15);
+            border: 2px solid rgba(212, 160, 23, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.3rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .logo-wrap:hover { transform: scale(1.08) rotate(-3deg); }
+        .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+
+        .nav-link {
+            position: relative;
+            font-weight: 700;
+            color: #0F2C59;
+            font-size: 0.875rem;
+            letter-spacing: 0.3px;
+            transition: all 0.3s;
+            padding: 0.6rem 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            border-radius: 0.65rem;
+        }
+        body.dark .nav-link { color: #cbd5e1; }
+        .nav-link i { font-size: 0.8rem; color: #D4A017; }
+        .nav-link:hover { 
+            color: #D4A017; 
+            background: rgba(212, 160, 23, 0.1);
             transform: translateY(-2px);
         }
-        .line-clamp-2 {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+        .nav-link.active { 
+            color: #D4A017; 
+            background: rgba(212, 160, 23, 0.12);
+        }
+
+        .theme-toggle {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #D4A017, #E8B923);
+            color: #0F2C59;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
+            font-size: 1.05rem;
+        }
+        .theme-toggle:hover { transform: rotate(180deg) scale(1.15); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #D4A017, #E8B923);
+            color: #0F2C59;
+            padding: 0.8rem 1.75rem;
+            border-radius: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1.2px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4), inset 0 -3px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+        .btn-primary:hover { 
+            transform: translateY(-4px) scale(1.04); 
+            box-shadow: 0 15px 35px rgba(212, 160, 23, 0.6);
+        }
+
+        /* PAPER CARDS - 3D */
+        .paper-card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border-left: 1px solid rgba(212, 160, 23, 0.1);
+            border-right: 1px solid rgba(212, 160, 23, 0.1);
+            border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+            border-top: 5px solid #ec4899;
+            position: relative;
+        }
+        body.dark .paper-card { background: #1a1a2e; }
+        .paper-card:hover { 
+            transform: translateY(-12px) scale(1.02); 
+            box-shadow: 0 30px 60px rgba(15, 44, 89, 0.25);
+            border-top-color: #D4A017;
+        }
+        .paper-card:active { transform: translateY(-6px) scale(1.01); }
+
+        .paper-icon-wrap {
+            height: 150px;
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
             overflow: hidden;
         }
-        .dark body { background-color: #0f172a; color: #e2e8f0; }
-        .dark .stat-card { background-color: #1e293b; color: #e2e8f0; }
-        .dark .text-brand-navy { color: #f1f5f9; }
-        .dark .text-gray-500 { color: #94a3b8; }
+        .paper-icon-wrap::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+            border-radius: 50%;
+        }
+        .paper-icon-wrap i { 
+            font-size: 4rem; 
+            color: white; 
+            position: relative;
+            z-index: 1;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .paper-card:hover .paper-icon-wrap i { transform: scale(1.15) rotate(-10deg); }
+
+        .paper-grade-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255,255,255,0.95);
+            color: #0F2C59;
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 2;
+        }
+
+        .paper-type-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: linear-gradient(135deg, #D4A017, #E8B923);
+            color: #0F2C59;
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(212, 160, 23, 0.5);
+            z-index: 2;
+        }
+
+        .filter-input {
+            border: 2px solid #e2e8f0;
+            border-radius: 0.9rem;
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            width: 100%;
+            font-family: inherit;
+            background: white;
+        }
+        .filter-input:focus {
+            outline: none;
+            border-color: #D4A017;
+            box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15);
+        }
+        body.dark .filter-input { background: #1e293b; color: #e2e8f0; border-color: #334155; }
+
+        .btn-action {
+            flex: 1;
+            padding: 0.6rem;
+            border-radius: 0.65rem;
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            border: none;
+        }
+        .btn-view {
+            background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+            color: white;
+        }
+        .btn-view:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 20px rgba(15, 44, 89, 0.4);
+        }
+        .btn-download {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+        .btn-download:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
+        }
+
+        .footer { 
+            background: linear-gradient(180deg, #0F2C59, #0a1a3a); 
+            color: white; 
+            padding-top: 4rem; 
+        }
+        body.dark .footer { background: #05080f; }
+        .footer a { 
+            color: rgba(255,255,255,0.75); 
+            transition: all 0.3s; 
+            font-size: 0.9rem; 
+            text-decoration: none; 
+        }
+        .footer a:hover { color: #D4A017; padding-left: 6px; }
+        .footer-title {
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            margin-bottom: 1.25rem;
+            position: relative;
+            padding-bottom: 0.6rem;
+        }
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #D4A017, #E8B923);
+            border-radius: 3px;
+        }
+        .social-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .social-icon i { color: #ffffff !important; font-size: 1.1rem; }
+        .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); }
+        .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
+        .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
+        .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
+        .social-icon:hover { 
+            transform: translateY(-6px) scale(1.15) rotate(-5deg); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="min-h-screen">
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="/" class="flex items-center space-x-2">
-                <img src="/images/logo.png" alt="Logo" class="w-10 h-10 rounded-lg" onerror="this.style.display='none'">
-                <div>
-                    <h1 class="font-black text-brand-navy text-lg leading-tight">අකුරු මංසල</h1>
-                    <p class="text-[10px] text-gray-500">ඉගෙනුමට නව මඟක්</p>
+    <!-- HEADER -->
+    <header class="main-nav sticky top-0 z-50">
+        <div class="container-wide">
+            <div class="h-20 flex items-center justify-between">
+                <a href="/" class="flex items-center space-x-3">
+                    <div class="logo-wrap">
+                        <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-2xl\'></i>'">
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
+                        <p class="text-xs text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
+                    </div>
+                </a>
+
+                <nav class="hidden lg:flex items-center space-x-1">
+                    <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
+                    <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book"></i>සම්පත්</a>
+                    <a href="/papers.html" class="nav-link active"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
+                    <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
+                    <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
+                </nav>
+
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleTheme()" class="theme-toggle">
+                        <i id="themeIcon" class="fa-solid fa-moon"></i>
+                    </button>
+                    <a href="/login.html" class="hidden md:inline-flex btn-primary" style="padding: 0.6rem 1.25rem;">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <span>Admin</span>
+                    </a>
                 </div>
-            </a>
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-bold">
-                <a href="/" class="text-gray-600 hover:text-brand-gold transition">මුල් පිටුව</a>
-                <a href="/resources.html" class="text-gray-600 hover:text-brand-gold transition">සම්පත්</a>
-                <a href="/papers.html" class="text-brand-gold">ප්‍රශ්න පත්‍ර</a>
-                <a href="/videos.html" class="text-gray-600 hover:text-brand-gold transition">වීඩියෝ</a>
-            </nav>
-            <a href="/admin.html" class="bg-brand-gold text-brand-navy px-4 py-2 rounded-lg font-bold text-sm hover:bg-brand-gold2 transition">
-                <i class="fa-solid fa-user-shield mr-1"></i> Admin
-            </a>
+            </div>
         </div>
     </header>
 
-    <!-- Hero -->
-    <section class="bg-brand-navy text-white py-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-2">Practice Papers</p>
-            <h1 class="text-4xl md:text-5xl font-black mb-2">ප්‍රශ්න පත්‍ර</h1>
-            <p class="text-white/70 text-sm">පාසල් පරීක්ෂණ, වාර පරීක්ෂණ සහ පුහුණු ප්‍රශ්න පත්‍ර</p>
+    <!-- HERO -->
+    <section class="bg-brand-navy text-white py-16 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <i class="fa-solid fa-file-pdf absolute text-9xl" style="top: 10%; left: 5%;"></i>
+            <i class="fa-solid fa-file-lines absolute text-9xl" style="bottom: 10%; right: 5%;"></i>
+        </div>
+        <div class="container-wide relative z-10">
+            <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-3" data-aos="fade-up">
+                <i class="fa-solid fa-file-lines mr-2"></i>Practice Papers
+            </p>
+            <h1 class="text-4xl md:text-5xl font-black mb-3" data-aos="fade-up" data-aos-delay="100">ප්‍රශ්න පත්‍ර</h1>
+            <p class="text-white/70 text-base max-w-2xl" data-aos="fade-up" data-aos-delay="200">
+                පාසල් පරීක්ෂණ, වාර පරීක්ෂණ සහ පුහුණු ප්‍රශ්න පත්‍ර
+            </p>
         </div>
     </section>
 
-    <!-- Filters -->
-    <section class="max-w-7xl mx-auto px-4 -mt-6">
-        <div class="bg-white rounded-2xl shadow-lg p-4 grid grid-cols-1 md:grid-cols-4 gap-3">
-            <input type="text" id="searchInput" placeholder="සොයන්න..." class="border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-gold">
-            <select id="gradeFilter" class="border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-gold">
+    <!-- FILTERS -->
+    <section class="container-wide -mt-6 relative z-10">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 grid grid-cols-1 md:grid-cols-4 gap-3" data-aos="fade-up">
+            <input type="text" id="searchInput" placeholder="ප්‍රශ්න පත්‍ර සොයන්න..." class="filter-input">
+            <select id="gradeFilter" class="filter-input">
                 <option value="">සියලු ශ්‍රේණි</option>
             </select>
-            <select id="subjectFilter" class="border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-gold">
+            <select id="subjectFilter" class="filter-input">
                 <option value="">සියලු විෂය</option>
             </select>
-            <select id="typeFilter" class="border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-brand-gold">
+            <select id="typeFilter" class="filter-input">
                 <option value="">සියලු වර්ග</option>
                 <option value="term">වාර පරීක්ෂණය</option>
                 <option value="school">පාසල් පරීක්ෂණය</option>
@@ -102,8 +409,8 @@
         </div>
     </section>
 
-    <!-- Papers List -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
+    <!-- PAPERS -->
+    <main class="container-wide py-8">
         <div id="papersContainer">
             <div class="text-center py-12">
                 <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
@@ -111,19 +418,203 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-brand-navy text-white py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-white/60">
-            © 2026 අකුරු මංසල • සියලු හිමිකම් ඇවිරිණි
+    <!-- FOOTER -->
+    <footer class="footer mt-12">
+        <div class="container-wide">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-white/10">
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2 shadow-lg">
+                            <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
+                        </div>
+                        <div>
+                            <h3 class="text-2xl font-black">අකුරු මංසල</h3>
+                            <p class="text-xs text-white/70 mt-1">ඉගෙනුමට නව මඟක්</p>
+                        </div>
+                    </div>
+                    <p class="text-white/70 text-sm leading-relaxed mb-6">
+                        ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
+                    </p>
+                    <div class="flex flex-wrap gap-3">
+                        <a href="#" class="social-icon facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-icon whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" class="social-icon instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-title">ඉක්මන් සබැඳි</h4>
+                    <ul class="space-y-3">
+                        <li><a href="/">මුල් පිටුව</a></li>
+                        <li><a href="/resources.html">සම්පත්</a></li>
+                        <li><a href="/papers.html">ප්‍රශ්න පත්‍ර</a></li>
+                        <li><a href="/videos.html">වීඩියෝ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">අප අමතන්න</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3">
+                            <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
+                            <span class="text-white/80 text-sm">කොළඹ, ශ්‍රී ලංකාව</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-phone text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">+94 767512666</span>
+                        </li>
+                        <li class="flex items-center space-x-3">
+                            <i class="fa-solid fa-envelope text-brand-gold"></i>
+                            <span class="text-white/80 text-sm">info@akurumansala.lk</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 text-center text-xs text-white/60">
+                <p>© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+            </div>
         </div>
     </footer>
 
-    <!-- PDF Open Function -->
     <script>
         const API_BASE = '/api';
+        let allPapers = [];
 
         // ============================================
-        // PDF OPEN FUNCTION (Base64 සඳහා)
+        // THEME
+        // ============================================
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            body.classList.toggle('dark');
+            if (body.classList.contains('dark')) {
+                icon.className = 'fa-solid fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.className = 'fa-solid fa-moon';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function loadTheme() {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'dark') {
+                document.body.classList.add('dark');
+                const icon = document.getElementById('themeIcon');
+                if (icon) icon.className = 'fa-solid fa-sun';
+            }
+        }
+
+        // ============================================
+        // LOAD FILTERS
+        // ============================================
+        async function loadFilters() {
+            try {
+                const [gradesRes, subjectsRes] = await Promise.all([
+                    fetch(`${API_BASE}/grades`),
+                    fetch(`${API_BASE}/subjects`)
+                ]);
+                const grades = await gradesRes.json();
+                const subjects = await subjectsRes.json();
+
+                const gradeFilter = document.getElementById('gradeFilter');
+                grades.forEach(g => {
+                    const opt = document.createElement('option');
+                    opt.value = g.id;
+                    opt.textContent = g.grade_name;
+                    gradeFilter.appendChild(opt);
+                });
+
+                const subjectFilter = document.getElementById('subjectFilter');
+                subjects.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = s.subject_name;
+                    subjectFilter.appendChild(opt);
+                });
+            } catch (err) {
+                console.error('Filter load error:', err);
+            }
+        }
+
+        // ============================================
+        // LOAD PAPERS
+        // ============================================
+        async function loadPapers() {
+            const container = document.getElementById('papersContainer');
+            try {
+                const res = await fetch(`${API_BASE}/papers`);
+                allPapers = await res.json();
+                renderPapers(allPapers);
+            } catch (err) {
+                container.innerHTML = `<div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg text-red-500">දෝෂයක්: ${err.message}</div>`;
+            }
+        }
+
+        // ============================================
+        // RENDER PAPERS
+        // ============================================
+        function renderPapers(papers) {
+            const container = document.getElementById('papersContainer');
+
+            if (!papers || papers.length === 0) {
+                container.innerHTML = `
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg">
+                        <i class="fa-solid fa-file-lines text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500 text-lg">ප්‍රශ්න පත්‍ර නොමැත</p>
+                        <p class="text-gray-400 text-sm mt-2">Admin Panel එකෙන් ප්‍රශ්න පත්‍ර එකතු කරන්න</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const typeLabels = {
+                term: 'වාර පරීක්ෂණය',
+                school: 'පාසල් පරීක්ෂණය',
+                practice: 'පුහුණු',
+                exam: 'විභාගය',
+                model: 'ආදර්ශ'
+            };
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${papers.map(p => `
+                        <div class="paper-card" data-aos="fade-up">
+                            <div class="paper-icon-wrap">
+                                <i class="fa-solid fa-file-pdf"></i>
+                                ${p.grade_name ? `<span class="paper-grade-badge">${p.grade_name}</span>` : ''}
+                                ${p.paper_type ? `<span class="paper-type-badge">${typeLabels[p.paper_type] || p.paper_type}</span>` : ''}
+                            </div>
+                            <div class="p-5 flex-1 flex flex-col">
+                                <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${p.title}</h3>
+                                <p class="text-xs text-gray-500 mb-3">
+                                    ${p.subject_name || ''} ${p.year ? '• ' + p.year : ''}
+                                </p>
+                                <p class="text-xs text-gray-400 flex-1 line-clamp-2">${p.description || 'විස්තරයක් නොමැත'}</p>
+                                
+                                ${p.pdf_file && p.pdf_file !== 'null' && p.pdf_file !== 'NULL' ? `
+                                    <div class="flex gap-2 pt-4 mt-3 border-t border-gray-100 dark:border-gray-700">
+                                        <button onclick="openPdf('${p.pdf_file.replace(/'/g, "\\'")}')" class="btn-action btn-view">
+                                            <i class="fa-solid fa-eye"></i> බලන්න
+                                        </button>
+                                        <button onclick="downloadPdf('${p.pdf_file.replace(/'/g, "\\'")}', '${p.title.replace(/'/g, "\\'")}')" class="btn-action btn-download">
+                                            <i class="fa-solid fa-download"></i> බාගන්න
+                                        </button>
+                                    </div>
+                                ` : `
+                                    <div class="pt-4 mt-3 border-t border-gray-100 dark:border-gray-700">
+                                        <p class="text-xs text-gray-400 text-center"><i class="fa-solid fa-info-circle mr-1"></i>PDF ගොනුවක් නොමැත</p>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            if (window.AOS) AOS.refresh();
+        }
+
+        // ============================================
+        // OPEN PDF (Base64)
         // ============================================
         function openPdf(pdfData) {
             try {
@@ -132,7 +623,6 @@
                     return;
                 }
                 
-                // Base64 data URL එකක් නම්
                 if (pdfData.startsWith('data:')) {
                     const parts = pdfData.split(',');
                     const mime = parts[0].match(/:(.*?);/)[1];
@@ -155,61 +645,71 @@
         }
 
         // ============================================
-        // LOAD PAPERS
+        // DOWNLOAD PDF
         // ============================================
-        async function loadPapers() {
-            const container = document.getElementById('papersContainer');
-            
+        function downloadPdf(pdfData, title) {
             try {
-                const res = await fetch(`${API_BASE}/papers`);
-                const papers = await res.json();
-                
-                if (!papers || papers.length === 0) {
-                    container.innerHTML = `
-                        <div class="stat-card text-center py-16">
-                            <i class="fa-solid fa-file-lines text-6xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500 text-lg">ප්‍රශ්න පත්‍ර නොමැත</p>
-                        </div>
-                    `;
+                if (!pdfData || pdfData === 'null') {
+                    alert('මෙම ප්‍රශ්න පත්‍රයට PDF ගොනුවක් අමුණා නැත');
                     return;
                 }
-                
-                container.innerHTML = `
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${papers.map(p => `
-                            <div class="stat-card border-t-4 border-brand-gold p-6">
-                                <div class="flex items-start space-x-4">
-                                    <div class="w-14 h-14 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center flex-shrink-0">
-                                        <i class="fa-solid fa-file-pdf text-2xl"></i>
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <h3 class="font-bold text-brand-navy text-base mb-1 line-clamp-2">${p.title}</h3>
-                                        <p class="text-xs text-gray-500 mb-3">
-                                            ${p.grade_name || ''} ${p.subject_name ? '• ' + p.subject_name : ''} ${p.year ? '• ' + p.year : ''}
-                                        </p>
-                                        <button onclick='openPdf("${p.pdf_file}")' class="text-brand-gold font-bold text-sm hover:text-brand-navy transition flex items-center gap-1">
-                                            බලන්න <i class="fa-solid fa-arrow-right"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            } catch (err) {
-                console.error('Load error:', err);
-                container.innerHTML = `
-                    <div class="stat-card text-center py-16">
-                        <i class="fa-solid fa-exclamation-circle text-6xl text-red-300 mb-4"></i>
-                        <p class="text-red-500">දෝෂයක්: ${err.message}</p>
-                    </div>
-                `;
+
+                const filename = title.replace(/[^a-zA-Z0-9\u0D80-\u0DFF\s]/g, '').trim() + '.pdf';
+
+                if (pdfData.startsWith('data:')) {
+                    const link = document.createElement('a');
+                    link.href = pdfData;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } else {
+                    window.open(pdfData, '_blank');
+                }
+            } catch (e) {
+                console.error('PDF download error:', e);
+                alert('PDF එක download කිරීමේ දෝෂයක්: ' + e.message);
             }
         }
 
-        // Load on page start
-        document.addEventListener('DOMContentLoaded', loadPapers);
+        // ============================================
+        // FILTERS
+        // ============================================
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const gradeId = document.getElementById('gradeFilter').value;
+            const subjectId = document.getElementById('subjectFilter').value;
+            const type = document.getElementById('typeFilter').value;
+
+            const filtered = allPapers.filter(p => {
+                const matchSearch = !search || (p.title || '').toLowerCase().includes(search);
+                const matchGrade = !gradeId || String(p.grade_id) === gradeId;
+                const matchSubject = !subjectId || String(p.subject_id) === subjectId;
+                const matchType = !type || p.paper_type === type;
+                return matchSearch && matchGrade && matchSubject && matchType;
+            });
+
+            renderPapers(filtered);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('gradeFilter').addEventListener('change', applyFilters);
+        document.getElementById('subjectFilter').addEventListener('change', applyFilters);
+        document.getElementById('typeFilter').addEventListener('change', applyFilters);
+
+        // ============================================
+        // INIT
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadTheme();
+            await loadFilters();
+            await loadPapers();
+        });
     </script>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true, offset: 100 });
+    </script>
 </body>
 </html>
