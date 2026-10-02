@@ -278,13 +278,14 @@
             height: 0;
             background: #000;
         }
-        .modal-video-wrap iframe {
+                .modal-video-wrap iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             border: none;
+            border-radius: 1rem 1rem 0 0;
         }
 
         .footer { 
@@ -526,22 +527,33 @@
         // YOUTUBE ID EXTRACTION
         // ============================================
         function getYouTubeId(url) {
-            if (!url) return null;
-            
-            let match = url.match(/youtu\.be\/([^"&?\/\s]{11})/);
-            if (match) return match[1];
-            
-            match = url.match(/[?&]v=([^"&?\/\s]{11})/);
-            if (match) return match[1];
-            
-            match = url.match(/youtube\.com\/embed\/([^"&?\/\s]{11})/);
-            if (match) return match[1];
-            
-            match = url.match(/youtube\.com\/v\/([^"&?\/\s]{11})/);
-            if (match) return match[1];
-            
-            return null;
-        }
+    if (!url) return null;
+    
+    // Clean the URL
+    url = url.trim();
+    
+    // Handle youtu.be/XXXXX format
+    let match = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+    if (match) return match[1];
+    
+    // Handle youtube.com/watch?v=XXXXX format
+    match = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+    if (match) return match[1];
+    
+    // Handle youtube.com/embed/XXXXX format
+    match = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+    if (match) return match[1];
+    
+    // Handle youtube.com/v/XXXXX format
+    match = url.match(/youtube\.com\/v\/([a-zA-Z0-9_-]{11})/);
+    if (match) return match[1];
+    
+    // Handle just the ID (11 characters)
+    match = url.match(/^([a-zA-Z0-9_-]{11})$/);
+    if (match) return match[1];
+    
+    return null;
+}
 
         // ============================================
         // LOAD FILTERS
@@ -663,33 +675,43 @@
         // OPEN VIDEO MODAL
         // ============================================
         async function openVideoModal(id) {
-            const modal = document.getElementById('videoModal');
-            const wrap = document.getElementById('modalVideoWrap');
-            const title = document.getElementById('modalVideoTitle');
-            const meta = document.getElementById('modalVideoMeta');
-            const desc = document.getElementById('modalVideoDesc');
+    const modal = document.getElementById('videoModal');
+    const wrap = document.getElementById('modalVideoWrap');
+    const title = document.getElementById('modalVideoTitle');
+    const meta = document.getElementById('modalVideoMeta');
+    const desc = document.getElementById('modalVideoDesc');
 
-            try {
-                const res = await fetch(`${API_BASE}/videos/${id}`);
-                const video = await res.json();
+    try {
+        const res = await fetch(`${API_BASE}/videos/${id}`);
+        const video = await res.json();
 
-                const ytId = getYouTubeId(video.video_url || video.youtube_id);
-                if (ytId) {
-                    wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                } else {
-                    wrap.innerHTML = `<div class="flex items-center justify-center h-full text-white"><p>වීඩියෝව නොමැත</p></div>`;
-                }
-
-                title.textContent = video.title || '';
-                meta.textContent = `${video.grade_name || ''} ${video.subject_name ? '• ' + video.subject_name : ''}`;
-                desc.textContent = video.description || 'විස්තරයක් නොමැත';
-
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            } catch (err) {
-                alert('වීඩියෝව load කිරීමේ දෝෂයක්');
-            }
+        const ytId = getYouTubeId(video.video_url || video.youtube_id);
+        
+        if (ytId) {
+            // FIX: Use youtube-nocookie.com and proper parameters
+            wrap.innerHTML = `<iframe 
+                src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1&playsinline=1" 
+                title="${video.title}"
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+            </iframe>`;
+        } else {
+            wrap.innerHTML = `<div class="flex items-center justify-center h-full text-white"><p>වීඩියෝව නොමැත</p></div>`;
         }
+
+        title.textContent = video.title || '';
+        meta.textContent = `${video.grade_name || ''} ${video.subject_name ? '• ' + video.subject_name : ''}`;
+        desc.textContent = video.description || 'විස්තරයක් නොමැත';
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    } catch (err) {
+        console.error('Video open error:', err);
+        alert('වීඩියෝව load කිරීමේ දෝෂයක්');
+    }
+}
 
         function closeVideoModal() {
             document.getElementById('videoModal').classList.remove('active');
