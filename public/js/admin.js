@@ -27,6 +27,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     setTimeout(checkPendingCount, 1000);
     
+    // Show logs link only for web_developer
+    if (state.user && state.user.role === 'web_developer') {
+        const logsLink = document.getElementById('logsLink');
+        if (logsLink) logsLink.style.display = 'flex';
+    }
+    
     console.log('✅ Admin Panel ready');
 });
 
@@ -45,7 +51,9 @@ function checkAuth() {
     try {
         state.user = JSON.parse(userStr);
         
-        if (state.user.role !== 'admin' && state.user.role !== 'teacher') {
+        // Allow web_developer, admin, and teacher
+        const allowedRoles = ['web_developer', 'admin', 'teacher'];
+        if (!allowedRoles.includes(state.user.role)) {
             alert('ඔබට මෙම පිටුවට ප්‍රවේශය නැත');
             window.location.href = '/';
             return false;
@@ -53,14 +61,19 @@ function checkAuth() {
         
         const userInfo = document.getElementById('userInfo');
         if (userInfo) {
+            const roleDisplay = {
+                'web_developer': 'Web Developer',
+                'admin': 'Admin',
+                'teacher': 'Teacher'
+            };
             userInfo.innerHTML = `
                 <div class="flex items-center space-x-2">
                     <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-gold to-brand-gold2 flex items-center justify-center text-brand-navy font-bold text-xs">
-                        ${state.user.name ? state.user.name.charAt(0) : 'A'}
+                        ${state.user.name ? state.user.name.charAt(0) : 'U'}
                     </div>
                     <div class="flex-1 min-w-0">
-                        <p class="text-white text-xs font-bold truncate">${state.user.name || 'Admin'}</p>
-                        <p class="text-[10px] text-white/60 uppercase">${state.user.role}</p>
+                        <p class="text-white text-xs font-bold truncate">${state.user.name || 'User'}</p>
+                        <p class="text-[10px] text-white/60 uppercase">${roleDisplay[state.user.role] || state.user.role}</p>
                     </div>
                 </div>
             `;
@@ -68,6 +81,7 @@ function checkAuth() {
         
         return true;
     } catch (e) {
+        console.error('Auth parse error:', e);
         window.location.href = '/login.html';
         return false;
     }
@@ -153,7 +167,10 @@ function showTab(tab) {
         grades: ['ශ්‍රේණි', 'ශ්‍රේණි කළමනාකරණය'],
         subjects: ['විෂයයන්', 'විෂය කළමනාකරණය'],
         pending: ['අනුමැතිය අපේක්ෂිත', 'ගුරුවරුන්ගේ දත්ත'],
-        users: ['පරිශීලකයින්', 'පරිශීලක කළමනාකරණය']
+        users: ['පරිශීලකයින්', 'පරිශීලක කළමනාකරණය'],
+        settings: ['වෙබ් අඩවි සැකසුම්', 'Social Media සහ වෙබ් අඩවි තොරතුරු'],
+        quizzes: ['ප්‍රශ්නාවලි', 'ප්‍රශ්නාවලි කළමනාකරණය'],
+        logs: ['ක්‍රියාකාරකම් Logs', 'පද්ධතියේ සියලු ක්‍රියාකාරකම්']
     };
     
     const [title, subtitle] = titles[tab] || ['Admin', ''];
@@ -171,7 +188,8 @@ function showTab(tab) {
         pending: renderPending,
         users: renderUsers,
         settings: renderSettings,
-        quizzes: renderQuizzes
+        quizzes: renderQuizzes,
+        logs: renderLogs
     };
     
     if (renderers[tab]) {
@@ -496,17 +514,10 @@ async function approveItem(type, id) {
     if (!confirm('මෙම අයිතමය අනුමත කිරීමට අවශ්‍යද?')) return;
     
     try {
-        await api(`/approval/approve/${type}/${id}`, {
-            method: 'POST'
-        });
-        
+        await api(`/approval/approve/${type}/${id}`, { method: 'POST' });
         showToast('සාර්ථකව අනුමත කරන ලදී!', 'success');
-        
-        if (typeof renderPending === 'function') {
-            renderPending();
-        }
+        if (typeof renderPending === 'function') renderPending();
     } catch (err) {
-        console.error('Approve error:', err);
         showToast('දෝෂයක්: ' + err.message, 'error');
     }
 }
@@ -520,14 +531,9 @@ async function rejectItem(type, id) {
             method: 'POST',
             body: JSON.stringify({ reason: reason || 'No reason provided' })
         });
-        
         showToast('සාර්ථකව ප්‍රතික්ෂේප කරන ලදී', 'success');
-        
-        if (typeof renderPending === 'function') {
-            renderPending();
-        }
+        if (typeof renderPending === 'function') renderPending();
     } catch (err) {
-        console.error('Reject error:', err);
         showToast('දෝෂයක්: ' + err.message, 'error');
     }
 }
@@ -567,6 +573,7 @@ async function renderUsers() {
                             <th>නම</th>
                             <th>විද්‍යුත් තැපෑල</th>
                             <th>භූමිකාව</th>
+                            <th>දුරකථන</th>
                             <th>පාසල</th>
                         </tr>
                     </thead>
@@ -576,10 +583,15 @@ async function renderUsers() {
                                 <td class="font-bold">${u.name}</td>
                                 <td>${u.email}</td>
                                 <td>
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold ${u.role === 'admin' ? 'bg-purple-100 text-purple-600' : u.role === 'teacher' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}">
+                                    <span class="px-3 py-1 rounded-full text-xs font-bold ${
+                                        u.role === 'web_developer' ? 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700' :
+                                        u.role === 'admin' ? 'bg-purple-100 text-purple-600' : 
+                                        u.role === 'teacher' ? 'bg-blue-100 text-blue-600' : 
+                                        'bg-gray-100 text-gray-600'}">
                                         ${u.role}
                                     </span>
                                 </td>
+                                <td>${u.phone || '-'}</td>
                                 <td>${u.school || '-'}</td>
                             </tr>
                         `).join('')}
@@ -616,7 +628,7 @@ function openForm(type) {
                 </div>
                 <div>
                     <label class="block text-sm font-bold mb-2">විස්තරය</label>
-                    <textarea id="f_desc" rows="3" class="form-input" placeholder="පාඩම පිළිබඳ කෙටි විස්තරයක්"></textarea>
+                    <textarea id="f_desc" rows="5" class="form-input" placeholder="පාඩම පිළිබඳ සම්පූර්ණ විස්තරය"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -632,44 +644,44 @@ function openForm(type) {
         `;
     } else if (type === 'paper') {
         formFields = `
-    <div class="space-y-4">
-        <div>
-            <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
-            <input id="f_title" required class="form-input" placeholder="ප්‍රශ්න පත්‍රයේ නම">
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label class="block text-sm font-bold mb-2">ශ්‍රේණිය *</label>
-                <select id="f_grade" required class="form-input">${gradeOptions}</select>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-bold mb-2">ශීර්ෂය *</label>
+                    <input id="f_title" required class="form-input" placeholder="ප්‍රශ්න පත්‍රයේ නම">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">ශ්‍රේණිය *</label>
+                        <select id="f_grade" required class="form-input">${gradeOptions}</select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">විෂය *</label>
+                        <select id="f_subject" required class="form-input">${subjectOptions}</select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold mb-2">වර්ගය</label>
+                        <select id="f_type" class="form-input">
+                            <option value="term">වාර පරීක්ෂණය</option>
+                            <option value="school">පාසල් පරීක්ෂණය</option>
+                            <option value="practice">පුහුණු</option>
+                            <option value="exam">විභාගය</option>
+                            <option value="model">ආදර්ශ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">වර්ෂය</label>
+                        <input type="number" id="f_year" value="${new Date().getFullYear()}" class="form-input">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2">📄 PDF ගොනුව</label>
+                    <input type="file" id="f_pdf" accept=".pdf" class="form-input">
+                    <p class="text-xs text-gray-500 mt-1">උපරිම 50MB. PDF පමණයි.</p>
+                </div>
             </div>
-            <div>
-                <label class="block text-sm font-bold mb-2">විෂය *</label>
-                <select id="f_subject" required class="form-input">${subjectOptions}</select>
-            </div>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-            <div>
-                <label class="block text-sm font-bold mb-2">වර්ගය</label>
-                <select id="f_type" class="form-input">
-                    <option value="term">වාර පරීක්ෂණය</option>
-                    <option value="school">පාසල් පරීක්ෂණය</option>
-                    <option value="practice">පුහුණු</option>
-                    <option value="exam">විභාගය</option>
-                    <option value="model">ආදර්ශ</option>
-                </select>
-            </div>
-            <div>
-                <label class="block text-sm font-bold mb-2">වර්ෂය</label>
-                <input type="number" id="f_year" value="${new Date().getFullYear()}" class="form-input">
-            </div>
-        </div>
-        <div>
-            <label class="block text-sm font-bold mb-2">📄 PDF ගොනුව</label>
-            <input type="file" id="f_pdf" accept=".pdf" class="form-input">
-            <p class="text-xs text-gray-500 mt-1">උපරිම 50MB. PDF පමණයි.</p>
-        </div>
-    </div>
-`;
+        `;
     } else if (type === 'video') {
         formFields = `
             <div class="space-y-4">
@@ -710,7 +722,7 @@ function openForm(type) {
                 </div>
                 <div>
                     <label class="block text-sm font-bold mb-2">අන්තර්ගතය *</label>
-                    <textarea id="f_content" required rows="6" class="form-input" placeholder="ලිපියේ සම්පූර්ණ අන්තර්ගතය"></textarea>
+                    <textarea id="f_content" required rows="8" class="form-input" placeholder="ලිපියේ සම්පූර්ණ අන්තර්ගතය"></textarea>
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
@@ -767,7 +779,6 @@ async function submitForm(type) {
             body.paper_type = document.getElementById('f_type').value;
             body.year = parseInt(document.getElementById('f_year').value);
 
-            // PDF එක Base64 ක්රමයට යවන්න
             const pdfInput = document.getElementById('f_pdf');
             if (pdfInput && pdfInput.files.length > 0) {
                 const file = pdfInput.files[0];
@@ -784,9 +795,7 @@ async function submitForm(type) {
                 
                 const uploadRes = await fetch(`${API_BASE}/upload`, {
                     method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${state.token}`
-                    },
+                    headers: { 'Authorization': `Bearer ${state.token}` },
                     body: formData
                 });
                 
@@ -835,6 +844,7 @@ async function submitForm(type) {
         showToast('දෝෂයක්: ' + err.message, 'error');
     }
 }
+
 async function deleteItem(type, id) {
     if (!confirm('ඔබට මෙය මකා දැමීමට අවශ්‍යද?')) return;
     
@@ -900,7 +910,6 @@ function loadTheme() {
     }
 }
 
-console.log('✅ admin.js loaded');
 // ============================================
 // SETTINGS
 // ============================================
@@ -919,77 +928,64 @@ async function renderSettings() {
                 </div>
 
                 <form id="settingsForm" class="space-y-6">
-                    
-                    <!-- Social Media Section -->
                     <div class="stat-card">
                         <h3 class="text-lg font-black text-brand-navy mb-4 flex items-center">
-                            <i class="fa-solid fa-share-nodes text-brand-gold mr-2"></i>
-                            Social Media
+                            <i class="fa-solid fa-share-nodes text-brand-gold mr-2"></i>Social Media
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-bold mb-2">
                                     <i class="fa-brands fa-facebook text-blue-600 mr-2"></i>Facebook Page URL
                                 </label>
-                                <input id="s_facebook" value="${settings.site_facebook || ''}" 
-                                       class="form-input" placeholder="https://facebook.com/yourpage">
+                                <input id="s_facebook" value="${settings.site_facebook || ''}" class="form-input" placeholder="https://facebook.com/yourpage">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold mb-2">
                                     <i class="fa-brands fa-youtube text-red-600 mr-2"></i>YouTube Channel URL
                                 </label>
-                                <input id="s_youtube" value="${settings.site_youtube || ''}" 
-                                       class="form-input" placeholder="https://youtube.com/@yourchannel">
+                                <input id="s_youtube" value="${settings.site_youtube || ''}" class="form-input" placeholder="https://youtube.com/@yourchannel">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold mb-2">
                                     <i class="fa-brands fa-whatsapp text-green-600 mr-2"></i>WhatsApp Number
                                 </label>
-                                <input id="s_whatsapp" value="${settings.site_whatsapp || ''}" 
-                                       class="form-input" placeholder="+94112345678">
+                                <input id="s_whatsapp" value="${settings.site_whatsapp || ''}" class="form-input" placeholder="+94112345678">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold mb-2">
                                     <i class="fa-brands fa-instagram text-pink-600 mr-2"></i>Instagram URL
                                 </label>
-                                <input id="s_instagram" value="${settings.site_instagram || ''}" 
-                                       class="form-input" placeholder="https://instagram.com/yourpage">
+                                <input id="s_instagram" value="${settings.site_instagram || ''}" class="form-input" placeholder="https://instagram.com/yourpage">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Contact Info Section -->
                     <div class="stat-card">
                         <h3 class="text-lg font-black text-brand-navy mb-4 flex items-center">
-                            <i class="fa-solid fa-address-card text-brand-gold mr-2"></i>
-                            සම්බන්ධතා තොරතුරු
+                            <i class="fa-solid fa-address-card text-brand-gold mr-2"></i>සම්බන්ධතා තොරතුරු
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-bold mb-2">
                                     <i class="fa-solid fa-envelope mr-2"></i>Email
                                 </label>
-                                <input id="s_email" value="${settings.site_email || ''}" 
-                                       class="form-input" placeholder="info@akurumansala.lk">
+                                <input id="s_email" value="${settings.site_email || ''}" class="form-input" placeholder="info@akurumansala.lk">
                             </div>
                             <div>
                                 <label class="block text-sm font-bold mb-2">
                                     <i class="fa-solid fa-phone mr-2"></i>Phone
                                 </label>
-                                <input id="s_phone" value="${settings.site_phone || ''}" 
-                                       class="form-input" placeholder="+94 11 234 5678">
+                                <input id="s_phone" value="${settings.site_phone || ''}" class="form-input" placeholder="+94 11 234 5678">
                             </div>
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-bold mb-2">
                                     <i class="fa-solid fa-location-dot mr-2"></i>Address
                                 </label>
-                                <input id="s_address" value="${settings.site_address || ''}" 
-                                       class="form-input" placeholder="කොළඹ, ශ්‍රී ලංකාව">
+                                <input id="s_address" value="${settings.site_address || ''}" class="form-input" placeholder="කොළඹ, ශ්‍රී ලංකාව">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Save Button -->
                     <div class="flex justify-end">
                         <button type="submit" class="btn-primary text-base px-8 py-4">
                             <i class="fa-solid fa-save mr-2"></i>සියල්ල සුරකින්න
@@ -1028,6 +1024,7 @@ async function renderSettings() {
         content.innerHTML = `<div class="text-center py-12 text-red-500">දෝෂයක්: ${err.message}</div>`;
     }
 }
+
 // ============================================
 // QUIZZES MANAGEMENT
 // ============================================
@@ -1093,9 +1090,6 @@ async function renderQuizzes() {
     }
 }
 
-// ============================================
-// OPEN QUIZ FORM
-// ============================================
 function openQuizForm() {
     const modal = document.getElementById('modal');
     const modalBody = document.getElementById('modalBody');
@@ -1250,3 +1244,116 @@ async function deleteQuiz(id) {
         showToast('දෝෂයක්: ' + err.message, 'error');
     }
 }
+
+// ============================================
+// ACTIVITY LOGS (Developer only)
+// ============================================
+async function renderLogs() {
+    const content = document.getElementById('tabContent');
+    
+    if (state.user.role !== 'web_developer') {
+        content.innerHTML = `
+            <div class="stat-card text-center py-16">
+                <i class="fa-solid fa-lock text-6xl text-red-300 mb-4"></i>
+                <p class="text-red-500 text-lg font-bold">ඔබට මෙම කොටසට ප්‍රවේශය නැත</p>
+                <p class="text-gray-500 text-sm mt-2">මෙය බලන්න පුළුවන් Web Developer ට විතරයි</p>
+            </div>
+        `;
+        return;
+    }
+    
+    content.innerHTML = `<div class="text-center py-12"><div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
+    
+    try {
+        const data = await api('/auth/logs?limit=200');
+        const logs = data.logs || [];
+
+        let html = `
+            <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+                <div class="text-sm text-gray-500">
+                    මුළු logs: <strong>${logs.length}</strong>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="renderLogs()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg text-xs">
+                        <i class="fa-solid fa-refresh mr-1"></i>Refresh
+                    </button>
+                    <button onclick="clearAllLogs()" class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg text-xs">
+                        <i class="fa-solid fa-trash mr-1"></i>සියල්ල මකන්න
+                    </button>
+                </div>
+            </div>
+        `;
+
+        if (logs.length === 0) {
+            html += `
+                <div class="stat-card text-center py-16">
+                    <i class="fa-solid fa-clipboard-list text-6xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 text-lg">Logs නොමැත</p>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="overflow-x-auto">
+                    <table class="data-table w-full">
+                        <thead>
+                            <tr>
+                                <th>කාලය</th>
+                                <th>පරිශීලක</th>
+                                <th>ක්‍රියාව</th>
+                                <th>විස්තර</th>
+                                <th>තත්ත්වය</th>
+                                <th>IP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${logs.map(log => `
+                                <tr>
+                                    <td class="text-xs text-gray-500 whitespace-nowrap">${new Date(log.created_at).toLocaleString('si-LK')}</td>
+                                    <td class="text-xs">${log.user_email || '-'}</td>
+                                    <td>
+                                        <span class="px-2 py-1 rounded text-xs font-bold ${
+                                            log.action.includes('login_success') ? 'bg-green-100 text-green-700' :
+                                            log.action.includes('login_failed') ? 'bg-red-100 text-red-700' :
+                                            log.action.includes('register') ? 'bg-blue-100 text-blue-700' :
+                                            log.action.includes('otp') ? 'bg-purple-100 text-purple-700' :
+                                            log.action.includes('password') ? 'bg-yellow-100 text-yellow-700' :
+                                            'bg-gray-100 text-gray-700'
+                                        }">
+                                            ${log.action}
+                                        </span>
+                                    </td>
+                                    <td class="text-xs text-gray-600">${log.details || '-'}</td>
+                                    <td>
+                                        <span class="px-2 py-1 rounded text-xs font-bold ${
+                                            log.status === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                                        }">
+                                            ${log.status}
+                                        </span>
+                                    </td>
+                                    <td class="text-xs text-gray-500">${log.ip_address || '-'}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        content.innerHTML = html;
+    } catch (err) {
+        content.innerHTML = `<div class="text-center py-12 text-red-500">දෝෂයක්: ${err.message}</div>`;
+    }
+}
+
+async function clearAllLogs() {
+    if (!confirm('සියලු logs මකා දැමීමට අවශ්‍යද?')) return;
+    try {
+        await api('/auth/logs', { method: 'DELETE' });
+        showToast('සියලු logs මකා දමන ලදී', 'success');
+        renderLogs();
+    } catch (err) {
+        showToast('දෝෂයක්: ' + err.message, 'error');
+    }
+}
+
+console.log('✅ admin.js loaded');
