@@ -604,61 +604,61 @@
         // RENDER VIDEOS
         // ============================================
         function renderVideos(videos) {
-            const container = document.getElementById('videosContainer');
+    const container = document.getElementById('videosContainer');
 
-            if (!videos || videos.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg">
-                        <i class="fa-solid fa-video text-6xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500 text-lg">වීඩියෝ නොමැත</p>
-                        <p class="text-gray-400 text-sm mt-2">Admin Panel එකෙන් වීඩියෝ එකතු කරන්න</p>
+    console.log('🎨 Rendering videos:', videos.length);
+
+    if (!videos || videos.length === 0) {
+        container.innerHTML = `
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg">
+                <i class="fa-solid fa-video text-6xl text-gray-300 mb-4"></i>
+                <p class="text-gray-500 text-lg">වීඩියෝ නොමැත</p>
+                <p class="text-gray-400 text-sm mt-2">Admin Panel එකෙන් වීඩියෝ එකතු කරන්න</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            ${videos.map(v => {
+                const ytId = getYouTubeId(v.video_url || v.youtube_id);
+                const thumb = ytId 
+                    ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` 
+                    : '/images/video-placeholder.jpg';
+                const fallbackThumb = ytId 
+                    ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` 
+                    : '/images/video-placeholder.jpg';
+                
+                return `
+                    <div class="video-card" onclick="openVideoModal(${v.id})" data-aos="fade-up">
+                        <div class="video-thumb">
+                            <img src="${thumb}" 
+                                 alt="${v.title}" 
+                                 onerror="this.onerror=null; this.src='${fallbackThumb}'">
+                            ${v.subject_name ? `<span class="video-badge">${v.subject_name}</span>` : ''}
+                            <div class="video-play-btn">
+                                <i class="fa-solid fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="p-5 flex-1 flex flex-col">
+                            <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${v.title}</h3>
+                            <p class="text-xs text-gray-500 mb-3">
+                                ${v.grade_name || ''} ${v.subject_name ? '• ' + v.subject_name : ''}
+                            </p>
+                            <p class="text-xs text-gray-400 flex-1 line-clamp-2">${v.description || 'විස්තරයක් නොමැත'}</p>
+                            <div class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
+                                <span class="text-xs text-gray-500"><i class="fa-solid fa-eye mr-1"></i>${v.views || 0}</span>
+                                <span class="text-brand-gold font-bold text-xs">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                            </div>
+                        </div>
                     </div>
                 `;
-                return;
-            }
-
-            container.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    ${videos.map(v => {
-                        const ytId = getYouTubeId(v.video_url || v.youtube_id);
-                        const thumb = ytId 
-                            ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` 
-                            : '/images/video-placeholder.jpg';
-                        const fallbackThumb = ytId 
-                            ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` 
-                            : '/images/video-placeholder.jpg';
-                        
-                        return `
-                            <div class="video-card" onclick="openVideoModal(${v.id})" data-aos="fade-up">
-                                <div class="video-thumb">
-                                    <img src="${thumb}" 
-                                         alt="${v.title}" 
-                                         onerror="this.onerror=null; this.src='${fallbackThumb}'">
-                                    ${v.subject_name ? `<span class="video-badge">${v.subject_name}</span>` : ''}
-                                    <div class="video-play-btn">
-                                        <i class="fa-solid fa-play"></i>
-                                    </div>
-                                </div>
-                                <div class="p-5 flex-1 flex flex-col">
-                                    <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${v.title}</h3>
-                                    <p class="text-xs text-gray-500 mb-3">
-                                        ${v.grade_name || ''} ${v.subject_name ? '• ' + v.subject_name : ''}
-                                    </p>
-                                    <p class="text-xs text-gray-400 flex-1 line-clamp-2">${v.description || 'විස්තරයක් නොමැත'}</p>
-                                    <div class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
-                                        <span class="text-xs text-gray-500"><i class="fa-solid fa-eye mr-1"></i>${v.views || 0}</span>
-                                        <span class="text-brand-gold font-bold text-xs">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-
-            if (window.AOS) AOS.refresh();
-        }
-
+            }).join('')}
+        </div>
+    `;
+    if (window.AOS) AOS.refresh();
+}
         // ============================================
         // OPEN VIDEO MODAL
         // ============================================
