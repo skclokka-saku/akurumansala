@@ -1,397 +1,397 @@
 <!DOCTYPE html>
 <html lang="si">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ප්‍රශ්න පත්‍ර | අකුරු මංසල</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            navy: '#0F2C59',
-                            navy2: '#1B3A6B',
-                            gold: '#D4A017',
-                            gold2: '#E8B923',
-                            light: '#F8F9FC',
-                        }
-                    },
-                    fontFamily: { sinhala: ['"Noto Serif Sinhala"', 'sans-serif'] }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="අකුරු මංසල - ප්‍රශ්න පත්‍ර">
+<title>ප්‍රශ්න පත්‍ර | අකුරු මංසල</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+tailwind.config = {
+    darkMode: 'class',
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    navy: '#0F2C59',
+                    navy2: '#1B3A6B',
+                    gold: '#D4A017',
+                    gold2: '#E8B923',
+                    light: '#F8F9FC',
                 }
+            },
+            fontFamily: {
+                sinhala: ['"Noto Serif Sinhala"', 'sans-serif'],
             }
         }
-    </script>
-    <style>
-        body { 
-            font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; 
-            background: #F8F9FC;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.04) 0%, transparent 50%);
-        }
-        body.dark { 
-            background: #0a0f1e; 
-            color: #e2e8f0;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.06) 0%, transparent 50%);
-        }
+    }
+}
+</script>
 
-        .container-wide {
-            width: 100%;
-            max-width: 1600px;
-            padding-left: 1.25rem;
-            padding-right: 1.25rem;
-            margin: 0 auto;
-        }
-        @media (min-width: 640px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
-        @media (min-width: 1024px) { .container-wide { padding-left: 3rem; padding-right: 3rem; } }
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif;
+        overflow-x: hidden;
+        background: #F8F9FC;
+        color: #1e293b;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark { background: #0a0f1e; color: #e2e8f0; }
 
-        .main-nav { 
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
-            border-bottom: 1px solid rgba(212, 160, 23, 0.1);
-        }
-        body.dark .main-nav { background: rgba(26, 26, 46, 0.98); }
+    .container-wide {
+        width: 100%;
+        max-width: 1920px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin: 0 auto;
+    }
+    @media (min-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
+    @media (min-width: 1024px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
 
-        .logo-wrap {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #ffffff, #f8f9fc);
-            border-radius: 1rem;
-            box-shadow: 0 6px 20px rgba(15, 44, 89, 0.15);
-            border: 2px solid rgba(212, 160, 23, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.3rem;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .logo-wrap:hover { transform: scale(1.08) rotate(-3deg); }
-        .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .main-nav {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
+        border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+    }
+    body.dark .main-nav { background: rgba(26, 26, 46, 0.98); }
 
-        .nav-link {
-            position: relative;
-            font-weight: 700;
-            color: #0F2C59;
-            font-size: 0.875rem;
-            letter-spacing: 0.3px;
-            transition: all 0.3s;
-            padding: 0.6rem 0.9rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            border-radius: 0.65rem;
-        }
-        body.dark .nav-link { color: #cbd5e1; }
-        .nav-link i { font-size: 0.8rem; color: #D4A017; }
-        .nav-link:hover { 
-            color: #D4A017; 
-            background: rgba(212, 160, 23, 0.1);
-            transform: translateY(-2px);
-        }
-        .nav-link.active { 
-            color: #D4A017; 
-            background: rgba(212, 160, 23, 0.12);
-        }
+    .logo-wrap {
+        width: 70px; height: 70px;
+        background: linear-gradient(135deg, #ffffff, #f8f9fc);
+        border-radius: 1.2rem;
+        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.2);
+        border: 2px solid rgba(212, 160, 23, 0.4);
+        display: flex; align-items: center; justify-content: center;
+        padding: 0.4rem;
+        transition: all 0.5s;
+    }
+    .logo-wrap:hover { transform: scale(1.1) rotate(-5deg); }
+    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
 
-        .theme-toggle {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #D4A017, #E8B923);
-            color: #0F2C59;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
-            font-size: 1.05rem;
-        }
-        .theme-toggle:hover { transform: rotate(180deg) scale(1.15); }
+    .nav-link {
+        font-weight: 700; color: #0F2C59; font-size: 1rem;
+        transition: all 0.3s;
+        padding: 0.75rem 1.2rem;
+        text-decoration: none;
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        border-radius: 0.85rem;
+    }
+    body.dark .nav-link { color: #cbd5e1; }
+    .nav-link i { color: #D4A017; }
+    .nav-link:hover, .nav-link.active {
+        color: #D4A017;
+        background: rgba(212, 160, 23, 0.1);
+        transform: translateY(-3px);
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #D4A017, #E8B923);
-            color: #0F2C59;
-            padding: 0.8rem 1.75rem;
-            border-radius: 0.9rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 1.2px;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4), inset 0 -3px 6px rgba(0,0,0,0.1);
-            cursor: pointer;
-            border: none;
-            text-decoration: none;
-        }
-        .btn-primary:hover { 
-            transform: translateY(-4px) scale(1.04); 
-            box-shadow: 0 15px 35px rgba(212, 160, 23, 0.6);
-        }
+    .theme-toggle {
+        width: 50px; height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: all 0.5s;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
+        font-size: 1.1rem;
+    }
+    .theme-toggle:hover { transform: rotate(180deg) scale(1.15); }
 
-        /* PAPER CARDS - 3D */
-        .paper-card {
-            background: white;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            border-left: 1px solid rgba(212, 160, 23, 0.1);
-            border-right: 1px solid rgba(212, 160, 23, 0.1);
-            border-bottom: 1px solid rgba(212, 160, 23, 0.1);
-            border-top: 5px solid #ec4899;
-            position: relative;
-        }
-        body.dark .paper-card { background: #1a1a2e; }
-        .paper-card:hover { 
-            transform: translateY(-12px) scale(1.02); 
-            box-shadow: 0 30px 60px rgba(15, 44, 89, 0.25);
-            border-top-color: #D4A017;
-        }
-        .paper-card:active { transform: translateY(-6px) scale(1.01); }
+    .btn-primary {
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        padding: 0.85rem 1.75rem;
+        border-radius: 1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        transition: all 0.4s;
+        display: inline-flex; align-items: center; gap: 0.65rem;
+        box-shadow: 0 10px 25px rgba(212, 160, 23, 0.4);
+        cursor: pointer;
+        border: none; text-decoration: none;
+    }
+    .btn-primary:hover { transform: translateY(-5px) scale(1.05); }
 
-        .paper-icon-wrap {
-            height: 150px;
-            background: linear-gradient(135deg, #ec4899, #db2777);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .paper-icon-wrap::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
-            border-radius: 50%;
-        }
-        .paper-icon-wrap i { 
-            font-size: 4rem; 
-            color: white; 
-            position: relative;
-            z-index: 1;
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .paper-card:hover .paper-icon-wrap i { transform: scale(1.15) rotate(-10deg); }
+    .page-hero {
+        background: linear-gradient(135deg, #0F2C59 0%, #1B3A6B 100%);
+        color: white;
+        padding: 4rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .page-hero::before {
+        content: '';
+        position: absolute; top: 0; right: 0;
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(212, 160, 23, 0.15), transparent 70%);
+        border-radius: 50%;
+    }
 
-        .paper-grade-badge {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: rgba(255,255,255,0.95);
-            color: #0F2C59;
-            padding: 0.4rem 1rem;
-            border-radius: 999px;
-            font-weight: 800;
-            font-size: 0.7rem;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            z-index: 2;
-        }
+    .filter-section {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        margin-top: -3rem;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 15px 40px rgba(15, 44, 89, 0.1);
+    }
+    body.dark .filter-section { background: #1a1a2e; }
 
-        .paper-type-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: linear-gradient(135deg, #D4A017, #E8B923);
-            color: #0F2C59;
-            padding: 0.4rem 1rem;
-            border-radius: 999px;
-            font-weight: 800;
-            font-size: 0.7rem;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(212, 160, 23, 0.5);
-            z-index: 2;
-        }
+    .filter-input {
+        width: 100%;
+        padding: 0.9rem 1.25rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 1rem;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: all 0.3s;
+        background: #F8F9FC;
+    }
+    body.dark .filter-input { background: #0a0f1e; border-color: #334155; color: #e2e8f0; }
+    .filter-input:focus { outline: none; border-color: #D4A017; box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15); }
 
-        .filter-input {
-            border: 2px solid #e2e8f0;
-            border-radius: 0.9rem;
-            padding: 0.85rem 1rem;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            width: 100%;
-            font-family: inherit;
-            background: white;
-        }
-        .filter-input:focus {
-            outline: none;
-            border-color: #D4A017;
-            box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15);
-        }
-        body.dark .filter-input { background: #1e293b; color: #e2e8f0; border-color: #334155; }
+    /* PAPER CARDS */
+    #papersContainer {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+        #papersContainer { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1024px) {
+        #papersContainer { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
 
-        .btn-action {
-            flex: 1;
-            padding: 0.6rem;
-            border-radius: 0.65rem;
-            font-weight: 800;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            cursor: pointer;
-            border: none;
-        }
-        .btn-view {
-            background: linear-gradient(135deg, #0F2C59, #1B3A6B);
-            color: white;
-        }
-        .btn-view:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 8px 20px rgba(15, 44, 89, 0.4);
-        }
-        .btn-download {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            color: white;
-        }
-        .btn-download:hover { 
-            transform: translateY(-3px); 
-            box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4);
-        }
+    .paper-card {
+        background: white;
+        border-radius: 1.25rem;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.08);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: flex;
+        flex-direction: column;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        border: 1px solid rgba(212, 160, 23, 0.1);
+    }
+    body.dark .paper-card { background: #1a1a2e; }
+    .paper-card:hover {
+        transform: translateY(-8px) !important;
+        box-shadow: 0 20px 45px rgba(15, 44, 89, 0.2);
+        border-color: rgba(212, 160, 23, 0.3);
+    }
 
-        .footer { 
-            background: linear-gradient(180deg, #0F2C59, #0a1a3a); 
-            color: white; 
-            padding-top: 4rem; 
-        }
-        body.dark .footer { background: #05080f; }
-        .footer a { 
-            color: rgba(255,255,255,0.75); 
-            transition: all 0.3s; 
-            font-size: 0.9rem; 
-            text-decoration: none; 
-        }
-        .footer a:hover { color: #D4A017; padding-left: 6px; }
-        .footer-title {
-            color: white;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            margin-bottom: 1.25rem;
-            position: relative;
-            padding-bottom: 0.6rem;
-        }
-        .footer-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: linear-gradient(90deg, #D4A017, #E8B923);
-            border-radius: 3px;
-        }
-        .social-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 0.85rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-            border: 1px solid rgba(255,255,255,0.15);
-        }
-        .social-icon i { color: #ffffff !important; font-size: 1.1rem; }
-        .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); }
-        .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
-        .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
-        .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
-        .social-icon:hover { 
-            transform: translateY(-6px) scale(1.15) rotate(-5deg); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-        }
-    </style>
+    .paper-header {
+        position: relative;
+        height: 160px;
+        background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    .paper-header i {
+        font-size: 3.5rem;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .paper-badge {
+        position: absolute;
+        top: 0.75rem;
+        left: 0.75rem;
+        background: rgba(255, 255, 255, 0.95);
+        color: #0F2C59;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+    }
+
+    .paper-year-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: rgba(15, 44, 89, 0.9);
+        color: white;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 0.7rem;
+        z-index: 2;
+    }
+
+    .paper-info {
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: 1;
+    }
+    .paper-info h3 {
+        font-weight: 800;
+        font-size: 1.05rem;
+        color: #0F2C59;
+        line-height: 1.3;
+    }
+    body.dark .paper-info h3 { color: #e2e8f0; }
+    .paper-info p {
+        font-size: 0.85rem;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+    }
+    body.dark .paper-info p { color: #94a3b8; }
+
+    .paper-actions {
+        padding: 1rem 1.25rem;
+        border-top: 1px solid rgba(15, 44, 89, 0.08);
+    }
+    body.dark .paper-actions { border-top-color: rgba(255, 255, 255, 0.08); }
+
+    .btn-download {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        background: linear-gradient(135deg, #ec4899, #be185d);
+        color: white;
+        font-weight: 700;
+        font-size: 0.9rem;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.3s;
+    }
+    .btn-download:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(236, 72, 153, 0.4); }
+    .btn-download.disabled { background: #94a3b8; cursor: not-allowed; }
+
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; }
+    .empty-state i { font-size: 4rem; color: #cbd5e1; margin-bottom: 1rem; }
+
+    .loading-spinner { grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; }
+    .spinner {
+        width: 50px; height: 50px;
+        border: 4px solid rgba(212, 160, 23, 0.2);
+        border-top-color: #D4A017;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .footer {
+        background: linear-gradient(180deg, #0F2C59, #0a1a3a);
+        color: white;
+        padding: 3rem 0 2rem;
+        margin-top: 4rem;
+    }
+    body.dark .footer { background: #05080f; }
+
+    @media (max-width: 768px) {
+        .page-hero { padding: 3rem 0; }
+        .filter-section { margin-top: -2rem; padding: 1rem; }
+        .logo-wrap { width: 55px; height: 55px; }
+        .nav-link { font-size: 0.85rem; padding: 0.5rem 0.75rem; }
+        .paper-header { height: 130px; }
+    }
+</style>
 </head>
-<body class="min-h-screen">
+<body>
 
-    <!-- HEADER -->
-    <header class="main-nav sticky top-0 z-50">
-        <div class="container-wide">
-            <div class="h-20 flex items-center justify-between">
-                <a href="/" class="flex items-center space-x-3">
-                    <div class="logo-wrap">
-                        <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-2xl\'></i>'">
-                    </div>
-                    <div class="hidden sm:block">
-                        <h1 class="text-xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
-                        <p class="text-xs text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
-                    </div>
-                </a>
-
-                <nav class="hidden lg:flex items-center space-x-1">
-                    <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
-                    <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book"></i>සම්පත්</a>
-                    <a href="/papers.html" class="nav-link active"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
-                    <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
-                    <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
-                </nav>
-
-                <div class="flex items-center space-x-3">
-                    <button onclick="toggleTheme()" class="theme-toggle">
-                        <i id="themeIcon" class="fa-solid fa-moon"></i>
-                    </button>
-                    <a href="/login.html" class="hidden md:inline-flex btn-primary" style="padding: 0.6rem 1.25rem;">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <span>Admin</span>
-                    </a>
+<!-- HEADER -->
+<header class="main-nav sticky top-0 z-50">
+    <div class="container-wide">
+        <div class="h-24 flex items-center justify-between">
+            <a href="/" class="flex items-center space-x-4">
+                <div class="logo-wrap">
+                    <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
                 </div>
+                <div class="hidden sm:block">
+                    <h1 class="text-2xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
+                    <p class="text-sm text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
+                </div>
+            </a>
+
+            <nav class="hidden lg:flex items-center space-x-1">
+                <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
+                <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book-open"></i>සම්පත්</a>
+                <a href="/papers.html" class="nav-link active"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
+                <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
+                <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleTheme()" class="theme-toggle">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+                <a href="/login.html" class="hidden md:inline-flex btn-primary">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Admin</span>
+                </a>
+                <button onclick="toggleMobileMenu()" class="lg:hidden w-12 h-12 rounded-xl bg-brand-navy text-white flex items-center justify-center">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
             </div>
         </div>
-    </header>
+    </div>
 
-    <!-- HERO -->
-    <section class="bg-brand-navy text-white py-16 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <i class="fa-solid fa-file-pdf absolute text-9xl" style="top: 10%; left: 5%;"></i>
-            <i class="fa-solid fa-file-lines absolute text-9xl" style="bottom: 10%; right: 5%;"></i>
-        </div>
-        <div class="container-wide relative z-10">
-            <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-3" data-aos="fade-up">
-                <i class="fa-solid fa-file-lines mr-2"></i>Practice Papers
-            </p>
-            <h1 class="text-4xl md:text-5xl font-black mb-3" data-aos="fade-up" data-aos-delay="100">ප්‍රශ්න පත්‍ර</h1>
-            <p class="text-white/70 text-base max-w-2xl" data-aos="fade-up" data-aos-delay="200">
-                පාසල් පරීක්ෂණ, වාර පරීක්ෂණ සහ පුහුණු ප්‍රශ්න පත්‍ර
-            </p>
-        </div>
-    </section>
+    <div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t px-4 py-4 space-y-2">
+        <a href="/" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+            <i class="fa-solid fa-home mr-2 text-brand-gold"></i>මුල් පිටුව
+        </a>
+        <a href="/resources.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+            <i class="fa-solid fa-book-open mr-2 text-brand-gold"></i>සම්පත්
+        </a>
+        <a href="/papers.html" class="block px-4 py-3 rounded-lg bg-brand-gold text-brand-navy font-bold">
+            <i class="fa-solid fa-file-lines mr-2"></i>ප්‍රශ්න පත්‍ර
+        </a>
+        <a href="/videos.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+            <i class="fa-solid fa-video mr-2 text-brand-gold"></i>වීඩියෝ
+        </a>
+    </div>
+</header>
 
-    <!-- FILTERS -->
-    <section class="container-wide -mt-6 relative z-10">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 grid grid-cols-1 md:grid-cols-4 gap-3" data-aos="fade-up">
-            <input type="text" id="searchInput" placeholder="ප්‍රශ්න පත්‍ර සොයන්න..." class="filter-input">
+<!-- HERO -->
+<section class="page-hero">
+    <div class="container-wide relative z-10">
+        <p class="text-brand-gold font-bold text-sm tracking-widest uppercase mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-file-lines"></i>
+            EXAM PAPERS
+        </p>
+        <h1 class="text-4xl md:text-6xl font-black mb-3">ප්‍රශ්න පත්‍ර</h1>
+        <p class="text-white/80 text-lg">ශ්‍රේණියට සහ විෂයට ගැලපෙන ප්‍රශ්න පත්‍ර එකතුවක්</p>
+    </div>
+</section>
+
+<!-- FILTERS -->
+<section class="container-wide -mt-8 relative z-20">
+    <div class="filter-section">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input type="text" id="searchInput" placeholder="සොයන්න..." class="filter-input">
             <select id="gradeFilter" class="filter-input">
                 <option value="">සියලු ශ්‍රේණි</option>
             </select>
@@ -400,317 +400,226 @@
             </select>
             <select id="typeFilter" class="filter-input">
                 <option value="">සියලු වර්ග</option>
-                <option value="term">වාර පරීක්ෂණය</option>
-                <option value="school">පාසල් පරීක්ෂණය</option>
+                <option value="term">වාර පරීක්ෂණ</option>
+                <option value="school">පාසල් පරීක්ෂණ</option>
                 <option value="practice">පුහුණු</option>
-                <option value="exam">විභාගය</option>
+                <option value="exam">විභාග</option>
                 <option value="model">ආදර්ශ</option>
             </select>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- PAPERS -->
-    <main class="container-wide py-8">
-        <div id="papersContainer">
-            <div class="text-center py-12">
-                <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
-            </div>
+<!-- PAPERS -->
+<main class="container-wide py-12">
+    <div id="papersContainer">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p class="text-gray-500">ප්‍රශ්න පත්‍ර load වෙමින්...</p>
         </div>
-    </main>
+    </div>
+</main>
 
-    <!-- FOOTER -->
-    <footer class="footer mt-12">
-        <div class="container-wide">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-white/10">
-                <div class="md:col-span-2">
-                    <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2 shadow-lg">
-                            <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-black">අකුරු මංසල</h3>
-                            <p class="text-xs text-white/70 mt-1">ඉගෙනුමට නව මඟක්</p>
-                        </div>
-                    </div>
-                    <p class="text-white/70 text-sm leading-relaxed mb-6">
-                        ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
-                    </p>
-                    <div class="flex flex-wrap gap-3">
-                        <a href="#" class="social-icon facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#" class="social-icon whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="#" class="social-icon instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    </div>
-                </div>
-                <div>
-                    <h4 class="footer-title">ඉක්මන් සබැඳි</h4>
-                    <ul class="space-y-3">
-                        <li><a href="/">මුල් පිටුව</a></li>
-                        <li><a href="/resources.html">සම්පත්</a></li>
-                        <li><a href="/papers.html">ප්‍රශ්න පත්‍ර</a></li>
-                        <li><a href="/videos.html">වීඩියෝ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="footer-title">අප අමතන්න</h4>
-                    <ul class="space-y-3">
-                        <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
-                            <span class="text-white/80 text-sm">කොළඹ, ශ්‍රී ලංකාව</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-phone text-brand-gold"></i>
-                            <span class="text-white/80 text-sm">+94 767512666</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-envelope text-brand-gold"></i>
-                            <span class="text-white/80 text-sm">info@akurumansala.lk</span>
-                        </li>
-                    </ul>
-                </div>
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container-wide text-center">
+        <p class="text-white/70">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+    </div>
+</footer>
+
+<script>
+const API_BASE = '/api';
+
+let allPapers = [];
+let filteredPapers = [];
+
+// ============================================
+// THEME
+// ============================================
+function toggleTheme() {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+}
+
+function loadTheme() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark');
+        document.getElementById('themeIcon').className = 'fa-solid fa-sun';
+    }
+}
+
+function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+}
+
+// ============================================
+// LOAD PAPERS
+// ============================================
+async function loadPapers() {
+    const container = document.getElementById('papersContainer');
+    
+    try {
+        const res = await fetch(`${API_BASE}/resources?type=paper&limit=100`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        
+        const data = await res.json();
+        allPapers = data.papers || data.data || data || [];
+        filteredPapers = [...allPapers];
+        
+        console.log('✅ Papers loaded:', allPapers.length);
+        renderPapers();
+        
+    } catch (err) {
+        console.error('❌ Paper load error:', err);
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-exclamation-triangle" style="color: #ef4444;"></i>
+                <p class="text-red-500 text-lg font-bold">දෝෂයක්: ${err.message}</p>
             </div>
-            <div class="pt-8 text-center text-xs text-white/60">
-                <p>© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
-            </div>
-        </div>
-    </footer>
+        `;
+    }
+}
 
-    <script>
-        const API_BASE = '/api';
-        let allPapers = [];
-
-        // ============================================
-        // THEME
-        // ============================================
-        function toggleTheme() {
-            const body = document.body;
-            const icon = document.getElementById('themeIcon');
-            body.classList.toggle('dark');
-            if (body.classList.contains('dark')) {
-                icon.className = 'fa-solid fa-sun';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                icon.className = 'fa-solid fa-moon';
-                localStorage.setItem('theme', 'light');
-            }
-        }
-
-        function loadTheme() {
-            const saved = localStorage.getItem('theme');
-            if (saved === 'dark') {
-                document.body.classList.add('dark');
-                const icon = document.getElementById('themeIcon');
-                if (icon) icon.className = 'fa-solid fa-sun';
-            }
-        }
-
-        // ============================================
-        // LOAD FILTERS
-        // ============================================
-        async function loadFilters() {
-            try {
-                const [gradesRes, subjectsRes] = await Promise.all([
-                    fetch(`${API_BASE}/grades`),
-                    fetch(`${API_BASE}/subjects`)
-                ]);
-                const grades = await gradesRes.json();
-                const subjects = await subjectsRes.json();
-
-                const gradeFilter = document.getElementById('gradeFilter');
-                grades.forEach(g => {
-                    const opt = document.createElement('option');
-                    opt.value = g.id;
-                    opt.textContent = g.grade_name;
-                    gradeFilter.appendChild(opt);
-                });
-
-                const subjectFilter = document.getElementById('subjectFilter');
-                subjects.forEach(s => {
-                    const opt = document.createElement('option');
-                    opt.value = s.id;
-                    opt.textContent = s.subject_name;
-                    subjectFilter.appendChild(opt);
-                });
-            } catch (err) {
-                console.error('Filter load error:', err);
-            }
-        }
-
-        // ============================================
-        // LOAD PAPERS
-        // ============================================
-        async function loadPapers() {
-            const container = document.getElementById('papersContainer');
-            try {
-                const res = await fetch(`${API_BASE}/papers`);
-                allPapers = await res.json();
-                renderPapers(allPapers);
-            } catch (err) {
-                container.innerHTML = `<div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg text-red-500">දෝෂයක්: ${err.message}</div>`;
-            }
-        }
-
-        // ============================================
-        // RENDER PAPERS
-        // ============================================
-        function renderPapers(papers) {
-            const container = document.getElementById('papersContainer');
-
-            if (!papers || papers.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg">
-                        <i class="fa-solid fa-file-lines text-6xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500 text-lg">ප්‍රශ්න පත්‍ර නොමැත</p>
-                        <p class="text-gray-400 text-sm mt-2">Admin Panel එකෙන් ප්‍රශ්න පත්‍ර එකතු කරන්න</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const typeLabels = {
-                term: 'වාර පරීක්ෂණය',
-                school: 'පාසල් පරීක්ෂණය',
-                practice: 'පුහුණු',
-                exam: 'විභාගය',
-                model: 'ආදර්ශ'
-            };
-
-            container.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    ${papers.map(p => `
-                        <div class="paper-card" data-aos="fade-up">
-                            <div class="paper-icon-wrap">
-                                <i class="fa-solid fa-file-pdf"></i>
-                                ${p.grade_name ? `<span class="paper-grade-badge">${p.grade_name}</span>` : ''}
-                                ${p.paper_type ? `<span class="paper-type-badge">${typeLabels[p.paper_type] || p.paper_type}</span>` : ''}
-                            </div>
-                            <div class="p-5 flex-1 flex flex-col">
-                                <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${p.title}</h3>
-                                <p class="text-xs text-gray-500 mb-3">
-                                    ${p.subject_name || ''} ${p.year ? '• ' + p.year : ''}
-                                </p>
-                                <p class="text-xs text-gray-400 flex-1 line-clamp-2">${p.description || 'විස්තරයක් නොමැත'}</p>
-                                
-                                ${p.pdf_file && p.pdf_file !== 'null' && p.pdf_file !== 'NULL' ? `
-                                    <div class="flex gap-2 pt-4 mt-3 border-t border-gray-100 dark:border-gray-700">
-                                        <button onclick="openPdf('${p.pdf_file.replace(/'/g, "\\'")}')" class="btn-action btn-view">
-                                            <i class="fa-solid fa-eye"></i> බලන්න
-                                        </button>
-                                        <button onclick="downloadPdf('${p.pdf_file.replace(/'/g, "\\'")}', '${p.title.replace(/'/g, "\\'")}')" class="btn-action btn-download">
-                                            <i class="fa-solid fa-download"></i> බාගන්න
-                                        </button>
-                                    </div>
-                                ` : `
-                                    <div class="pt-4 mt-3 border-t border-gray-100 dark:border-gray-700">
-                                        <p class="text-xs text-gray-400 text-center"><i class="fa-solid fa-info-circle mr-1"></i>PDF ගොනුවක් නොමැත</p>
-                                    </div>
-                                `}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            if (window.AOS) AOS.refresh();
-        }
-
-        // ============================================
-        // OPEN PDF (Base64)
-        // ============================================
-        function openPdf(pdfData) {
-            try {
-                if (!pdfData || pdfData === 'null') {
-                    alert('මෙම ප්‍රශ්න පත්‍රයට PDF ගොනුවක් අමුණා නැත');
-                    return;
-                }
-                
-                if (pdfData.startsWith('data:')) {
-                    const parts = pdfData.split(',');
-                    const mime = parts[0].match(/:(.*?);/)[1];
-                    const b64 = parts[1];
-                    const binary = atob(b64);
-                    const array = new Uint8Array(binary.length);
-                    for (let i = 0; i < binary.length; i++) {
-                        array[i] = binary.charCodeAt(i);
-                    }
-                    const blob = new Blob([array], { type: mime });
-                    const url = URL.createObjectURL(blob);
-                    window.open(url, '_blank');
-                } else {
-                    window.open(pdfData, '_blank');
-                }
-            } catch (e) {
-                console.error('PDF open error:', e);
-                alert('PDF එක open කිරීමේ දෝෂයක්: ' + e.message);
-            }
-        }
-
-        // ============================================
-        // DOWNLOAD PDF
-        // ============================================
-        function downloadPdf(pdfData, title) {
-            try {
-                if (!pdfData || pdfData === 'null') {
-                    alert('මෙම ප්‍රශ්න පත්‍රයට PDF ගොනුවක් අමුණා නැත');
-                    return;
-                }
-
-                const filename = title.replace(/[^a-zA-Z0-9\u0D80-\u0DFF\s]/g, '').trim() + '.pdf';
-
-                if (pdfData.startsWith('data:')) {
-                    const link = document.createElement('a');
-                    link.href = pdfData;
-                    link.download = filename;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                } else {
-                    window.open(pdfData, '_blank');
-                }
-            } catch (e) {
-                console.error('PDF download error:', e);
-                alert('PDF එක download කිරීමේ දෝෂයක්: ' + e.message);
-            }
-        }
-
-        // ============================================
-        // FILTERS
-        // ============================================
-        function applyFilters() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const gradeId = document.getElementById('gradeFilter').value;
-            const subjectId = document.getElementById('subjectFilter').value;
-            const type = document.getElementById('typeFilter').value;
-
-            const filtered = allPapers.filter(p => {
-                const matchSearch = !search || (p.title || '').toLowerCase().includes(search);
-                const matchGrade = !gradeId || String(p.grade_id) === gradeId;
-                const matchSubject = !subjectId || String(p.subject_id) === subjectId;
-                const matchType = !type || p.paper_type === type;
-                return matchSearch && matchGrade && matchSubject && matchType;
-            });
-
-            renderPapers(filtered);
-        }
-
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.getElementById('gradeFilter').addEventListener('change', applyFilters);
-        document.getElementById('subjectFilter').addEventListener('change', applyFilters);
-        document.getElementById('typeFilter').addEventListener('change', applyFilters);
-
-        // ============================================
-        // INIT
-        // ============================================
-        document.addEventListener('DOMContentLoaded', async () => {
-            loadTheme();
-            await loadFilters();
-            await loadPapers();
+// ============================================
+// LOAD FILTERS
+// ============================================
+async function loadFilters() {
+    try {
+        const [gradesRes, subjectsRes] = await Promise.all([
+            fetch(`${API_BASE}/grades`),
+            fetch(`${API_BASE}/subjects`)
+        ]);
+        
+        const grades = await gradesRes.json();
+        const subjects = await subjectsRes.json();
+        
+        const gradesArr = Array.isArray(grades) ? grades : (grades.grades || []);
+        const subjectsArr = Array.isArray(subjects) ? subjects : (subjects.subjects || []);
+        
+        const gradeFilter = document.getElementById('gradeFilter');
+        gradesArr.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g.id;
+            opt.textContent = g.grade_name;
+            gradeFilter.appendChild(opt);
         });
-    </script>
+        
+        const subjectFilter = document.getElementById('subjectFilter');
+        subjectsArr.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.subject_name;
+            subjectFilter.appendChild(opt);
+        });
+        
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        gradeFilter.addEventListener('change', applyFilters);
+        subjectFilter.addEventListener('change', applyFilters);
+        document.getElementById('typeFilter').addEventListener('change', applyFilters);
+        
+    } catch (err) {
+        console.error('Filter load error:', err);
+    }
+}
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ duration: 800, once: true, offset: 100 });
-    </script>
-        <script src="/js/ai-chat.js"></script>
+// ============================================
+// APPLY FILTERS
+// ============================================
+function applyFilters() {
+    const search = document.getElementById('searchInput').value.toLowerCase().trim();
+    const gradeId = document.getElementById('gradeFilter').value;
+    const subjectId = document.getElementById('subjectFilter').value;
+    const type = document.getElementById('typeFilter').value;
+    
+    filteredPapers = allPapers.filter(p => {
+        if (search && !(p.title || '').toLowerCase().includes(search)) return false;
+        if (gradeId && String(p.grade_id) !== gradeId) return false;
+        if (subjectId && String(p.subject_id) !== subjectId) return false;
+        if (type && p.paper_type !== type) return false;
+        return true;
+    });
+    
+    renderPapers();
+}
+
+// ============================================
+// RENDER PAPERS
+// ============================================
+function renderPapers() {
+    const container = document.getElementById('papersContainer');
+    
+    if (filteredPapers.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-folder-open"></i>
+                <p class="text-gray-500 text-lg font-bold">ප්‍රශ්න පත්‍ර නොමැත</p>
+                <p class="text-gray-400 text-sm mt-2">කරුණාකර පසුව නැවත උත්සාහ කරන්න</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const typeMap = {
+        term: 'වාර පරීක්ෂණය',
+        school: 'පාසල් පරීක්ෂණය',
+        practice: 'පුහුණු',
+        exam: 'විභාගය',
+        model: 'ආදර්ශ'
+    };
+    
+    container.innerHTML = filteredPapers.map(p => `
+        <div class="paper-card">
+            <div class="paper-header">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span class="paper-badge">${typeMap[p.paper_type] || 'ප්‍රශ්න පත්‍රය'}</span>
+                ${p.year ? `<span class="paper-year-badge">${p.year}</span>` : ''}
+            </div>
+            <div class="paper-info">
+                <h3>${escapeHtml(p.title || 'N/A')}</h3>
+                <p>
+                    ${p.grade_name ? `<span><i class="fa-solid fa-graduation-cap text-brand-gold"></i> ${escapeHtml(p.grade_name)}</span>` : ''}
+                    ${p.subject_name ? `<span><i class="fa-solid fa-book text-brand-gold"></i> ${escapeHtml(p.subject_name)}</span>` : ''}
+                </p>
+            </div>
+            <div class="paper-actions">
+                ${p.pdf_file ? `
+                    <a href="${p.pdf_file}" target="_blank" class="btn-download">
+                        <i class="fa-solid fa-download"></i>PDF බලන්න
+                    </a>
+                ` : `
+                    <button class="btn-download disabled" disabled>
+                        <i class="fa-solid fa-file-pdf"></i>PDF නොමැත
+                    </button>
+                `}
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============================================
+// HELPERS
+// ============================================
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
+    loadFilters();
+    loadPapers();
+});
+</script>
+
 </body>
 </html>
