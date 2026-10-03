@@ -30,6 +30,19 @@ const PORT = process.env.PORT || 3000;
 app.set('trust proxy', 1);
 
 // ============================================
+// UPLOADS DIRECTORY SETUP
+// ============================================
+const UPLOADS_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH
+    ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH, '..', 'uploads')
+    : path.join(__dirname, 'uploads');
+
+if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    console.log('✅ Created uploads directory:', UPLOADS_DIR);
+}
+console.log('✅ Uploads directory:', UPLOADS_DIR);
+
+// ============================================
 // FIND PUBLIC FOLDER
 // ============================================
 const publicPaths = [
@@ -58,7 +71,8 @@ if (!publicPath) {
 // ============================================
 app.use(helmet({
     contentSecurityPolicy: false,
-    crossOriginEmbedderPolicy: false
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' }
 }));
 app.use(cors());
 app.use(express.json({ limit: '200mb' }));
@@ -79,7 +93,17 @@ if (publicPath) {
     app.use(express.static(publicPath));
     console.log('✅ Static files served from:', publicPath);
 }
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Serve uploads with proper headers
+app.use('/uploads', express.static(UPLOADS_DIR, {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.pdf')) {
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', 'inline');
+        }
+    }
+}));
+console.log('✅ Uploads served from: /uploads →', UPLOADS_DIR);
 
 // ============================================
 // API ROUTES
@@ -103,6 +127,7 @@ app.get('/api/health', (req, res) => {
         status: 'ok', 
         timestamp: new Date().toISOString(),
         publicPath: publicPath || 'NOT FOUND',
+        uploadsPath: UPLOADS_DIR,
         cwd: process.cwd(),
         dirname: __dirname
     });
@@ -145,11 +170,13 @@ app.use((err, req, res, next) => {
 });
 
 // ============================================
-// START SERVER (FIXED - seed skip if DB exists)
+// START SERVER
 // ============================================
 async function startServer() {
     try {
-        const dbPath = path.join(__dirname, 'database', 'akuru.db');
+        const dbDir = process.env.RAILWAY_VOLUME_MOUNT_PATH 
+            || path.join(__dirname, 'database');
+        const dbPath = path.join(dbDir, 'akuru.db');
         const dbAlreadyExists = fs.existsSync(dbPath);
 
         await initializeDatabase();
@@ -169,6 +196,7 @@ async function startServer() {
             console.log('╠══════════════════════════════════════════════════╣');
             console.log(`║   🌐 Server:  http://localhost:${PORT}              ║`);
             console.log(`║   📁 Public:  ${publicPath ? 'FOUND' : 'NOT FOUND'}                          ║`);
+            console.log(`║   📄 Uploads: ${UPLOADS_DIR.substring(0, 25)}...           ║`);
             console.log(`║   💾 DB:      ${dbAlreadyExists ? 'EXISTS' : 'NEWLY CREATED'}                    ║`);
             console.log('╚══════════════════════════════════════════════════╝');
             console.log('');
