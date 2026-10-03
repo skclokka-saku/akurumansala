@@ -531,13 +531,14 @@
         }
 
         // ============================================
-        // LOAD VIDEOS
+        // LOAD VIDEOS (API FIX)
         // ============================================
         async function loadVideos() {
             const container = document.getElementById('videosContainer');
             try {
                 console.log('📥 Loading videos...');
-                const res = await fetch(`${API_BASE}/videos`);
+                // *** වෙනස: API Endpoint එක /resources?type=video ලෙස වෙනස් කර ඇත ***
+                const res = await fetch(`${API_BASE}/resources?type=video&limit=200`);
                 
                 if (!res.ok) {
                     throw new Error(`HTTP error! status: ${res.status}`);
@@ -546,7 +547,8 @@
                 const data = await res.json();
                 console.log('✅ Videos received:', data);
                 
-                allVideos = Array.isArray(data) ? data : (data.videos || []);
+                // *** වෙනස: Data Structure එක resources API එකට ගැලපෙන ලෙස වෙනස් කර ඇත ***
+                allVideos = data.resources || data.lessons || [];
                 console.log('✅ Total videos:', allVideos.length);
                 
                 renderVideos(allVideos);
@@ -576,7 +578,9 @@
             container.innerHTML = `
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     ${videos.map(v => {
-                        const ytId = getYouTubeId(v.video_url || v.youtube_id);
+                        // *** වෙනස: video_url වෙනුවට video_url හෝ youtube_url භාවිතා කර ඇත ***
+                        const videoUrl = v.video_url || v.youtube_url || v.url || '';
+                        const ytId = getYouTubeId(videoUrl);
                         const thumb = ytId 
                             ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` 
                             : 'https://placehold.co/600x400/0F2C59/D4A017?text=Video';
@@ -609,7 +613,7 @@
         }
 
         // ============================================
-        // OPEN VIDEO MODAL
+        // OPEN VIDEO MODAL (API FIX)
         // ============================================
         async function openVideoModal(id) {
             const modal = document.getElementById('videoModal');
@@ -619,10 +623,12 @@
             const desc = document.getElementById('modalVideoDesc');
 
             try {
-                const res = await fetch(`${API_BASE}/videos/${id}`);
+                // *** වෙනස: API Endpoint එක /resources/video/${id} ලෙස වෙනස් කර ඇත ***
+                const res = await fetch(`${API_BASE}/resources/video/${id}`);
                 const video = await res.json();
 
-                const ytId = getYouTubeId(video.video_url || video.youtube_id);
+                const videoUrl = video.video_url || video.youtube_url || video.url || '';
+                const ytId = getYouTubeId(videoUrl);
                 
                 if (ytId) {
                     wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
