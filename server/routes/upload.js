@@ -1,99 +1,133 @@
+// routes/upload.js
 const express = require('express');
-const router = express.Router();
 const multer = require('multer');
-const { authenticate, authorize } = require('../middleware/auth');
+const path = require('path');
+const fs = require('fs');
+const crypto = require('crypto');
 
-// Multer memory storage (Base64 encoding සඳහා)
-const storage = multer.memoryStorage();
+const router = express.Router();
 
+// ============================================
+// UPLOADS DIRECTORY
+// ============================================
+const UPLOADS_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH
+    ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH, '..', 'uploads')
+    : path.join(__dirname, '..', 'uploads');
+
+if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
+
+// ============================================
+// MULTER STORAGE
+// ============================================
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, UPLOADS_DIR);
+    },
+    filename: (req, file, cb) => {
+        // Generate unique filename
+        const uniqueId = crypto.randomBytes(8).toString('hex');
+        const timestamp = Date.now();
+        const ext = path.extname(file.originalname).toLowerCase();
+        const cleanName = path.basename(file.originalname, ext)
+            .replace(/[^a-zA-Z0-9\u0D80-\u0DFF]/g, '_')
+            .substring(0, 30);
+        cb(null, `${timestamp}_${uniqueId}_${cleanName}${ext}`);
+    }
+});
+
+// File filter
 const fileFilter = (req, file, cb) => {
-    const allowed = [
+    const allowedTypes = [
         'application/pdf',
-        'image/jpeg', 'image/png', 'image/gif', 'image/webp',
-        'video/mp4', 'video/webm'
+        'image/jpeg', 'image/png', 'image/webp', 'image/gif',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ];
-    if (allowed.includes(file.mimetype)) cb(null, true);
-    else cb(new Error('අවසර නැති ෆයිල් වර්ගයකි. PDF, ඡායාරූප හෝ වීඩියෝ උඩුගත කරන්න.'), false);
+    
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error(`ෆයිල් වර්ගය අවසර නැහැ: ${file.mimetype}`), false);
+    }
 };
 
 const upload = multer({
-    storage,
-    fileFilter,
-    limits: { fileSize: 100 * 1024 * 1024 } // 100MB
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: {
+        fileSize: 50 * 1024 * 1024 // 50MB
+    }
 });
 
-// ==========================================
-// POST /api/upload - Single file (Base64)
-// ==========================================
-router.post('/', authenticate, authorize('admin', 'teacher'), (req, res) => {
-    upload.single('file')(req, res, async (err) => {
-        if (err) {
-            console.error('Multer error:', err);
-            return res.status(400).json({ error: err.message || 'ෆයිල් උඩුගත කිරීමේ දෝෂයක්' });
-        }
+// ============================================
+// AUTH MIDDLEWARE (simple check)
+// ============================================
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
+function authMiddleware(req, res, next) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Authentication required' });
+    }
+    
+    const token = authHeader.substring(7);
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (err) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+}
+
+// ============================================
+// UPLOAD ROUTE
+// ============================================
+router.post('/', authMiddleware, upload.single('file'), (req, res) => {
+    try {
         if (!req.file) {
-            return res.status(400).json({ error: 'ෆයිල් එකක් තෝරන්න' });
+            return res.status(400).json({ error: 'ෆයිල් එකක් අවශ්‍යයි' });
         }
 
-        try {
-            // ෆයිල් එක Base64 string එකකට convert කරන්න
-            const base64Data = req.file.buffer.toString('base64');
-            const dataUrl = `data:${req.file.mimetype};base64,${base64Data}`;
+        const fileUrl = `/uploads/${req.file.filename}`;
+        const fullUrl = `${req.protocol}://${req.get('host')}${fileUrl}`;
 
-            const fileInfo = {
-                url: dataUrl,
-                name: req.file.originalname,
+        console.log('✅ File uploaded:', req.file.filename, '(', Math.round(req.file.size / 1024), 'KB )');
+
+        res.json({
+            success: true,
+            file: {
+                filename: req.file.filename,
+                originalname: req.file.originalname,
+                mimetype: req.file.mimetype,
                 size: req.file.size,
-                type: req.file.mimetype
-            };
-
-            console.log('✅ File uploaded (Base64):', req.file.originalname);
-
-            res.json({
-                message: 'ෆයිල් සාර්ථකව උඩුගත කරන ලදී',
-                file: fileInfo
-            });
-        } catch (error) {
-            console.error('Upload error:', error);
-            res.status(500).json({ error: 'ෆයිල් උඩුගත කිරීමේ දෝෂයක්: ' + error.message });
-        }
-    });
+                url: fileUrl,
+                fullUrl: fullUrl
+            }
+        });
+    } catch (err) {
+        console.error('Upload error:', err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// ==========================================
-// POST /api/upload/multiple
-// ==========================================
-router.post('/multiple', authenticate, authorize('admin', 'teacher'), (req, res) => {
-    upload.array('files', 10)(req, res, async (err) => {
-        if (err) {
-            return res.status(400).json({ error: err.message || 'ෆයිල් උඩුගත කිරීමේ දෝෂයක්' });
+// ============================================
+// ERROR HANDLER for multer
+// ============================================
+router.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({ error: 'ෆයිල් එක 50MB ට වඩා විශාලයි' });
         }
-
-        if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ error: 'ෆයිල් එකක්වත් තෝරා නැත' });
-        }
-
-        try {
-            const files = req.files.map(file => {
-                const base64Data = file.buffer.toString('base64');
-                return {
-                    url: `data:${file.mimetype};base64,${base64Data}`,
-                    name: file.originalname,
-                    size: file.size,
-                    type: file.mimetype
-                };
-            });
-
-            res.json({
-                message: 'ෆයිල් සාර්ථකව උඩුගත කරන ලදී',
-                files: files
-            });
-        } catch (error) {
-            console.error('Upload error:', error);
-            res.status(500).json({ error: 'ෆයිල් උඩුගත කිරීමේ දෝෂයක්: ' + error.message });
-        }
-    });
+        return res.status(400).json({ error: err.message });
+    }
+    if (err) {
+        return res.status(400).json({ error: err.message });
+    }
+    next();
 });
 
 module.exports = router;
