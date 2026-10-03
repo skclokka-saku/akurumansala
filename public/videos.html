@@ -31,42 +31,30 @@
         body { 
             font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; 
             background: #F8F9FC;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.04) 0%, transparent 50%);
         }
-        body.dark { 
-            background: #0a0f1e; 
-            color: #e2e8f0;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(212, 160, 23, 0.06) 0%, transparent 50%);
-        }
+        body.dark { background: #0a0f1e; color: #e2e8f0; }
 
-            .container-wide {
-        width: 100%;
-        max-width: 1920px;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        margin: 0 auto;
-    }
-    @media (min-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
-    @media (min-width: 1024px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
-    @media (min-width: 1440px) { .container-wide { padding-left: 2.5rem; padding-right: 2.5rem; } }
+        .container-wide {
+            width: 100%;
+            max-width: 1920px;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            margin: 0 auto;
+        }
+        @media (min-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
+        @media (min-width: 1024px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
+
         .main-nav { 
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(20px);
             box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
-            border-bottom: 1px solid rgba(212, 160, 23, 0.1);
         }
-        body.dark .main-nav { 
-            background: rgba(26, 26, 46, 0.98);
-        }
+        body.dark .main-nav { background: rgba(26, 26, 46, 0.98); }
 
         .logo-wrap {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #ffffff, #f8f9fc);
+            background: white;
             border-radius: 1rem;
             box-shadow: 0 6px 20px rgba(15, 44, 89, 0.15);
             border: 2px solid rgba(212, 160, 23, 0.3);
@@ -74,17 +62,15 @@
             align-items: center;
             justify-content: center;
             padding: 0.3rem;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s;
         }
         .logo-wrap:hover { transform: scale(1.08) rotate(-3deg); }
         .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
 
         .nav-link {
-            position: relative;
             font-weight: 700;
             color: #0F2C59;
             font-size: 0.875rem;
-            letter-spacing: 0.3px;
             transition: all 0.3s;
             padding: 0.6rem 0.9rem;
             text-decoration: none;
@@ -95,14 +81,9 @@
         }
         body.dark .nav-link { color: #cbd5e1; }
         .nav-link i { font-size: 0.8rem; color: #D4A017; }
-        .nav-link:hover { 
+        .nav-link:hover, .nav-link.active { 
             color: #D4A017; 
             background: rgba(212, 160, 23, 0.1);
-            transform: translateY(-2px);
-        }
-        .nav-link.active { 
-            color: #D4A017; 
-            background: rgba(212, 160, 23, 0.12);
         }
 
         .theme-toggle {
@@ -115,7 +96,7 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s;
             border: 3px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
             font-size: 1.05rem;
@@ -128,44 +109,36 @@
             padding: 0.8rem 1.75rem;
             border-radius: 0.9rem;
             font-weight: 800;
-            text-transform: uppercase;
             font-size: 0.75rem;
+            text-transform: uppercase;
             letter-spacing: 1.2px;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
-            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4), inset 0 -3px 6px rgba(0,0,0,0.1);
-            cursor: pointer;
-            border: none;
-            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4);
+            transition: all 0.4s;
         }
-        .btn-primary:hover { 
-            transform: translateY(-4px) scale(1.04); 
-            box-shadow: 0 15px 35px rgba(212, 160, 23, 0.6);
-        }
+        .btn-primary:hover { transform: translateY(-4px) scale(1.04); }
 
-        /* VIDEO CARDS - 3D */
+        /* VIDEO CARDS */
         .video-card {
             background: white;
             border-radius: 1.5rem;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             display: flex;
             flex-direction: column;
             height: 100%;
             cursor: pointer;
             border: 1px solid rgba(212, 160, 23, 0.1);
-            position: relative;
         }
         body.dark .video-card { background: #1a1a2e; }
         .video-card:hover { 
-            transform: translateY(-12px) scale(1.02); 
+            transform: translateY(-12px); 
             box-shadow: 0 30px 60px rgba(15, 44, 89, 0.25);
-            border-color: rgba(212, 160, 23, 0.3);
         }
-        .video-card:active { transform: translateY(-6px) scale(1.01); }
 
         .video-thumb {
             position: relative;
@@ -177,9 +150,9 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.6s;
         }
-        .video-card:hover .video-thumb img { transform: scale(1.15) rotate(2deg); }
+        .video-card:hover .video-thumb img { transform: scale(1.15); }
 
         .video-play-btn {
             position: absolute;
@@ -196,12 +169,9 @@
             justify-content: center;
             font-size: 1.7rem;
             box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5);
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.5s;
         }
-        .video-card:hover .video-play-btn { 
-            transform: translate(-50%, -50%) scale(1.2) rotate(10deg); 
-            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.7);
-        }
+        .video-card:hover .video-play-btn { transform: translate(-50%, -50%) scale(1.2); }
 
         .video-badge {
             position: absolute;
@@ -213,22 +183,9 @@
             border-radius: 999px;
             font-weight: 800;
             font-size: 0.7rem;
-            letter-spacing: 0.5px;
             text-transform: uppercase;
             box-shadow: 0 4px 15px rgba(212, 160, 23, 0.5);
             z-index: 2;
-        }
-
-        .video-duration {
-            position: absolute;
-            bottom: 1rem;
-            right: 1rem;
-            background: rgba(0,0,0,0.85);
-            color: white;
-            padding: 0.35rem 0.85rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 700;
         }
 
         .filter-input {
@@ -258,7 +215,6 @@
             z-index: 100;
             padding: 1rem;
             overflow-y: auto;
-            backdrop-filter: blur(5px);
         }
         .modal-overlay.active { display: flex; }
         .modal-content {
@@ -269,7 +225,6 @@
             max-height: 90vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
         }
         body.dark .modal-content { background: #1e293b; }
         .modal-video-wrap {
@@ -278,14 +233,13 @@
             height: 0;
             background: #000;
         }
-                .modal-video-wrap iframe {
+        .modal-video-wrap iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             border: none;
-            border-radius: 1rem 1rem 0 0;
         }
 
         .footer { 
@@ -294,12 +248,7 @@
             padding-top: 4rem; 
         }
         body.dark .footer { background: #05080f; }
-        .footer a { 
-            color: rgba(255,255,255,0.75); 
-            transition: all 0.3s; 
-            font-size: 0.9rem; 
-            text-decoration: none; 
-        }
+        .footer a { color: rgba(255,255,255,0.75); transition: all 0.3s; font-size: 0.9rem; text-decoration: none; }
         .footer a:hover { color: #D4A017; padding-left: 6px; }
         .footer-title {
             color: white;
@@ -328,22 +277,27 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: all 0.4s;
             color: #ffffff;
             text-decoration: none;
             font-size: 1rem;
             box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-            border: 1px solid rgba(255,255,255,0.15);
         }
-        .social-icon i { color: #ffffff !important; font-size: 1.1rem; }
+        .social-icon i { color: #ffffff !important; }
         .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); }
         .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
         .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
         .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
-        .social-icon:hover { 
-            transform: translateY(-6px) scale(1.15) rotate(-5deg); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        .social-icon:hover { transform: translateY(-6px) scale(1.15) rotate(-5deg); }
+
+        .empty-state {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 4rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
         }
+        body.dark .empty-state { background: #1a1a2e; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -440,10 +394,10 @@
                         ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
                     </p>
                     <div class="flex flex-wrap gap-3">
-                        <a href="#" class="social-icon facebook" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon youtube" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#" class="social-icon whatsapp" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="#" class="social-icon instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-icon facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon youtube"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-icon whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
+                        <a href="#" class="social-icon instagram"><i class="fa-brands fa-instagram"></i></a>
                     </div>
                 </div>
                 <div>
@@ -460,7 +414,7 @@
                     <ul class="space-y-3">
                         <li class="flex items-start space-x-3">
                             <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
-                            <span class="text-white/80 text-sm">කොළඹ, ශ්‍රී ලංකාව</span>
+                            <span class="text-white/80 text-sm">කෑගල්ල, ශ්‍රී ලංකාව</span>
                         </li>
                         <li class="flex items-center space-x-3">
                             <i class="fa-solid fa-phone text-brand-gold"></i>
@@ -527,33 +481,23 @@
         // YOUTUBE ID EXTRACTION
         // ============================================
         function getYouTubeId(url) {
-    if (!url) return null;
-    
-    // Clean the URL
-    url = url.trim();
-    
-    // Handle youtu.be/XXXXX format
-    let match = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
-    if (match) return match[1];
-    
-    // Handle youtube.com/watch?v=XXXXX format
-    match = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
-    if (match) return match[1];
-    
-    // Handle youtube.com/embed/XXXXX format
-    match = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
-    if (match) return match[1];
-    
-    // Handle youtube.com/v/XXXXX format
-    match = url.match(/youtube\.com\/v\/([a-zA-Z0-9_-]{11})/);
-    if (match) return match[1];
-    
-    // Handle just the ID (11 characters)
-    match = url.match(/^([a-zA-Z0-9_-]{11})$/);
-    if (match) return match[1];
-    
-    return null;
-}
+            if (!url) return null;
+            url = url.trim();
+            
+            let match = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+            if (match) return match[1];
+            
+            match = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+            if (match) return match[1];
+            
+            match = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
+            if (match) return match[1];
+            
+            match = url.match(/^([a-zA-Z0-9_-]{11})$/);
+            if (match) return match[1];
+            
+            return null;
+        }
 
         // ============================================
         // LOAD FILTERS
@@ -591,127 +535,104 @@
         // LOAD VIDEOS
         // ============================================
         async function loadVideos() {
-    const container = document.getElementById('videosContainer');
-    try {
-        console.log('📥 Loading videos...');
-        
-        const res = await fetch(`${API_BASE}/videos`);
-        const data = await res.json();
-        
-        console.log('✅ Videos received:', data);
-        
-        // Fix: API returns array directly
-        allVideos = Array.isArray(data) ? data : (data.videos || []);
-        
-        console.log('✅ Total videos:', allVideos.length);
-        
-        renderVideos(allVideos);
-    } catch (err) {
-        console.error('❌ Error loading videos:', err);
-        container.innerHTML = `<div class="text-center py-16 text-red-500">දෝෂයක්: ${err.message}</div>`;
-    }
-}
+            const container = document.getElementById('videosContainer');
+            try {
+                const res = await fetch(`${API_BASE}/videos`);
+                const data = await res.json();
+                
+                allVideos = Array.isArray(data) ? data : (data.videos || []);
+                renderVideos(allVideos);
+            } catch (err) {
+                console.error('Error loading videos:', err);
+                container.innerHTML = `<div class="empty-state text-red-500">දෝෂයක්: ${err.message}</div>`;
+            }
+        }
 
         // ============================================
         // RENDER VIDEOS
         // ============================================
         function renderVideos(videos) {
-    const container = document.getElementById('videosContainer');
+            const container = document.getElementById('videosContainer');
 
-    console.log('🎨 Rendering videos:', videos.length);
-
-    if (!videos || videos.length === 0) {
-        container.innerHTML = `
-            <div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg">
-                <i class="fa-solid fa-video text-6xl text-gray-300 mb-4"></i>
-                <p class="text-gray-500 text-lg">වීඩියෝ නොමැත</p>
-                <p class="text-gray-400 text-sm mt-2">Admin Panel එකෙන් වීඩියෝ එකතු කරන්න</p>
-            </div>
-        `;
-        return;
-    }
-
-    container.innerHTML = `
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            ${videos.map(v => {
-                const ytId = getYouTubeId(v.video_url || v.youtube_id);
-                const thumb = ytId 
-                    ? `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg` 
-                    : '/images/video-placeholder.jpg';
-                const fallbackThumb = ytId 
-                    ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` 
-                    : '/images/video-placeholder.jpg';
-                
-                return `
-                    <div class="video-card" onclick="openVideoModal(${v.id})" data-aos="fade-up">
-                        <div class="video-thumb">
-                            <img src="${thumb}" 
-                                 alt="${v.title}" 
-                                 onerror="this.onerror=null; this.src='${fallbackThumb}'">
-                            ${v.subject_name ? `<span class="video-badge">${v.subject_name}</span>` : ''}
-                            <div class="video-play-btn">
-                                <i class="fa-solid fa-play"></i>
-                            </div>
-                        </div>
-                        <div class="p-5 flex-1 flex flex-col">
-                            <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${v.title}</h3>
-                            <p class="text-xs text-gray-500 mb-3">
-                                ${v.grade_name || ''} ${v.subject_name ? '• ' + v.subject_name : ''}
-                            </p>
-                            <p class="text-xs text-gray-400 flex-1 line-clamp-2">${v.description || 'විස්තරයක් නොමැත'}</p>
-                            <div class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
-                                <span class="text-xs text-gray-500"><i class="fa-solid fa-eye mr-1"></i>${v.views || 0}</span>
-                                <span class="text-brand-gold font-bold text-xs">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
-                            </div>
-                        </div>
+            if (!videos || videos.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-video text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500 text-lg">වීඩියෝ නොමැත</p>
+                        <p class="text-gray-400 text-sm mt-2">Admin Panel එකෙන් වීඩියෝ එකතු කරන්න</p>
                     </div>
                 `;
-            }).join('')}
-        </div>
-    `;
-    if (window.AOS) AOS.refresh();
-}
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    ${videos.map(v => {
+                        const ytId = getYouTubeId(v.video_url || v.youtube_id);
+                        const thumb = ytId 
+                            ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` 
+                            : 'https://placehold.co/600x400/0F2C59/D4A017?text=Video';
+                        
+                        return `
+                            <div class="video-card" onclick="openVideoModal(${v.id})" data-aos="fade-up">
+                                <div class="video-thumb">
+                                    <img src="${thumb}" alt="${v.title}">
+                                    ${v.subject_name ? `<span class="video-badge">${v.subject_name}</span>` : ''}
+                                    <div class="video-play-btn">
+                                        <i class="fa-solid fa-play"></i>
+                                    </div>
+                                </div>
+                                <div class="p-5 flex-1 flex flex-col">
+                                    <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${v.title}</h3>
+                                    <p class="text-xs text-gray-500 mb-3">
+                                        ${v.grade_name || ''} ${v.subject_name ? '• ' + v.subject_name : ''}
+                                    </p>
+                                    <div class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
+                                        <span class="text-xs text-gray-500"><i class="fa-solid fa-eye mr-1"></i>${v.views || 0}</span>
+                                        <span class="text-brand-gold font-bold text-xs">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+            if (window.AOS) AOS.refresh();
+        }
+
         // ============================================
         // OPEN VIDEO MODAL
         // ============================================
         async function openVideoModal(id) {
-    const modal = document.getElementById('videoModal');
-    const wrap = document.getElementById('modalVideoWrap');
-    const title = document.getElementById('modalVideoTitle');
-    const meta = document.getElementById('modalVideoMeta');
-    const desc = document.getElementById('modalVideoDesc');
+            const modal = document.getElementById('videoModal');
+            const wrap = document.getElementById('modalVideoWrap');
+            const title = document.getElementById('modalVideoTitle');
+            const meta = document.getElementById('modalVideoMeta');
+            const desc = document.getElementById('modalVideoDesc');
 
-    try {
-        const res = await fetch(`${API_BASE}/videos/${id}`);
-        const video = await res.json();
+            try {
+                const res = await fetch(`${API_BASE}/videos/${id}`);
+                const video = await res.json();
 
-        const ytId = getYouTubeId(video.video_url || video.youtube_id);
-        
-        if (ytId) {
-            // FIX: Use youtube-nocookie.com and proper parameters
-            wrap.innerHTML = `<iframe 
-                src="https://www.youtube-nocookie.com/embed/${ytId}?rel=0&modestbranding=1&playsinline=1" 
-                title="${video.title}"
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen>
-            </iframe>`;
-        } else {
-            wrap.innerHTML = `<div class="flex items-center justify-center h-full text-white"><p>වීඩියෝව නොමැත</p></div>`;
+                const ytId = getYouTubeId(video.video_url || video.youtube_id);
+                
+                if (ytId) {
+                    wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                } else {
+                    wrap.innerHTML = `<div class="flex items-center justify-center h-full text-white"><p>වීඩියෝව නොමැත</p></div>`;
+                }
+
+                title.textContent = video.title || '';
+                meta.textContent = `${video.grade_name || ''} ${video.subject_name ? '• ' + video.subject_name : ''}`;
+                desc.textContent = video.description || 'විස්තරයක් නොමැත';
+
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            } catch (err) {
+                console.error('Video open error:', err);
+                alert('වීඩියෝව load කිරීමේ දෝෂයක්');
+            }
         }
-
-        title.textContent = video.title || '';
-        meta.textContent = `${video.grade_name || ''} ${video.subject_name ? '• ' + video.subject_name : ''}`;
-        desc.textContent = video.description || 'විස්තරයක් නොමැත';
-
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    } catch (err) {
-        console.error('Video open error:', err);
-        alert('වීඩියෝව load කිරීමේ දෝෂයක්');
-    }
-}
 
         function closeVideoModal() {
             document.getElementById('videoModal').classList.remove('active');
@@ -755,6 +676,6 @@
     <script>
         AOS.init({ duration: 800, once: true, offset: 100 });
     </script>
-        <script src="/js/ai-chat.js"></script>
+    <script src="/js/ai-chat.js"></script>
 </body>
 </html>
