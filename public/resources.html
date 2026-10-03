@@ -15,11 +15,11 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
     body.dark { background: #0a0f1e; color: #e2e8f0; }
     .container-wide { width: 100%; max-width: 1920px; padding: 0 1rem; margin: 0 auto; }
     @media (min-width: 1024px) { .container-wide { padding: 0 2rem; } }
-    .main-nav { background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(15,44,89,0.1); }
+    .main-nav { background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(15,44,89,0.1); position: sticky; top: 0; z-index: 50; }
     body.dark .main-nav { background: rgba(26,26,46,0.98); }
     .logo-wrap { width: 70px; height: 70px; background: white; border-radius: 1.2rem; border: 2px solid rgba(212,160,23,0.4); display: flex; align-items: center; justify-content: center; padding: 0.4rem; }
     .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
-    .nav-link { font-weight: 700; color: #0F2C59; padding: 0.75rem 1.2rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 0.85rem; }
+    .nav-link { font-weight: 700; color: #0F2C59; padding: 0.75rem 1.2rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 0.85rem; transition: all 0.3s; }
     body.dark .nav-link { color: #cbd5e1; }
     .nav-link i { color: #D4A017; }
     .nav-link:hover, .nav-link.active { color: #D4A017; background: rgba(212,160,23,0.1); }
@@ -53,7 +53,6 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
     .empty-state i { font-size: 4rem; color: #cbd5e1; margin-bottom: 1rem; }
     .spinner { width: 50px; height: 50px; border: 4px solid rgba(212,160,23,0.2); border-top-color: #D4A017; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .debug-info { background: #fef3c7; border: 2px solid #f59e0b; padding: 1rem; border-radius: 0.75rem; margin: 1rem 0; font-family: monospace; font-size: 0.85rem; color: #78350f; }
     .footer { background: linear-gradient(180deg, #0F2C59, #0a1a3a); color: white; padding: 3rem 0 2rem; margin-top: 4rem; }
     .pdf-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; visibility: hidden; transition: all 0.3s; }
     .pdf-modal.show { opacity: 1; visibility: visible; }
@@ -70,25 +69,25 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
 </head>
 <body>
 
-<header class="main-nav sticky top-0 z-50">
+<header class="main-nav">
     <div class="container-wide">
-        <div class="h-24 flex items-center justify-between">
-            <a href="/" class="flex items-center space-x-4">
-                <div class="logo-wrap"><img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'"></div>
-                <div class="hidden sm:block">
-                    <h1 class="text-2xl font-black dark:text-white leading-none" style="color:#0F2C59">අකුරු මංසල</h1>
-                    <p class="text-sm font-bold mt-1" style="color:#D4A017">ඉගෙනුමට නව මඟක්</p>
+        <div style="height: 96px; display: flex; align-items: center; justify-content: space-between;">
+            <a href="/" style="display: flex; align-items: center; gap: 1rem; text-decoration: none;">
+                <div class="logo-wrap"><img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap\' style=\'color:#D4A017;font-size:2rem\'></i>'"></div>
+                <div style="display: none;" class="sm-show">
+                    <h1 style="font-size: 1.5rem; font-weight: 900; color: #0F2C59; line-height: 1;">අකුරු මංසල</h1>
+                    <p style="font-size: 0.9rem; color: #D4A017; font-weight: 700; margin-top: 0.25rem;">ඉගෙනුමට නව මඟක්</p>
                 </div>
             </a>
-            <nav class="hidden lg:flex items-center space-x-1">
+            <nav style="display: none;" class="lg-show">
                 <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
                 <a href="/resources.html" class="nav-link active"><i class="fa-solid fa-book-open"></i>සම්පත්</a>
                 <a href="/papers.html" class="nav-link"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
                 <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
             </nav>
-            <div class="flex items-center space-x-3">
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
                 <button onclick="toggleTheme()" class="theme-toggle"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
-                <a href="/login.html" class="hidden md:inline-flex" style="background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.85rem 1.75rem; border-radius: 1rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 0.65rem;">
+                <a href="/login.html" style="background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.85rem 1.75rem; border-radius: 1rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 0.65rem;">
                     <i class="fa-solid fa-user-shield"></i><span>Admin</span>
                 </a>
             </div>
@@ -98,13 +97,13 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
 
 <section class="page-hero">
     <div class="container-wide">
-        <p style="color:#D4A017; font-weight:700; font-size:0.9rem; letter-spacing:0.2em; margin-bottom:0.75rem;"><i class="fa-solid fa-book-open mr-2"></i>LEARNING LIBRARY</p>
-        <h1 class="text-4xl md:text-6xl font-black mb-3">අධ්‍යාපනික සම්පත්</h1>
+        <p style="color:#D4A017; font-weight:700; font-size:0.9rem; letter-spacing:0.2em; margin-bottom:0.75rem;"><i class="fa-solid fa-book-open" style="margin-right:0.5rem;"></i>LEARNING LIBRARY</p>
+        <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 0.75rem;">අධ්‍යාපනික සම්පත්</h1>
         <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem;">ශ්‍රේණියට සහ විෂයට ගැලපෙන පාඩම් සහ සටහන්</p>
     </div>
 </section>
 
-<section class="container-wide -mt-8 relative z-20">
+<section class="container-wide" style="margin-top: -2rem; position: relative; z-index: 20;">
     <div class="filter-section">
         <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1rem;">
             <button class="tab-btn active" data-type="lesson" onclick="switchTab('lesson')"><i class="fa-solid fa-book"></i> පාඩම්</button>
@@ -116,10 +115,7 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
     </div>
 </section>
 
-<main class="container-wide py-12">
-    <div id="debugInfo" class="debug-info">
-        <strong>🔍 Debug:</strong> <span id="debugText">Loading...</span>
-    </div>
+<main class="container-wide" style="padding: 3rem 1rem;">
     <div id="resourcesContainer">
         <div class="empty-state"><div class="spinner"></div><p>Load වෙමින්...</p></div>
     </div>
@@ -128,7 +124,7 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
 <div id="pdfModal" class="pdf-modal" onclick="if(event.target===this)closePdfModal()">
     <div class="pdf-modal-content" onclick="event.stopPropagation()">
         <div class="pdf-modal-header">
-            <h3 id="pdfModalTitle"><i class="fa-solid fa-file-pdf mr-2"></i>PDF බලන්න</h3>
+            <h3 id="pdfModalTitle" style="font-weight:800; font-size:1.1rem;"><i class="fa-solid fa-file-pdf" style="margin-right:0.5rem;"></i>PDF බලන්න</h3>
             <button class="pdf-modal-close" onclick="closePdfModal()"><i class="fa-solid fa-times"></i></button>
         </div>
         <div class="pdf-modal-body"><iframe id="pdfIframe" src=""></iframe></div>
@@ -141,13 +137,12 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
 </div>
 
 <footer class="footer">
-    <div class="container-wide text-center">
+    <div class="container-wide" style="text-align: center;">
         <p style="color: rgba(255,255,255,0.7);">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
     </div>
 </footer>
 
 <script>
-console.log('🚀 resources.html script START');
 const API_BASE = '/api';
 let currentType = 'lesson';
 let allItems = [];
@@ -163,11 +158,6 @@ function loadTheme() {
         document.body.classList.add('dark');
         document.getElementById('themeIcon').className = 'fa-solid fa-sun';
     }
-}
-function debug(msg) {
-    console.log('DEBUG:', msg);
-    const el = document.getElementById('debugText');
-    if (el) el.textContent = msg;
 }
 function extractArray(data) {
     if (!data) return [];
@@ -189,31 +179,17 @@ function switchTab(type) {
 }
 
 async function loadResources() {
-    console.log('🔄 loadResources() called, type:', currentType);
     const c = document.getElementById('resourcesContainer');
     c.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Load වෙමින්...</p></div>';
-    debug(`Fetching /api/resources?type=${currentType}...`);
     
     try {
         const res = await fetch(`${API_BASE}/resources?type=${currentType}&limit=100`);
-        debug(`Response: ${res.status} ${res.statusText}`);
-        console.log('📡 Response:', res.status);
-        
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        
         const data = await res.json();
-        console.log('📦 Data:', data);
-        console.log('📦 Keys:', Object.keys(data));
-        
         allItems = extractArray(data);
-        console.log('✅ Extracted:', allItems.length);
         filteredItems = [...allItems];
-        debug(`✅ Loaded ${allItems.length} ${currentType}s`);
         renderResources();
-        
     } catch (err) {
-        console.error('❌ Error:', err);
-        debug(`❌ Error: ${err.message}`);
         c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-exclamation-triangle" style="color:#ef4444"></i><p style="color:#ef4444;font-weight:700;">දෝෂයක්: ${err.message}</p></div>`;
     }
 }
@@ -222,7 +198,6 @@ function renderResources() {
     const c = document.getElementById('resourcesContainer');
     if (filteredItems.length === 0) {
         c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-folder-open"></i><p style="color:#64748b;font-weight:700;">සම්පත් නොමැත</p></div>`;
-        debug('⚠️ No items to render');
         return;
     }
     const iconMap = { lesson: 'fa-book-open', article: 'fa-newspaper' };
@@ -251,7 +226,6 @@ function renderResources() {
             </div>
         `;
     }).join('');
-    debug(`✅ Rendered ${filteredItems.length} items`);
 }
 
 function openPdf(itemId) {
@@ -268,7 +242,7 @@ function openPdf(itemId) {
         }
         return;
     }
-    document.getElementById('pdfModalTitle').innerHTML = `<i class="fa-solid fa-file-pdf mr-2"></i>${escapeHtml(item.title)}`;
+    document.getElementById('pdfModalTitle').innerHTML = `<i class="fa-solid fa-file-pdf" style="margin-right:0.5rem;"></i>${escapeHtml(item.title)}`;
     document.getElementById('pdfIframe').src = pdfUrl;
     document.getElementById('pdfDownloadBtn').href = pdfUrl;
     document.getElementById('pdfNewTabBtn').href = pdfUrl;
@@ -308,11 +282,11 @@ function escapeHtml(str) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('✅ DOMContentLoaded fired');
     loadTheme();
     loadResources();
 });
-console.log('✅ resources.html script END');
+
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePdfModal(); });
 </script>
 
 </body>
