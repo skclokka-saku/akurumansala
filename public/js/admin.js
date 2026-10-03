@@ -27,11 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     setTimeout(checkPendingCount, 1000);
     
-    if (state.user && state.user.role === 'web_developer') {
-        const logsLink = document.getElementById('logsLink');
-        if (logsLink) logsLink.style.display = 'flex';
-    }
-    
     console.log('✅ Admin Panel ready');
 });
 
@@ -311,6 +306,7 @@ async function renderResourceTable(type) {
                     <table class="data-table">
                         <thead>
                             <tr>
+                                <th>Image</th>
                                 <th>ID</th>
                                 <th>ශීර්ෂය</th>
                                 <th>ශ්‍රේණිය</th>
@@ -319,8 +315,14 @@ async function renderResourceTable(type) {
                             </tr>
                         </thead>
                         <tbody>
-                            ${items.map(item => `
+                            ${items.map(item => {
+                                const thumbHtml = item.thumbnail 
+                                    ? `<img src="${item.thumbnail}" style="width:60px;height:40px;border-radius:0.5rem;object-fit:cover;border:1px solid #e5e7eb;" alt="thumb">`
+                                    : `<div style="width:60px;height:40px;border-radius:0.5rem;background:linear-gradient(135deg,#0F2C59,#1B3A6B);display:flex;align-items:center;justify-content:center;color:rgba(212,160,23,0.6);"><i class="fa-solid fa-image"></i></div>`;
+                                
+                                return `
                                 <tr>
+                                    <td>${thumbHtml}</td>
                                     <td class="text-gray-500">#${item.id}</td>
                                     <td class="font-bold">${item.title || 'N/A'}</td>
                                     <td>${item.grade_name || '-'}</td>
@@ -331,7 +333,7 @@ async function renderResourceTable(type) {
                                         </button>
                                     </td>
                                 </tr>
-                            `).join('')}
+                            `}).join('')}
                         </tbody>
                     </table>
                 </div>
@@ -345,7 +347,33 @@ async function renderResourceTable(type) {
 }
 
 // ============================================
-// FORM MODAL
+// THUMBNAIL HELPERS
+// ============================================
+function previewThumbnail(input) {
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('රූපය 5MB ට වඩා විශාලයි', 'error');
+            input.value = '';
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const preview = document.getElementById('thumbPreview');
+            const placeholder = document.getElementById('thumbPlaceholder');
+            if (preview) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            if (placeholder) placeholder.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+// ============================================
+// FORM MODAL (with Thumbnail)
 // ============================================
 function openForm(type) {
     const modal = document.getElementById('modal');
@@ -356,6 +384,15 @@ function openForm(type) {
     
     const gradeOptions = state.grades.map(g => `<option value="${g.id}">${g.grade_name}</option>`).join('');
     const subjectOptions = state.subjects.map(s => `<option value="${s.id}">${s.subject_name}</option>`).join('');
+    
+    const thumbnailField = `
+        <div>
+            <label class="block text-sm font-bold mb-2">🖼️ Thumbnail රූපය (Optional)</label>
+            <input type="file" id="f_thumbnail" accept="image/*" class="form-input" onchange="previewThumbnail(this)">
+            <p class="text-xs text-gray-500 mt-1">JPG, PNG, WebP — Max 5MB — 800×500px recommended</p>
+            <img id="thumbPreview" style="display:none;width:100%;height:120px;object-fit:cover;border-radius:0.5rem;margin-top:0.5rem;" alt="Preview">
+        </div>
+    `;
     
     let formFields = '';
     
@@ -380,6 +417,7 @@ function openForm(type) {
                         <select id="f_subject" required class="form-input">${subjectOptions}</select>
                     </div>
                 </div>
+                ${thumbnailField}
             </div>
         `;
     } else if (type === 'paper') {
@@ -420,6 +458,7 @@ function openForm(type) {
                     <input type="file" id="f_pdf" accept=".pdf" class="form-input">
                     <p class="text-xs text-gray-500 mt-1">උපරිම 50MB. PDF පමණයි.</p>
                 </div>
+                ${thumbnailField}
             </div>
         `;
     } else if (type === 'video') {
@@ -448,6 +487,7 @@ function openForm(type) {
                     <input id="f_video_url" required class="form-input" placeholder="https://www.youtube.com/watch?v=...">
                     <p class="text-xs text-gray-500 mt-1">උදා: https://www.youtube.com/watch?v=dQw4w9WgXcQ</p>
                 </div>
+                ${thumbnailField}
             </div>
         `;
     } else if (type === 'article') {
@@ -475,6 +515,7 @@ function openForm(type) {
                         <input id="f_author" value="${state.user.name || 'Admin'}" class="form-input">
                     </div>
                 </div>
+                ${thumbnailField}
             </div>
         `;
     }
@@ -501,11 +542,44 @@ function openForm(type) {
     });
 }
 
+// ============================================
+// SUBMIT FORM (with Thumbnail Upload)
+// ============================================
 async function submitForm(type) {
     const endpoint = type;
     
     try {
         let body = {};
+        let thumbnailUrl = null;
+        
+        // Upload thumbnail FIRST if exists
+        const thumbInput = document.getElementById('f_thumbnail');
+        if (thumbInput && thumbInput.files.length > 0) {
+            showToast('Thumbnail upload වෙමින්...', 'info');
+            try {
+                const formData = new FormData();
+                formData.append('file', thumbInput.files[0]);
+                
+                const thumbRes = await fetch(`${API_BASE}/upload/thumbnail`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${state.token}` },
+                    body: formData
+                });
+                
+                if (!thumbRes.ok) {
+                    const err = await thumbRes.json().catch(() => ({}));
+                    throw new Error('Thumbnail upload failed: ' + (err.error || thumbRes.statusText));
+                }
+                
+                const thumbData = await thumbRes.json();
+                thumbnailUrl = thumbData.file.url;
+                console.log('✅ Thumbnail uploaded:', thumbnailUrl);
+            } catch (err) {
+                console.error('Thumbnail upload failed:', err);
+                showToast('Thumbnail upload fail: ' + err.message, 'error');
+                return;
+            }
+        }
         
         if (type === 'lesson' || type === 'paper' || type === 'video') {
             body = {
@@ -572,6 +646,11 @@ async function submitForm(type) {
                 category: document.getElementById('f_category').value.trim(),
                 author: document.getElementById('f_author').value.trim()
             };
+        }
+        
+        // Add thumbnail URL to body
+        if (thumbnailUrl) {
+            body.thumbnail = thumbnailUrl;
         }
         
         console.log('📤 Submitting:', endpoint, body);
@@ -970,9 +1049,6 @@ function renderPendingSection(title, items, type, icon, color) {
     `;
 }
 
-// ============================================
-// APPROVE / REJECT FUNCTIONS
-// ============================================
 async function approveItem(type, id) {
     if (!confirm('මෙම අයිතමය අනුමත කිරීමට අවශ්‍යද?')) return;
     
@@ -1015,7 +1091,6 @@ async function checkPendingCount() {
         console.error('Pending count error:', err);
     }
 }
-
 // ============================================
 // USERS
 // ============================================
@@ -1414,7 +1489,7 @@ async function deleteQuiz(id) {
 }
 
 // ============================================
-// ACTIVITY LOGS (Developer only)
+// ACTIVITY LOGS
 // ============================================
 async function renderLogs() {
     const content = document.getElementById('tabContent');
@@ -1437,9 +1512,7 @@ async function renderLogs() {
 
         let html = `
             <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
-                <div class="text-sm text-gray-500">
-                    මුළු logs: <strong>${logs.length}</strong>
-                </div>
+                <div class="text-sm text-gray-500">මුළු logs: <strong>${logs.length}</strong></div>
                 <div class="flex gap-2">
                     <button onclick="renderLogs()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg text-xs">
                         <i class="fa-solid fa-refresh mr-1"></i>Refresh
@@ -1482,8 +1555,6 @@ async function renderLogs() {
                                             log.action.includes('login_success') ? 'bg-green-100 text-green-700' :
                                             log.action.includes('login_failed') ? 'bg-red-100 text-red-700' :
                                             log.action.includes('register') ? 'bg-blue-100 text-blue-700' :
-                                            log.action.includes('otp') ? 'bg-purple-100 text-purple-700' :
-                                            log.action.includes('password') ? 'bg-yellow-100 text-yellow-700' :
                                             'bg-gray-100 text-gray-700'
                                         }">
                                             ${log.action}
