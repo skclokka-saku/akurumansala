@@ -1,3 +1,4 @@
+// seed.js
 const bcrypt = require('bcryptjs');
 const { dbRun, dbGet, initializeDatabase } = require('./database');
 
@@ -64,7 +65,7 @@ async function seedDatabase() {
         console.log('🌱 Seeding database...');
         await initializeDatabase();
 
-        // Check if admin exists - USING SINGLE QUOTES FOR SQL
+        // Check if admin exists
         const adminExists = await dbGet("SELECT * FROM users WHERE role = 'admin' LIMIT 1");
         
         if (!adminExists) {
@@ -78,7 +79,7 @@ async function seedDatabase() {
             const teacherPassword = await bcrypt.hash('teacher123', 10);
             await dbRun(
                 'INSERT INTO users (name, email, password, role, school) VALUES (?, ?, ?, ?, ?)',
-                ['ගුරු මහතා', 'teacher@akurumansala.lk', teacherPassword, 'teacher', 'කොළඹ මධ්‍ය විද්‍යාලය']
+                ['ගුරු මහතා', 'teacher@akurumansala.lk', teacherPassword, 'teacher', 'කෑගල්ල මධ්‍ය විද්‍යාලය']
             );
             console.log('✅ Teacher created: teacher@akurumansala.lk / teacher123');
         }
@@ -124,14 +125,14 @@ async function seedDatabase() {
                 { title: 'තෙවන ශ්‍රේණිය පරිසරය - අපේ පවුල', grade: 3, subject: 7, desc: 'පවුලේ සාමාජිකයන් සහ ඔවුන්ගේ භූමිකාවන්.' },
                 { title: 'හතරවන ශ්‍රේණිය සිංහල - ව්‍යාකරණ මූලිකාංග', grade: 4, subject: 1, desc: 'නාම පද, ක්‍රියා පද හඳුනා ගැනීම.' },
                 { title: 'පස්වන ශ්‍රේණිය ගණිතය - භාග', grade: 5, subject: 2, desc: 'භාග සහ ඒවායේ ගණනය කිරීම්.' },
-                { title: 'හයවන ශ්‍රේණිය විද්‍යාව - ජීවීන්ගේ ලෝකය', grade: 6, subject: 3, desc: 'ශාක සහ සතුන්ගේ ලෝකය.' },
+                { title: 'හයවන ශ්‍රේණිය විද්‍යාව - ජීවීන්ගේ ලෝකය', grade: 6, subject: 3, desc: 'ශාක සහ සත්ත්වයන්ගේ ලෝකය.' },
                 { title: 'හත්වන ශ්‍රේණිය ගණිතය - සමීකරණ', grade: 7, subject: 2, desc: 'සරල සමීකරණ විසඳීම.' },
-                { title: 'අටවන ශ්‍රේණිය විද්‍යාව - පදාර්ථයේ ස්වභාවය', grade: 8, subject: 3, desc: 'පදාර්ථය, එහි අවස්ථා සහ ගුණාංග.' },
+                { title: 'අටවන ශ්‍රේණිය විද්‍යාව - පදාර්ථයේ ස්වභාවය', grade: 8, subject: 3, desc: 'පදාර්ථය, ඉහිල් සහ අවස්ථා සහ ගුණාංග.' },
                 { title: 'නවවන ශ්‍රේණිය ගණිතය - ත්‍රිකෝණමිතිය', grade: 9, subject: 2, desc: 'ත්‍රිකෝණමිතික අනුපාත.' },
                 { title: 'දසවන ශ්‍රේණිය විද්‍යාව - රසායනික ප්‍රතික්‍රියා', grade: 10, subject: 3, desc: 'රසායනික ප්‍රතික්‍රියා වර්ග.' },
                 { title: 'එකොළොස්වන ශ්‍රේණිය ගණිතය - වීජ ගණිතය', grade: 11, subject: 2, desc: 'වීජ ගණිත මූලධර්ම.' },
                 { title: 'දොළොස්වන ශ්‍රේණිය භෞතික විද්‍යාව - චලිතය', grade: 12, subject: 13, desc: 'චලිතයේ මූලධර්ම.' },
-                { title: 'දහතුන්වන ශ්‍රේණිය රසායන විද්‍යාව - කාබනික රසායනය', grade: 13, subject: 14, desc: 'කාබනික සංයෝග.' },
+                { title: 'දහතුන්වන ශ්‍රේණිය රසායන විද්‍යාව - කාබනික රසායනය', grade: 13, subject: 14, desc: 'කාබනික සංයෝග.' }
             ];
 
             for (const lesson of demoLessons) {
@@ -152,7 +153,7 @@ async function seedDatabase() {
                 { title: '8 ශ්‍රේණිය සිංහල - තෙවන වාර පරීක්ෂණය', grade: 8, subject: 1, type: 'term', year: 2025 },
                 { title: '9 ශ්‍රේණිය ඉංග්‍රීසි - පුහුණු ප්‍රශ්න පත්‍රය', grade: 9, subject: 4, type: 'practice', year: 2025 },
                 { title: '10 ශ්‍රේණිය ගණිතය - ආදර්ශ ප්‍රශ්න පත්‍රය', grade: 10, subject: 2, type: 'model', year: 2025 },
-                { title: '11 ශ්‍රේණිය විද්‍යාව - සාමාන්‍ය පෙළ ආදර්ශ පත්‍රය', grade: 11, subject: 3, type: 'exam', year: 2025 },
+                { title: '11 ශ්‍රේණිය විද්‍යාව - සාමාන්‍ය පෙළ ආදර්ශ ප්‍රශ්න පත්‍රය', grade: 11, subject: 3, type: 'exam', year: 2025 }
             ];
 
             for (const paper of demoPapers) {
@@ -170,7 +171,7 @@ async function seedDatabase() {
             const demoVideos = [
                 { title: 'විද්‍යාව: පදාර්ථයේ අවස්ථා', grade: 8, subject: 3, youtube: 'dQw4w9WgXcQ' },
                 { title: 'ගණිතය: භාග සරල කරමු', grade: 7, subject: 2, youtube: 'dQw4w9WgXcQ' },
-                { title: 'ICT: Computer Network යනු කුමක්ද?', grade: 10, subject: 8, youtube: 'dQw4w9WgXcQ' },
+                { title: 'ICT: Computer Network යනු කුමක්ද?', grade: 10, subject: 8, youtube: 'dQw4w9WgXcQ' }
             ];
 
             for (const video of demoVideos) {
@@ -186,9 +187,9 @@ async function seedDatabase() {
 
             // Demo articles
             const demoArticles = [
-                { title: 'විභාගයට සූදානම් වීමේ සරල ක්‍රම 10', category: 'අධ්‍යාපනය', content: 'විභාගයට පෙර කාලය නිවැරදිව සැලසුම් කරගැනීමට උපකාරී අදහස් කිහිපයක්...' },
-                { title: 'කියවීමේ පුරුද්ද වර්ධනය කරගන්නේ කෙසේද?', category: 'පුරුදු', content: 'දිනපතා කියවීමේ පුරුද්දක් ඇති කරගැනීමේ ප්‍රායෝගික ක්‍රම...' },
-                { title: 'තාක්ෂණය සහ නවීන ඉගෙනීම', category: 'තාක්ෂණය', content: 'ඩිජිටල් සම්පත් ඉගෙනීමට භාවිතා කළ හැකි ආකාර...' },
+                { title: 'විෂයානුකූලව සූදානම් වීමේ සරල ක්‍රම 10', category: 'අධ්‍යාපනය', content: 'විෂයානුකූලව පෙර කාලය නිවැරදිව සැලසුම් කරගැනීමට උපකාරී අදහස් කිහිපයක්...' },
+                { title: 'කියවීමේ පුරුද්ද වර්ධනය කරගන්නේ කෙසේද?', category: 'පුරුදු', content: 'දිනපතා කියවීමේ පුරුද්දක් ඇති කරගැනීමෙන් ප්‍රයෝජනයක් ක්‍රම...' },
+                { title: 'තාක්ෂණය සහ නවීන අධ්‍යාපනය', category: 'තාක්ෂණය', content: 'ඩිජිටල් සම්පත් භාවිතයෙන් අධ්‍යාපනයට ශාඛා...' }
             ];
 
             for (const article of demoArticles) {
@@ -217,7 +218,7 @@ async function seedDatabase() {
             ['hero_title_1', 'දැනුමට'],
             ['hero_title_2', 'අකුරු'],
             ['hero_title_3', 'එකතු කරමු.'],
-            ['hero_description', '1 සිට 13 ශ්‍රේණි දක්වා සිසුන්ට ඉගෙනීමට, ගුරුවරුන්ට අධ්‍යාපනික සම්පත් බෙදා ගැනීමට නිර්මාණය කළ අධ්‍යාපනික වේදිකාවක්.'],
+            ['hero_description', '1 සිට 13 ශ්‍රේණි දක්වා සිසුන්ට ඉගෙනීමට, ගුරුවරුන්ට අධ්‍යාපනික සම්පත් බෙදා ගැනීමට නිර්මාණය කළ අධ්‍යාපනික වේදිකාවක්.']
         ];
 
         for (const [key, value] of settings) {
