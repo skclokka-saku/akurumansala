@@ -3,349 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="අකුරු මංසල - අධ්‍යාපනික සම්පත්">
 <title>සම්පත් | අකුරු මංසල</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <script>
 tailwind.config = {
     darkMode: 'class',
-    theme: {
-        extend: {
-            colors: {
-                brand: {
-                    navy: '#0F2C59',
-                    navy2: '#1B3A6B',
-                    gold: '#D4A017',
-                    gold2: '#E8B923',
-                    light: '#F8F9FC',
-                }
-            },
-            fontFamily: {
-                sinhala: ['"Noto Serif Sinhala"', 'sans-serif'],
-            }
-        }
-    }
+    theme: { extend: { colors: { brand: { navy: '#0F2C59', navy2: '#1B3A6B', gold: '#D4A017', gold2: '#E8B923', light: '#F8F9FC' } } } }
 }
 </script>
 
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-        font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif;
-        overflow-x: hidden;
-        background: #F8F9FC;
-        color: #1e293b;
-        transition: background-color 0.3s, color 0.3s;
-    }
+    body { font-family: 'Noto Serif Sinhala', sans-serif; background: #F8F9FC; color: #1e293b; }
     body.dark { background: #0a0f1e; color: #e2e8f0; }
+    .container-wide { width: 100%; max-width: 1920px; padding: 0 1rem; margin: 0 auto; }
+    @media (min-width: 1024px) { .container-wide { padding: 0 2rem; } }
 
-    .container-wide {
-        width: 100%;
-        max-width: 1920px;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        margin: 0 auto;
-    }
-    @media (min-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
-    @media (min-width: 1024px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
-
-    /* HEADER */
-    .main-nav {
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
-        border-bottom: 1px solid rgba(212, 160, 23, 0.1);
-    }
-    body.dark .main-nav { background: rgba(26, 26, 46, 0.98); }
-
-    .logo-wrap {
-        width: 70px; height: 70px;
-        background: linear-gradient(135deg, #ffffff, #f8f9fc);
-        border-radius: 1.2rem;
-        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.2);
-        border: 2px solid rgba(212, 160, 23, 0.4);
-        display: flex; align-items: center; justify-content: center;
-        padding: 0.4rem;
-        transition: all 0.5s;
-    }
-    .logo-wrap:hover { transform: scale(1.1) rotate(-5deg); }
+    .main-nav { background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(15,44,89,0.1); }
+    body.dark .main-nav { background: rgba(26,26,46,0.98); }
+    .logo-wrap { width: 70px; height: 70px; background: linear-gradient(135deg, #fff, #f8f9fc); border-radius: 1.2rem; border: 2px solid rgba(212,160,23,0.4); display: flex; align-items: center; justify-content: center; padding: 0.4rem; }
     .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
-
-    .nav-link {
-        font-weight: 700; color: #0F2C59; font-size: 1rem;
-        transition: all 0.3s;
-        padding: 0.75rem 1.2rem;
-        text-decoration: none;
-        display: inline-flex; align-items: center; gap: 0.5rem;
-        border-radius: 0.85rem;
-    }
+    .nav-link { font-weight: 700; color: #0F2C59; padding: 0.75rem 1.2rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 0.85rem; transition: all 0.3s; }
     body.dark .nav-link { color: #cbd5e1; }
     .nav-link i { color: #D4A017; }
-    .nav-link:hover, .nav-link.active {
-        color: #D4A017;
-        background: rgba(212, 160, 23, 0.1);
-        transform: translateY(-3px);
-    }
-
-    .theme-toggle {
-        width: 50px; height: 50px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #D4A017, #E8B923);
-        color: #0F2C59;
-        display: flex; align-items: center; justify-content: center;
-        cursor: pointer;
-        transition: all 0.5s;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
-        font-size: 1.1rem;
-    }
-    .theme-toggle:hover { transform: rotate(180deg) scale(1.15); }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #D4A017, #E8B923);
-        color: #0F2C59;
-        padding: 0.85rem 1.75rem;
-        border-radius: 1rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        letter-spacing: 1px;
-        transition: all 0.4s;
-        display: inline-flex; align-items: center; gap: 0.65rem;
-        box-shadow: 0 10px 25px rgba(212, 160, 23, 0.4);
-        cursor: pointer;
-        border: none; text-decoration: none;
-    }
-    .btn-primary:hover { transform: translateY(-5px) scale(1.05); }
-
-    /* PAGE HERO */
-    .page-hero {
-        background: linear-gradient(135deg, #0F2C59 0%, #1B3A6B 100%);
-        color: white;
-        padding: 4rem 0;
-        position: relative;
-        overflow: hidden;
-    }
-    .page-hero::before {
-        content: '';
-        position: absolute; top: 0; right: 0;
-        width: 400px; height: 400px;
-        background: radial-gradient(circle, rgba(212, 160, 23, 0.15), transparent 70%);
-        border-radius: 50%;
-    }
-
-    /* FILTERS */
-    .filter-section {
-        background: white;
-        border-radius: 1.5rem;
-        padding: 1.5rem;
-        margin-top: -3rem;
-        position: relative;
-        z-index: 10;
-        box-shadow: 0 15px 40px rgba(15, 44, 89, 0.1);
-    }
+    .nav-link:hover, .nav-link.active { color: #D4A017; background: rgba(212,160,23,0.1); }
+    .theme-toggle { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 3px solid rgba(255,255,255,0.3); }
+    .btn-primary { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.85rem 1.75rem; border-radius: 1rem; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.65rem; border: none; cursor: pointer; }
+    .page-hero { background: linear-gradient(135deg, #0F2C59 0%, #1B3A6B 100%); color: white; padding: 4rem 0; }
+    .filter-section { background: white; border-radius: 1.5rem; padding: 1.5rem; margin-top: -3rem; position: relative; z-index: 10; box-shadow: 0 15px 40px rgba(15,44,89,0.1); }
     body.dark .filter-section { background: #1a1a2e; }
-
-    .filter-input {
-        width: 100%;
-        padding: 0.9rem 1.25rem;
-        border: 2px solid #e5e7eb;
-        border-radius: 1rem;
-        font-size: 1rem;
-        font-family: inherit;
-        transition: all 0.3s;
-        background: #F8F9FC;
-    }
+    .filter-input { width: 100%; padding: 0.9rem 1.25rem; border: 2px solid #e5e7eb; border-radius: 1rem; font-size: 1rem; background: #F8F9FC; }
     body.dark .filter-input { background: #0a0f1e; border-color: #334155; color: #e2e8f0; }
-    .filter-input:focus { outline: none; border-color: #D4A017; box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15); }
-
-    /* TAB BUTTONS */
-    .tab-btn {
-        padding: 0.75rem 1.5rem;
-        border-radius: 1rem;
-        font-weight: 700;
-        font-size: 0.9rem;
-        cursor: pointer;
-        border: 2px solid transparent;
-        transition: all 0.3s;
-        background: rgba(15, 44, 89, 0.05);
-        color: #0F2C59;
-        display: inline-flex; align-items: center; gap: 0.5rem;
-    }
-    body.dark .tab-btn { background: rgba(255, 255, 255, 0.05); color: #cbd5e1; }
-    .tab-btn:hover { background: rgba(212, 160, 23, 0.15); }
-    .tab-btn.active {
-        background: linear-gradient(135deg, #D4A017, #E8B923);
-        color: #0F2C59;
-        box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4);
-    }
-
-    /* RESOURCE CARDS */
-    #resourcesContainer {
-        display: grid;
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-        gap: 1.5rem;
-    }
-    @media (min-width: 768px) {
-        #resourcesContainer { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (min-width: 1024px) {
-        #resourcesContainer { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    }
-
-    .resource-card {
-        background: white;
-        border-radius: 1.25rem;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.08);
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        opacity: 1 !important;
-        visibility: visible !important;
-        transform: none !important;
-        border: 1px solid rgba(212, 160, 23, 0.1);
-    }
+    .filter-input:focus { outline: none; border-color: #D4A017; }
+    .tab-btn { padding: 0.75rem 1.5rem; border-radius: 1rem; font-weight: 700; cursor: pointer; border: none; background: rgba(15,44,89,0.05); color: #0F2C59; }
+    body.dark .tab-btn { background: rgba(255,255,255,0.05); color: #cbd5e1; }
+    .tab-btn.active { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; }
+    #resourcesContainer { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    @media (min-width: 768px) { #resourcesContainer { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { #resourcesContainer { grid-template-columns: repeat(3, 1fr); } }
+    .resource-card { background: white; border-radius: 1.25rem; overflow: hidden; box-shadow: 0 8px 25px rgba(15,44,89,0.08); display: flex; flex-direction: column; border: 1px solid rgba(212,160,23,0.1); transition: all 0.3s; }
     body.dark .resource-card { background: #1a1a2e; }
-    .resource-card:hover {
-        transform: translateY(-8px) !important;
-        box-shadow: 0 20px 45px rgba(15, 44, 89, 0.2);
-        border-color: rgba(212, 160, 23, 0.3);
-    }
-
-    .resource-header {
-        position: relative;
-        width: 100%;
-        height: 180px;
-        overflow: hidden;
-        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .resource-header i {
-        font-size: 4rem;
-        color: rgba(212, 160, 23, 0.6);
-    }
-
-    .resource-badge {
-        position: absolute;
-        top: 0.75rem;
-        right: 0.75rem;
-        background: linear-gradient(135deg, #D4A017, #E8B923);
-        color: #0F2C59;
-        padding: 0.35rem 0.85rem;
-        border-radius: 999px;
-        font-weight: 800;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        z-index: 2;
-    }
-
-    .resource-info {
-        padding: 1.25rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        flex: 1;
-    }
-    .resource-info h3 {
-        font-weight: 800;
-        font-size: 1.05rem;
-        color: #0F2C59;
-        line-height: 1.3;
-    }
+    .resource-card:hover { transform: translateY(-6px); box-shadow: 0 20px 45px rgba(15,44,89,0.2); }
+    .resource-header { height: 180px; background: linear-gradient(135deg, #0F2C59, #1B3A6B); display: flex; align-items: center; justify-content: center; position: relative; }
+    .resource-header i { font-size: 4rem; color: rgba(212,160,23,0.6); }
+    .resource-badge { position: absolute; top: 0.75rem; right: 0.75rem; background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.35rem 0.85rem; border-radius: 999px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
+    .resource-info { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+    .resource-info h3 { font-weight: 800; font-size: 1.05rem; color: #0F2C59; }
     body.dark .resource-info h3 { color: #e2e8f0; }
-    .resource-info p {
-        font-size: 0.85rem;
-        color: #64748b;
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        flex-wrap: wrap;
-    }
+    .resource-info p { font-size: 0.85rem; color: #64748b; }
     body.dark .resource-info p { color: #94a3b8; }
-
-    .resource-desc {
-        font-size: 0.9rem;
-        color: #475569;
-        line-height: 1.5;
-        margin-top: 0.5rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-    body.dark .resource-desc { color: #cbd5e1; }
-
-    .resource-actions {
-        padding: 1rem 1.25rem;
-        border-top: 1px solid rgba(15, 44, 89, 0.08);
-        display: flex;
-        gap: 0.75rem;
-    }
-    body.dark .resource-actions { border-top-color: rgba(255, 255, 255, 0.08); }
-
-    .btn-view {
-        flex: 1;
-        padding: 0.6rem 1rem;
-        border-radius: 0.75rem;
-        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
-        color: white;
-        font-weight: 700;
-        font-size: 0.85rem;
-        border: none;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        transition: all 0.3s;
-    }
-    .btn-view:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 44, 89, 0.3); }
-
-    /* EMPTY STATE */
-    .empty-state { grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; }
+    .resource-actions { padding: 1rem 1.25rem; border-top: 1px solid rgba(15,44,89,0.08); }
+    body.dark .resource-actions { border-top-color: rgba(255,255,255,0.08); }
+    .btn-view { width: 100%; padding: 0.75rem 1rem; border-radius: 0.75rem; background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; font-weight: 700; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .empty-state { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; }
     .empty-state i { font-size: 4rem; color: #cbd5e1; margin-bottom: 1rem; }
-
-    /* LOADING SPINNER */
-    .loading-spinner { grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; }
-    .spinner {
-        width: 50px; height: 50px;
-        border: 4px solid rgba(212, 160, 23, 0.2);
-        border-top-color: #D4A017;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin: 0 auto 1rem;
-    }
+    .spinner { width: 50px; height: 50px; border: 4px solid rgba(212,160,23,0.2); border-top-color: #D4A017; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .footer { background: linear-gradient(180deg, #0F2C59, #0a1a3a); color: white; padding: 3rem 0 2rem; margin-top: 4rem; }
 
-    /* FOOTER */
-    .footer {
-        background: linear-gradient(180deg, #0F2C59, #0a1a3a);
-        color: white;
-        padding: 3rem 0 2rem;
-        margin-top: 4rem;
-    }
-    body.dark .footer { background: #05080f; }
+    /* PDF MODAL */
+    .pdf-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; visibility: hidden; transition: all 0.3s; }
+    .pdf-modal.show { opacity: 1; visibility: visible; }
+    .pdf-modal-content { background: white; border-radius: 1rem; width: 100%; max-width: 1200px; height: 95vh; display: flex; flex-direction: column; overflow: hidden; }
+    body.dark .pdf-modal-content { background: #1a1a2e; }
+    .pdf-modal-header { padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; }
+    .pdf-modal-header h3 { font-weight: 800; font-size: 1.1rem; }
+    .pdf-modal-close { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; transition: all 0.3s; }
+    .pdf-modal-close:hover { background: #ef4444; transform: rotate(90deg); }
+    .pdf-modal-body { flex: 1; background: #525659; position: relative; }
+    .pdf-modal-body iframe { width: 100%; height: 100%; border: none; }
+    .pdf-modal-actions { padding: 0.75rem 1.5rem; display: flex; gap: 0.5rem; background: #f8f9fc; border-top: 1px solid #e5e7eb; }
+    body.dark .pdf-modal-actions { background: #0a0f1e; border-top-color: #334155; }
+    .pdf-action-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; background: #0F2C59; color: white; border: none; cursor: pointer; text-decoration: none; font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .pdf-action-btn:hover { background: #1B3A6B; }
+    .pdf-action-btn.gold { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; }
+    .pdf-action-btn.red { background: #ef4444; }
 
     @media (max-width: 768px) {
         .page-hero { padding: 3rem 0; }
         .filter-section { margin-top: -2rem; padding: 1rem; }
-        .logo-wrap { width: 55px; height: 55px; }
-        .nav-link { font-size: 0.85rem; padding: 0.5rem 0.75rem; }
-        .resource-header { height: 140px; }
+        .pdf-modal-content { height: 100vh; border-radius: 0; }
     }
 </style>
 </head>
@@ -364,7 +105,6 @@ tailwind.config = {
                     <p class="text-sm text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
                 </div>
             </a>
-
             <nav class="hidden lg:flex items-center space-x-1">
                 <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
                 <a href="/resources.html" class="nav-link active"><i class="fa-solid fa-book-open"></i>සම්පත්</a>
@@ -372,45 +112,18 @@ tailwind.config = {
                 <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
                 <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
             </nav>
-
             <div class="flex items-center space-x-3">
-                <button onclick="toggleTheme()" class="theme-toggle">
-                    <i id="themeIcon" class="fa-solid fa-moon"></i>
-                </button>
-                <a href="/login.html" class="hidden md:inline-flex btn-primary">
-                    <i class="fa-solid fa-user-shield"></i>
-                    <span>Admin</span>
-                </a>
-                <button onclick="toggleMobileMenu()" class="lg:hidden w-12 h-12 rounded-xl bg-brand-navy text-white flex items-center justify-center">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
+                <button onclick="toggleTheme()" class="theme-toggle"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
+                <a href="/login.html" class="hidden md:inline-flex btn-primary"><i class="fa-solid fa-user-shield"></i><span>Admin</span></a>
             </div>
         </div>
-    </div>
-
-    <div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t px-4 py-4 space-y-2">
-        <a href="/" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
-            <i class="fa-solid fa-home mr-2 text-brand-gold"></i>මුල් පිටුව
-        </a>
-        <a href="/resources.html" class="block px-4 py-3 rounded-lg bg-brand-gold text-brand-navy font-bold">
-            <i class="fa-solid fa-book-open mr-2"></i>සම්පත්
-        </a>
-        <a href="/papers.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
-            <i class="fa-solid fa-file-lines mr-2 text-brand-gold"></i>ප්‍රශ්න පත්‍ර
-        </a>
-        <a href="/videos.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
-            <i class="fa-solid fa-video mr-2 text-brand-gold"></i>වීඩියෝ
-        </a>
     </div>
 </header>
 
 <!-- HERO -->
 <section class="page-hero">
-    <div class="container-wide relative z-10">
-        <p class="text-brand-gold font-bold text-sm tracking-widest uppercase mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-book-open"></i>
-            LEARNING LIBRARY
-        </p>
+    <div class="container-wide">
+        <p class="text-brand-gold font-bold text-sm tracking-widest uppercase mb-3"><i class="fa-solid fa-book-open mr-2"></i>LEARNING LIBRARY</p>
         <h1 class="text-4xl md:text-6xl font-black mb-3">අධ්‍යාපනික සම්පත්</h1>
         <p class="text-white/80 text-lg">ශ්‍රේණියට සහ විෂයට ගැලපෙන පාඩම් සහ සටහන්</p>
     </div>
@@ -419,25 +132,14 @@ tailwind.config = {
 <!-- FILTERS -->
 <section class="container-wide -mt-8 relative z-20">
     <div class="filter-section">
-        <!-- Tabs -->
         <div class="flex flex-wrap gap-2 mb-4">
-            <button class="tab-btn active" data-type="lesson" onclick="switchTab('lesson')">
-                <i class="fa-solid fa-book"></i>පාඩම්
-            </button>
-            <button class="tab-btn" data-type="article" onclick="switchTab('article')">
-                <i class="fa-solid fa-newspaper"></i>ලිපි
-            </button>
+            <button class="tab-btn active" data-type="lesson" onclick="switchTab('lesson')"><i class="fa-solid fa-book"></i> පාඩම්</button>
+            <button class="tab-btn" data-type="article" onclick="switchTab('article')"><i class="fa-solid fa-newspaper"></i> ලිපි</button>
         </div>
-
-        <!-- Filters -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input type="text" id="searchInput" placeholder="සොයන්න..." class="filter-input">
-            <select id="gradeFilter" class="filter-input">
-                <option value="">සියලු ශ්‍රේණි</option>
-            </select>
-            <select id="subjectFilter" class="filter-input">
-                <option value="">සියලු විෂය</option>
-            </select>
+            <select id="gradeFilter" class="filter-input"><option value="">සියලු ශ්‍රේණි</option></select>
+            <select id="subjectFilter" class="filter-input"><option value="">සියලු විෂය</option></select>
         </div>
     </div>
 </section>
@@ -445,12 +147,27 @@ tailwind.config = {
 <!-- RESOURCES -->
 <main class="container-wide py-12">
     <div id="resourcesContainer">
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-            <p class="text-gray-500">සම්පත් load වෙමින්...</p>
-        </div>
+        <div class="empty-state"><div class="spinner"></div><p>Load වෙමින්...</p></div>
     </div>
 </main>
+
+<!-- PDF MODAL -->
+<div id="pdfModal" class="pdf-modal" onclick="if(event.target===this)closePdfModal()">
+    <div class="pdf-modal-content" onclick="event.stopPropagation()">
+        <div class="pdf-modal-header">
+            <h3 id="pdfModalTitle"><i class="fa-solid fa-file-pdf mr-2"></i>PDF බලන්න</h3>
+            <button class="pdf-modal-close" onclick="closePdfModal()"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div class="pdf-modal-body">
+            <iframe id="pdfIframe" src=""></iframe>
+        </div>
+        <div class="pdf-modal-actions">
+            <a id="pdfDownloadBtn" href="" download class="pdf-action-btn gold"><i class="fa-solid fa-download"></i>Download</a>
+            <a id="pdfNewTabBtn" href="" target="_blank" class="pdf-action-btn"><i class="fa-solid fa-external-link-alt"></i>නව Tab එකකින්</a>
+            <button onclick="closePdfModal()" class="pdf-action-btn red ml-auto"><i class="fa-solid fa-times"></i>වහන්න</button>
+        </div>
+    </div>
+</div>
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -461,262 +178,195 @@ tailwind.config = {
 
 <script>
 const API_BASE = '/api';
-
 let currentType = 'lesson';
 let allItems = [];
 let filteredItems = [];
 
-// ============================================
-// THEME
-// ============================================
 function toggleTheme() {
     document.body.classList.toggle('dark');
-    const isDark = document.body.classList.contains('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    document.getElementById('themeIcon').className = document.body.classList.contains('dark') ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
 }
-
 function loadTheme() {
     if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark');
         document.getElementById('themeIcon').className = 'fa-solid fa-sun';
     }
 }
-
-function toggleMobileMenu() {
-    document.getElementById('mobileMenu').classList.toggle('hidden');
-}
-
-// ============================================
-// SWITCH TAB
-// ============================================
 function switchTab(type) {
     currentType = type;
-    
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.type === type);
-    });
-    
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.type === type));
     loadResources();
 }
 
-// ============================================
-// LOAD RESOURCES
-// ============================================
 async function loadResources() {
-    const container = document.getElementById('resourcesContainer');
-    container.innerHTML = `
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-            <p class="text-gray-500">Load වෙමින්...</p>
-        </div>
-    `;
-    
+    const c = document.getElementById('resourcesContainer');
+    c.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Load වෙමින්...</p></div>';
     try {
         const res = await fetch(`${API_BASE}/resources?type=${currentType}&limit=100`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        
         const data = await res.json();
-        
-        // Handle different response structures
-        const keyMap = { lesson: 'lessons', paper: 'papers', article: 'articles', video: 'videos' };
-        allItems = data[keyMap[currentType]] || data[currentType + 's'] || data.data || data || [];
-        
-        console.log(`✅ ${currentType}s loaded:`, allItems.length);
-        
+        const keyMap = { lesson: 'lessons', article: 'articles' };
+        allItems = data[keyMap[currentType]] || data.data || [];
         filteredItems = [...allItems];
         renderResources();
-        
     } catch (err) {
-        console.error('❌ Load error:', err);
-        container.innerHTML = `
-            <div class="empty-state">
-                <i class="fa-solid fa-exclamation-triangle" style="color: #ef4444;"></i>
-                <p class="text-red-500 text-lg font-bold">දෝෂයක්: ${err.message}</p>
-            </div>
-        `;
+        c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-exclamation-triangle" style="color:#ef4444"></i><p class="text-red-500">${err.message}</p></div>`;
     }
 }
 
-// ============================================
-// LOAD FILTERS
-// ============================================
 async function loadFilters() {
     try {
-        const [gradesRes, subjectsRes] = await Promise.all([
-            fetch(`${API_BASE}/grades`),
-            fetch(`${API_BASE}/subjects`)
-        ]);
-        
-        const grades = await gradesRes.json();
-        const subjects = await subjectsRes.json();
-        
+        const [g, s] = await Promise.all([fetch(`${API_BASE}/grades`), fetch(`${API_BASE}/subjects`)]);
+        const grades = await g.json();
+        const subjects = await s.json();
         const gradesArr = Array.isArray(grades) ? grades : (grades.grades || []);
         const subjectsArr = Array.isArray(subjects) ? subjects : (subjects.subjects || []);
-        
-        const gradeFilter = document.getElementById('gradeFilter');
-        gradesArr.forEach(g => {
-            const opt = document.createElement('option');
-            opt.value = g.id;
-            opt.textContent = g.grade_name;
-            gradeFilter.appendChild(opt);
+        gradesArr.forEach(gr => {
+            const o = document.createElement('option'); o.value = gr.id; o.textContent = gr.grade_name;
+            document.getElementById('gradeFilter').appendChild(o);
         });
-        
-        const subjectFilter = document.getElementById('subjectFilter');
-        subjectsArr.forEach(s => {
-            const opt = document.createElement('option');
-            opt.value = s.id;
-            opt.textContent = s.subject_name;
-            subjectFilter.appendChild(opt);
+        subjectsArr.forEach(su => {
+            const o = document.createElement('option'); o.value = su.id; o.textContent = su.subject_name;
+            document.getElementById('subjectFilter').appendChild(o);
         });
-        
         document.getElementById('searchInput').addEventListener('input', applyFilters);
-        gradeFilter.addEventListener('change', applyFilters);
-        subjectFilter.addEventListener('change', applyFilters);
-        
-    } catch (err) {
-        console.error('Filter load error:', err);
-    }
+        document.getElementById('gradeFilter').addEventListener('change', applyFilters);
+        document.getElementById('subjectFilter').addEventListener('change', applyFilters);
+    } catch (err) { console.error(err); }
 }
 
-// ============================================
-// APPLY FILTERS
-// ============================================
 function applyFilters() {
     const search = document.getElementById('searchInput').value.toLowerCase().trim();
     const gradeId = document.getElementById('gradeFilter').value;
     const subjectId = document.getElementById('subjectFilter').value;
-    
-    filteredItems = allItems.filter(item => {
-        if (search && !(item.title || '').toLowerCase().includes(search)) return false;
-        if (gradeId && String(item.grade_id) !== gradeId) return false;
-        if (subjectId && String(item.subject_id) !== subjectId) return false;
+    filteredItems = allItems.filter(i => {
+        if (search && !(i.title || '').toLowerCase().includes(search)) return false;
+        if (gradeId && String(i.grade_id) !== gradeId) return false;
+        if (subjectId && String(i.subject_id) !== subjectId) return false;
         return true;
     });
-    
     renderResources();
 }
 
-// ============================================
-// RENDER
-// ============================================
 function renderResources() {
-    const container = document.getElementById('resourcesContainer');
-    
+    const c = document.getElementById('resourcesContainer');
     if (filteredItems.length === 0) {
-        const typeName = currentType === 'lesson' ? 'පාඩම්' : 'ලිපි';
-        container.innerHTML = `
-            <div class="empty-state">
-                <i class="fa-solid fa-folder-open"></i>
-                <p class="text-gray-500 text-lg font-bold">${typeName} නොමැත</p>
-                <p class="text-gray-400 text-sm mt-2">කරුණාකර පසුව නැවත උත්සාහ කරන්න</p>
+        c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-folder-open"></i><p class="text-gray-500 text-lg font-bold">සම්පත් නොමැත</p></div>`;
+        return;
+    }
+    const iconMap = { lesson: 'fa-book-open', article: 'fa-newspaper' };
+    const badgeMap = { lesson: 'පාඩම', article: 'ලිපිය' };
+    
+    c.innerHTML = filteredItems.map(item => {
+        const hasPdf = item.pdf_file && item.pdf_file.length > 0;
+        const hasContent = item.content && item.content.length > 0;
+        
+        let actionBtn = '';
+        if (hasPdf) {
+            // Check if it's a data URL or file URL
+            const isDataUrl = item.pdf_file.startsWith('data:');
+            actionBtn = `<button onclick="openPdf('${item.id}')" class="btn-view"><i class="fa-solid fa-file-pdf"></i>PDF බලන්න</button>`;
+        } else if (hasContent) {
+            actionBtn = `<button onclick="showContent(${item.id})" class="btn-view"><i class="fa-solid fa-eye"></i>කියවන්න</button>`;
+        } else {
+            actionBtn = `<button class="btn-view" disabled style="opacity:0.5"><i class="fa-solid fa-info-circle"></i>තොරතුරු නොමැත</button>`;
+        }
+        
+        return `
+            <div class="resource-card">
+                <div class="resource-header">
+                    <i class="fa-solid ${iconMap[currentType]}"></i>
+                    <span class="resource-badge">${badgeMap[currentType]}</span>
+                </div>
+                <div class="resource-info">
+                    <h3>${escapeHtml(item.title)}</h3>
+                    <p>${item.grade_name ? `<i class="fa-solid fa-graduation-cap text-brand-gold"></i> ${escapeHtml(item.grade_name)}` : ''} ${item.subject_name ? `• <i class="fa-solid fa-book text-brand-gold"></i> ${escapeHtml(item.subject_name)}` : ''}</p>
+                    ${item.description ? `<p style="margin-top:0.5rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escapeHtml(item.description)}</p>` : ''}
+                </div>
+                <div class="resource-actions">${actionBtn}</div>
             </div>
         `;
+    }).join('');
+}
+
+// ============================================
+// PDF MODAL
+// ============================================
+function openPdf(itemId) {
+    const item = allItems.find(i => String(i.id) === String(itemId));
+    if (!item || !item.pdf_file) return;
+    
+    const pdfUrl = item.pdf_file;
+    
+    // Check if it's a data URL (old uploads)
+    const isDataUrl = pdfUrl.startsWith('data:');
+    
+    if (isDataUrl) {
+        // Data URL — try to open in new tab
+        console.log('⚠️ Data URL detected - opening in new tab');
+        const newTab = window.open();
+        if (newTab) {
+            newTab.document.write(`
+                <html>
+                <head><title>${escapeHtml(item.title)}</title></head>
+                <body style="margin:0">
+                    <embed src="${pdfUrl}" type="application/pdf" width="100%" height="100%" />
+                </body>
+                </html>
+            `);
+        } else {
+            alert('Browser එක pop-up block කරලා. කරුණාකර pop-up allow කරන්න.');
+        }
         return;
     }
     
-    const iconMap = {
-        lesson: 'fa-book-open',
-        article: 'fa-newspaper',
-        paper: 'fa-file-lines'
-    };
-    
-    const badgeMap = {
-        lesson: 'පාඩම',
-        article: 'ලිපිය',
-        paper: 'ප්‍රශ්න පත්‍රය'
-    };
-    
-    container.innerHTML = filteredItems.map(item => `
-        <div class="resource-card">
-            <div class="resource-header">
-                <i class="fa-solid ${iconMap[currentType] || 'fa-book'}"></i>
-                <span class="resource-badge">${badgeMap[currentType] || 'සම්පත'}</span>
-            </div>
-            <div class="resource-info">
-                <h3>${escapeHtml(item.title || 'N/A')}</h3>
-                <p>
-                    ${item.grade_name ? `<span><i class="fa-solid fa-graduation-cap text-brand-gold"></i> ${escapeHtml(item.grade_name)}</span>` : ''}
-                    ${item.subject_name ? `<span><i class="fa-solid fa-book text-brand-gold"></i> ${escapeHtml(item.subject_name)}</span>` : ''}
-                </p>
-                ${item.description ? `<p class="resource-desc">${escapeHtml(item.description)}</p>` : ''}
-                ${item.category ? `<p class="resource-desc"><i class="fa-solid fa-tag text-brand-gold mr-1"></i>${escapeHtml(item.category)}</p>` : ''}
-            </div>
-            <div class="resource-actions">
-                ${item.pdf_file ? `
-                    <a href="${item.pdf_file}" target="_blank" class="btn-view">
-                        <i class="fa-solid fa-file-pdf"></i>PDF බලන්න
-                    </a>
-                ` : item.content ? `
-                    <button onclick="showContent(${item.id})" class="btn-view">
-                        <i class="fa-solid fa-eye"></i>කියවන්න
-                    </button>
-                ` : `
-                    <button class="btn-view" disabled style="opacity: 0.5;">
-                        <i class="fa-solid fa-info-circle"></i>තොරතුරු නොමැත
-                    </button>
-                `}
-            </div>
-        </div>
-    `).join('');
+    // Normal file URL — use modal
+    document.getElementById('pdfModalTitle').innerHTML = `<i class="fa-solid fa-file-pdf mr-2"></i>${escapeHtml(item.title)}`;
+    document.getElementById('pdfIframe').src = pdfUrl;
+    document.getElementById('pdfDownloadBtn').href = pdfUrl;
+    document.getElementById('pdfNewTabBtn').href = pdfUrl;
+    document.getElementById('pdfModal').classList.add('show');
 }
 
-// ============================================
-// SHOW CONTENT MODAL
-// ============================================
+function closePdfModal() {
+    document.getElementById('pdfModal').classList.remove('show');
+    document.getElementById('pdfIframe').src = '';
+}
+
 function showContent(itemId) {
     const item = allItems.find(i => i.id === itemId);
     if (!item) return;
-    
     const modal = document.createElement('div');
-    modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+    modal.className = 'pdf-modal show';
     modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
-    
     modal.innerHTML = `
-        <div class="bg-white dark:bg-gray-900 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
-            <div class="sticky top-0 bg-white dark:bg-gray-900 p-4 border-b flex justify-between items-center z-10">
-                <h2 class="text-xl font-black text-brand-navy dark:text-white pr-4">${escapeHtml(item.title)}</h2>
-                <button onclick="this.closest('.fixed').remove()" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
-                    <i class="fa-solid fa-times"></i>
-                </button>
+        <div class="pdf-modal-content" onclick="event.stopPropagation()">
+            <div class="pdf-modal-header">
+                <h3>${escapeHtml(item.title)}</h3>
+                <button class="pdf-modal-close" onclick="this.closest('.pdf-modal').remove()"><i class="fa-solid fa-times"></i></button>
             </div>
-            <div class="p-6">
-                <p class="text-sm text-gray-500 mb-4">
-                    ${item.grade_name ? `<i class="fa-solid fa-graduation-cap mr-1"></i>${escapeHtml(item.grade_name)}` : ''}
-                    ${item.subject_name ? ` • <i class="fa-solid fa-book mr-1"></i>${escapeHtml(item.subject_name)}` : ''}
-                </p>
-                ${item.description ? `<p class="text-gray-600 dark:text-gray-300 mb-4 italic">${escapeHtml(item.description)}</p>` : ''}
-                <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
-                    ${escapeHtml(item.content || 'අන්තර්ගතය නොමැත')}
-                </div>
+            <div style="flex:1;overflow-y:auto;padding:2rem;background:white;color:#1e293b">
+                <p style="color:#64748b;margin-bottom:1rem">${escapeHtml(item.grade_name || '')} ${item.subject_name ? '• ' + escapeHtml(item.subject_name) : ''}</p>
+                ${item.description ? `<p style="font-style:italic;margin-bottom:1rem;color:#475569">${escapeHtml(item.description)}</p>` : ''}
+                <div style="white-space:pre-wrap;line-height:1.8">${escapeHtml(item.content)}</div>
             </div>
         </div>
     `;
-    
     document.body.appendChild(modal);
 }
 
-// ============================================
-// HELPERS
-// ============================================
 function escapeHtml(str) {
     if (!str) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-// ============================================
-// INIT
-// ============================================
 document.addEventListener('DOMContentLoaded', () => {
     loadTheme();
     loadFilters();
     loadResources();
 });
+
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePdfModal(); });
 </script>
 
 </body>
