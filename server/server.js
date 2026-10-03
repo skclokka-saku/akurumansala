@@ -1,3 +1,4 @@
+// server.js
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -25,13 +26,11 @@ const aiRoutes = require('./routes/ai');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ============================================
-// TRUST PROXY (Railway)
-// ============================================
+// Trust proxy for Railway
 app.set('trust proxy', 1);
 
 // ============================================
-// FIND PUBLIC FOLDER (Smart Detection)
+// FIND PUBLIC FOLDER
 // ============================================
 const publicPaths = [
     path.join(__dirname, '..', 'public'),
@@ -110,7 +109,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // ============================================
-// CATCH-ALL for SPA (serve index.html for non-API routes)
+// CATCH-ALL for SPA
 // ============================================
 app.get('*', (req, res) => {
     if (req.path.startsWith('/api/')) {
@@ -146,12 +145,21 @@ app.use((err, req, res, next) => {
 });
 
 // ============================================
-// START SERVER
+// START SERVER (FIXED - seed skip if DB exists)
 // ============================================
 async function startServer() {
     try {
+        const dbPath = path.join(__dirname, 'database', 'akuru.db');
+        const dbAlreadyExists = fs.existsSync(dbPath);
+
         await initializeDatabase();
-        await seedDatabase();
+
+        if (!dbAlreadyExists) {
+            console.log('🌱 First run detected - seeding database...');
+            await seedDatabase();
+        } else {
+            console.log('✅ Database already exists - skipping seed');
+        }
 
         app.listen(PORT, () => {
             console.log('');
@@ -161,6 +169,7 @@ async function startServer() {
             console.log('╠══════════════════════════════════════════════════╣');
             console.log(`║   🌐 Server:  http://localhost:${PORT}              ║`);
             console.log(`║   📁 Public:  ${publicPath ? 'FOUND' : 'NOT FOUND'}                          ║`);
+            console.log(`║   💾 DB:      ${dbAlreadyExists ? 'EXISTS' : 'NEWLY CREATED'}                    ║`);
             console.log('╚══════════════════════════════════════════════════╝');
             console.log('');
         });
