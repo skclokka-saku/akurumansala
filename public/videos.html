@@ -4,38 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>වීඩියෝ පාඩම් | අකුරු මංසල</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <script>
-tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { navy: '#0F2C59', navy2: '#1B3A6B', gold: '#D4A017', gold2: '#E8B923' } } } } }
+tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { navy: '#0F2C59', gold: '#D4A017' } } } } }
 </script>
-
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Noto Serif Sinhala', sans-serif; background: #F8F9FC; color: #1e293b; }
     body.dark { background: #0a0f1e; color: #e2e8f0; }
     .container-wide { width: 100%; max-width: 1920px; padding: 0 1rem; margin: 0 auto; }
     @media (min-width: 1024px) { .container-wide { padding: 0 2rem; } }
-
     .main-nav { background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(15,44,89,0.1); }
     body.dark .main-nav { background: rgba(26,26,46,0.98); }
     .logo-wrap { width: 70px; height: 70px; background: white; border-radius: 1.2rem; border: 2px solid rgba(212,160,23,0.4); display: flex; align-items: center; justify-content: center; padding: 0.4rem; }
     .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
-    .nav-link { font-weight: 700; color: #0F2C59; padding: 0.75rem 1.2rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 0.85rem; transition: all 0.3s; }
+    .nav-link { font-weight: 700; color: #0F2C59; padding: 0.75rem 1.2rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 0.85rem; }
     body.dark .nav-link { color: #cbd5e1; }
     .nav-link i { color: #D4A017; }
     .nav-link:hover, .nav-link.active { color: #D4A017; background: rgba(212,160,23,0.1); }
     .theme-toggle { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 3px solid rgba(255,255,255,0.3); }
-    .btn-primary { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.85rem 1.75rem; border-radius: 1rem; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.65rem; }
     .page-hero { background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; padding: 4rem 0; }
     .filter-section { background: white; border-radius: 1.5rem; padding: 1.5rem; margin-top: -3rem; position: relative; z-index: 10; box-shadow: 0 15px 40px rgba(15,44,89,0.1); }
     body.dark .filter-section { background: #1a1a2e; }
     .filter-input { width: 100%; padding: 0.9rem 1.25rem; border: 2px solid #e5e7eb; border-radius: 1rem; font-size: 1rem; background: #F8F9FC; }
     body.dark .filter-input { background: #0a0f1e; border-color: #334155; color: #e2e8f0; }
-    .filter-input:focus { outline: none; border-color: #D4A017; }
     #videosContainer { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
     @media (min-width: 768px) { #videosContainer { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1024px) { #videosContainer { grid-template-columns: repeat(3, 1fr); } }
@@ -43,79 +36,30 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
     body.dark .video-card { background: #1a1a2e; }
     .video-card:hover { transform: translateY(-8px); box-shadow: 0 20px 45px rgba(15,44,89,0.2); }
     .video-thumb { position: relative; width: 100%; height: 200px; overflow: hidden; background: linear-gradient(135deg, #0F2C59, #1B3A6B); }
-    .video-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
-    .video-card:hover .video-thumb img { transform: scale(1.1); }
-    .video-badge { position: absolute; top: 0.75rem; right: 0.75rem; background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.35rem 0.85rem; border-radius: 999px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
-    .video-play-btn { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(15,44,89,0.3); opacity: 0; transition: opacity 0.3s; }
-    .video-card:hover .video-play-btn { opacity: 1; }
-    .video-play-btn::after { content: '\f04b'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 2rem; color: white; width: 70px; height: 70px; background: rgba(212,160,23,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; padding-left: 5px; }
+    .video-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .video-badge { position: absolute; top: 0.75rem; right: 0.75rem; background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.35rem 0.85rem; border-radius: 999px; font-weight: 800; font-size: 0.7rem; }
     .video-info { padding: 1.25rem; flex: 1; }
     .video-info h3 { font-weight: 800; font-size: 1.05rem; color: #0F2C59; margin-bottom: 0.5rem; }
     body.dark .video-info h3 { color: #e2e8f0; }
     .video-info p { font-size: 0.85rem; color: #64748b; }
-    body.dark .video-info p { color: #94a3b8; }
     .empty-state { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; }
     .empty-state i { font-size: 4rem; color: #cbd5e1; margin-bottom: 1rem; }
     .spinner { width: 50px; height: 50px; border: 4px solid rgba(212,160,23,0.2); border-top-color: #D4A017; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .debug-info { background: #fef3c7; border: 2px solid #f59e0b; padding: 1rem; border-radius: 0.75rem; margin: 1rem 0; font-family: monospace; font-size: 0.85rem; color: #78350f; }
     .footer { background: linear-gradient(180deg, #0F2C59, #0a1a3a); color: white; padding: 3rem 0 2rem; margin-top: 4rem; }
-
-    /* VIDEO MODAL */
-    .video-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; visibility: hidden; transition: all 0.3s; }
-    .video-modal.show { opacity: 1; visibility: visible; }
-    .video-modal-content { background: white; border-radius: 1.5rem; width: 100%; max-width: 1000px; max-height: 95vh; display: flex; flex-direction: column; overflow: hidden; }
-    body.dark .video-modal-content { background: #1a1a2e; }
-    .video-modal-header { padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; }
-    .video-modal-close { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-    .video-modal-close:hover { background: #ef4444; transform: rotate(90deg); }
-    .video-embed-wrap { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; }
-    .video-embed-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
-    .video-modal-body { padding: 1.5rem; overflow-y: auto; }
-    .video-modal-body h2 { font-size: 1.4rem; font-weight: 800; color: #0F2C59; margin-bottom: 0.5rem; }
-    body.dark .video-modal-body h2 { color: #e2e8f0; }
-    .video-modal-body .meta { font-size: 0.9rem; color: #64748b; margin-bottom: 1rem; }
-    .video-modal-body .desc { color: #475569; line-height: 1.7; }
-    body.dark .video-modal-body .desc { color: #cbd5e1; }
-
-    /* YOUTUBE ERROR FALLBACK */
-    .yt-error-fallback {
-        position: absolute; inset: 0;
-        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
-        display: flex; flex-direction: column; align-items: center; justify-content: center;
-        color: white; padding: 2rem; text-align: center;
-    }
-    .yt-error-fallback i { font-size: 3rem; color: #D4A017; margin-bottom: 1rem; }
-    .yt-error-fallback h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; }
-    .yt-error-fallback p { color: rgba(255,255,255,0.8); margin-bottom: 1.5rem; max-width: 400px; }
-    .yt-error-fallback a { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.75rem 1.5rem; border-radius: 0.75rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
-
-    /* YOUTUBE WATCH BUTTON (in actions) */
-    .yt-actions { padding: 1rem 1.5rem; display: flex; gap: 0.75rem; border-top: 1px solid #e5e7eb; flex-wrap: wrap; }
-    body.dark .yt-actions { border-top-color: #334155; }
-    .yt-action-btn { padding: 0.6rem 1.2rem; border-radius: 0.75rem; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border: none; cursor: pointer; }
-    .yt-action-btn.primary { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; }
-    .yt-action-btn.youtube { background: #ff0000; color: white; }
-    .yt-action-btn.close { background: #e5e7eb; color: #475569; margin-left: auto; }
-
-    @media (max-width: 768px) {
-        .page-hero { padding: 3rem 0; }
-        .filter-section { margin-top: -2rem; padding: 1rem; }
-        .video-thumb { height: 180px; }
-        .video-modal-content { border-radius: 0; max-height: 100vh; }
-    }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="main-nav sticky top-0 z-50">
     <div class="container-wide">
         <div class="h-24 flex items-center justify-between">
             <a href="/" class="flex items-center space-x-4">
                 <div class="logo-wrap"><img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'"></div>
                 <div class="hidden sm:block">
-                    <h1 class="text-2xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
-                    <p class="text-sm text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
+                    <h1 class="text-2xl font-black dark:text-white leading-none" style="color:#0F2C59">අකුරු මංසල</h1>
+                    <p class="text-sm font-bold mt-1" style="color:#D4A017">ඉගෙනුමට නව මඟක්</p>
                 </div>
             </a>
             <nav class="hidden lg:flex items-center space-x-1">
@@ -123,73 +67,54 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
                 <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book-open"></i>සම්පත්</a>
                 <a href="/papers.html" class="nav-link"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
                 <a href="/videos.html" class="nav-link active"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
-                <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
             </nav>
             <div class="flex items-center space-x-3">
                 <button onclick="toggleTheme()" class="theme-toggle"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
-                <a href="/login.html" class="hidden md:inline-flex btn-primary"><i class="fa-solid fa-user-shield"></i><span>Admin</span></a>
+                <a href="/login.html" class="hidden md:inline-flex" style="background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.85rem 1.75rem; border-radius: 1rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 0.65rem;">
+                    <i class="fa-solid fa-user-shield"></i><span>Admin</span>
+                </a>
             </div>
         </div>
     </div>
 </header>
 
-<!-- HERO -->
 <section class="page-hero">
     <div class="container-wide">
-        <p class="text-brand-gold font-bold text-sm tracking-widest uppercase mb-3"><i class="fa-solid fa-video mr-2"></i>VIDEO LIBRARY</p>
+        <p style="color:#D4A017; font-weight:700; font-size:0.9rem; letter-spacing:0.2em; margin-bottom: 0.75rem;"><i class="fa-solid fa-video mr-2"></i>VIDEO LIBRARY</p>
         <h1 class="text-4xl md:text-6xl font-black mb-3">වීඩියෝ පාඩම්</h1>
-        <p class="text-white/80 text-lg">දරුවන්ට ආකර්ෂණීය වීඩියෝ පාඩම් නරඹන්න</p>
+        <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem;">දරුවන්ට ආකර්ෂණීය වීඩියෝ පාඩම් නරඹන්න</p>
     </div>
 </section>
 
-<!-- FILTERS -->
 <section class="container-wide -mt-8 relative z-20">
     <div class="filter-section">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div style="display:grid; grid-template-columns: 1fr; gap: 1rem;">
             <input type="text" id="searchInput" placeholder="වීඩියෝ සොයන්න..." class="filter-input">
-            <select id="gradeFilter" class="filter-input"><option value="">සියලු ශ්‍රේණි</option></select>
-            <select id="subjectFilter" class="filter-input"><option value="">සියලු විෂය</option></select>
         </div>
     </div>
 </section>
 
-<!-- VIDEOS -->
 <main class="container-wide py-12">
+    <div id="debugInfo" class="debug-info">
+        <strong>🔍 Debug:</strong> <span id="debugText">Loading...</span>
+    </div>
+    
     <div id="videosContainer">
         <div class="empty-state"><div class="spinner"></div><p>Load වෙමින්...</p></div>
     </div>
 </main>
 
-<!-- VIDEO MODAL -->
-<div id="videoModal" class="video-modal" onclick="if(event.target===this)closeVideoModal()">
-    <div class="video-modal-content" onclick="event.stopPropagation()">
-        <div class="video-modal-header">
-            <h3 id="videoModalTitle"><i class="fa-solid fa-video mr-2"></i>වීඩියෝ</h3>
-            <button class="video-modal-close" onclick="closeVideoModal()"><i class="fa-solid fa-times"></i></button>
-        </div>
-        <div id="videoEmbedArea" class="video-embed-wrap">
-            <iframe id="videoIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div id="videoModalBody" class="video-modal-body"></div>
-        <div class="yt-actions">
-            <a id="ytWatchBtn" href="" target="_blank" class="yt-action-btn youtube"><i class="fa-brands fa-youtube"></i>YouTube එකේ නරඹන්න</a>
-            <button onclick="closeVideoModal()" class="yt-action-btn close"><i class="fa-solid fa-times"></i>වහන්න</button>
-        </div>
-    </div>
-</div>
-
-<!-- FOOTER -->
 <footer class="footer">
     <div class="container-wide text-center">
-        <p class="text-white/70">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+        <p style="color: rgba(255,255,255,0.7);">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
     </div>
 </footer>
 
 <script>
+console.log('🚀 videos.html script START');
+
 const API_BASE = '/api';
 let allVideos = [];
-let filteredVideos = [];
-let embedTimeout = null;
 
 function toggleTheme() {
     document.body.classList.toggle('dark');
@@ -203,70 +128,87 @@ function loadTheme() {
     }
 }
 
+function debug(msg) {
+    console.log('DEBUG:', msg);
+    const el = document.getElementById('debugText');
+    if (el) el.textContent = msg;
+}
+
+function extractArray(data) {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    const keys = ['videos', 'papers', 'lessons', 'articles', 'data', 'results', 'items'];
+    for (const key of keys) {
+        if (Array.isArray(data[key])) return data[key];
+    }
+    for (const key of Object.keys(data)) {
+        if (Array.isArray(data[key])) return data[key];
+    }
+    return [];
+}
+
 async function loadVideos() {
+    console.log('🔄 loadVideos() called');
     const c = document.getElementById('videosContainer');
     c.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Load වෙමින්...</p></div>';
+    
     try {
+        debug('Fetching /api/videos...');
         const res = await fetch(`${API_BASE}/videos`);
+        debug(`Response status: ${res.status} ${res.statusText}`);
+        console.log('📡 Response:', res.status);
+        
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        
         const data = await res.json();
-        allVideos = data.videos || data.data || [];
-        filteredVideos = [...allVideos];
-        await loadFilters();
+        console.log('📦 Data received:', data);
+        console.log('📦 Data type:', typeof data);
+        console.log('📦 Data keys:', data ? Object.keys(data) : 'null');
+        
+        allVideos = extractArray(data);
+        console.log('✅ Extracted videos:', allVideos.length);
+        
+        debug(`✅ Loaded ${allVideos.length} videos`);
         renderVideos();
+        
     } catch (err) {
-        c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-exclamation-triangle" style="color:#ef4444"></i><p class="text-red-500">${err.message}</p></div>`;
+        console.error('❌ Error:', err);
+        debug(`❌ Error: ${err.message}`);
+        c.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-exclamation-triangle" style="color:#ef4444"></i>
+                <p style="color:#ef4444; font-size:1.1rem; font-weight:700;">දෝෂයක්: ${err.message}</p>
+                <p style="color:#64748b; font-size:0.85rem; margin-top:0.5rem;">F12 → Console එකේ විස්තර බලන්න</p>
+            </div>
+        `;
     }
-}
-
-async function loadFilters() {
-    try {
-        const [g, s] = await Promise.all([fetch(`${API_BASE}/grades`), fetch(`${API_BASE}/subjects`)]);
-        const grades = await g.json();
-        const subjects = await s.json();
-        const gradesArr = Array.isArray(grades) ? grades : (grades.grades || []);
-        const subjectsArr = Array.isArray(subjects) ? subjects : (subjects.subjects || []);
-        gradesArr.forEach(gr => {
-            const o = document.createElement('option'); o.value = gr.id; o.textContent = gr.grade_name;
-            document.getElementById('gradeFilter').appendChild(o);
-        });
-        subjectsArr.forEach(su => {
-            const o = document.createElement('option'); o.value = su.id; o.textContent = su.subject_name;
-            document.getElementById('subjectFilter').appendChild(o);
-        });
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.getElementById('gradeFilter').addEventListener('change', applyFilters);
-        document.getElementById('subjectFilter').addEventListener('change', applyFilters);
-    } catch (err) { console.error(err); }
-}
-
-function applyFilters() {
-    const search = document.getElementById('searchInput').value.toLowerCase().trim();
-    const gradeId = document.getElementById('gradeFilter').value;
-    const subjectId = document.getElementById('subjectFilter').value;
-    filteredVideos = allVideos.filter(v => {
-        if (search && !(v.title || '').toLowerCase().includes(search)) return false;
-        if (gradeId && String(v.grade_id) !== gradeId) return false;
-        if (subjectId && String(v.subject_id) !== subjectId) return false;
-        return true;
-    });
-    renderVideos();
 }
 
 function renderVideos() {
     const c = document.getElementById('videosContainer');
-    if (filteredVideos.length === 0) {
-        c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-video-slash"></i><p class="text-gray-500 text-lg font-bold">වීඩියෝ නොමැත</p></div>`;
+    
+    if (allVideos.length === 0) {
+        c.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-video-slash"></i>
+                <p style="color:#64748b; font-size:1.1rem; font-weight:700;">වීඩියෝ නොමැත</p>
+                <p style="color:#94a3b8; font-size:0.85rem; margin-top:0.5rem;">API එකේ videos data නැහැ හෝ response format වැරදි</p>
+            </div>
+        `;
+        debug('⚠️ No videos to render');
         return;
     }
-    c.innerHTML = filteredVideos.map(v => {
+    
+    console.log('🎨 Rendering', allVideos.length, 'videos');
+    
+    c.innerHTML = allVideos.map(v => {
         const youtubeId = v.youtube_id || extractYouTubeId(v.video_url) || '';
         const thumbnail = youtubeId ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg` : 'https://via.placeholder.com/400x200/0F2C59/D4A017?text=Video';
         return `
-            <div class="video-card" onclick="openVideoModal(${v.id})">
+            <div class="video-card" onclick="openVideo(${v.id})">
                 <div class="video-thumb">
-                    <img src="${thumbnail}" alt="${escapeHtml(v.title)}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x200/0F2C59/D4A017?text=Video'">
+                    <img src="${thumbnail}" alt="${escapeHtml(v.title)}" onerror="this.src='https://via.placeholder.com/400x200/0F2C59/D4A017?text=Video'">
                     <span class="video-badge">${escapeHtml(v.grade_name || 'Video')}</span>
-                    <div class="video-play-btn"></div>
                 </div>
                 <div class="video-info">
                     <h3>${escapeHtml(v.title)}</h3>
@@ -275,113 +217,16 @@ function renderVideos() {
             </div>
         `;
     }).join('');
+    
+    debug(`✅ Rendered ${allVideos.length} videos`);
 }
 
-// ============================================
-// VIDEO MODAL
-// ============================================
-function openVideoModal(videoId) {
-    const video = allVideos.find(v => v.id === videoId);
-    if (!video) return;
-    
-    const youtubeId = video.youtube_id || extractYouTubeId(video.video_url) || '';
-    const modal = document.getElementById('videoModal');
-    
-    document.getElementById('videoModalTitle').innerHTML = `<i class="fa-solid fa-video mr-2"></i>${escapeHtml(video.title)}`;
-    document.getElementById('videoModalBody').innerHTML = `
-        <h2>${escapeHtml(video.title)}</h2>
-        <p class="meta"><i class="fa-solid fa-graduation-cap mr-1"></i>${escapeHtml(video.grade_name || '')} ${video.subject_name ? '• ' + escapeHtml(video.subject_name) : ''}</p>
-        ${video.description ? `<p class="desc">${escapeHtml(video.description)}</p>` : ''}
-    `;
-    
-    const iframe = document.getElementById('videoIframe');
-    const watchBtn = document.getElementById('ytWatchBtn');
-    const embedArea = document.getElementById('videoEmbedArea');
-    
-    if (youtubeId) {
-        // Use youtube-nocookie.com and include origin for better embed support
-        const origin = encodeURIComponent(window.location.origin);
-        iframe.src = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&origin=${origin}`;
-        watchBtn.href = `https://www.youtube.com/watch?v=${youtubeId}`;
-        
-        // Remove any old error fallback
-        const oldFallback = embedArea.querySelector('.yt-error-fallback');
-        if (oldFallback) oldFallback.remove();
-        
-        // Set a timeout — if iframe doesn't load in 5s, show fallback
-        clearTimeout(embedTimeout);
-        embedTimeout = setTimeout(() => {
-            // Check if iframe is still empty / error
-            showEmbedFallback(youtubeId, video.title);
-        }, 5000);
-        
-        // Listen for iframe load
-        iframe.onload = () => {
-            clearTimeout(embedTimeout);
-            console.log('✅ YouTube iframe loaded');
-        };
-        
-    } else {
-        embedArea.innerHTML = `
-            <div class="yt-error-fallback">
-                <i class="fa-solid fa-exclamation-triangle"></i>
-                <h3>වීඩියෝ URL එක වැරදි</h3>
-                <p>මෙම වීඩියෝවට වලංගු YouTube ID එකක් නැහැ.</p>
-            </div>
-        `;
-        watchBtn.style.display = 'none';
-    }
-    
-    modal.classList.add('show');
-}
-
-function showEmbedFallback(youtubeId, title) {
-    const embedArea = document.getElementById('videoEmbedArea');
-    const existing = embedArea.querySelector('.yt-error-fallback');
-    if (existing) return;
-    
-    // Check if iframe actually loaded content
-    const iframe = document.getElementById('videoIframe');
-    try {
-        // If cross-origin, this will throw — which means it loaded something
-        iframe.contentWindow.location.href;
-        // Same-origin means it's empty (about:blank)
-    } catch (e) {
-        // Cross-origin — iframe loaded something, might be fine
-        // But error 153 might still show
-    }
-    
-    // Add a visible fallback button
-    const fallback = document.createElement('div');
-    fallback.className = 'yt-error-fallback';
-    fallback.style.background = 'rgba(0,0,0,0.85)';
-    fallback.style.top = 'auto';
-    fallback.style.height = 'auto';
-    fallback.style.padding = '1rem';
-    fallback.innerHTML = `
-        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;justify-content:center;">
-            <div style="text-align:left;">
-                <p style="margin:0;font-weight:700;color:#D4A017;font-size:0.9rem;"><i class="fa-solid fa-info-circle"></i> වීඩියෝ embed කරන්න බැහැ</p>
-                <p style="margin:0.25rem 0 0;font-size:0.8rem;color:rgba(255,255,255,0.7);">මෙම වීඩියෝව අයිතිකරු embed කිරීම අවහිර කරලා ඇත</p>
-            </div>
-            <a href="https://www.youtube.com/watch?v=${youtubeId}" target="_blank" style="background:#ff0000;color:white;padding:0.5rem 1rem;border-radius:0.5rem;text-decoration:none;font-weight:700;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.4rem;">
-                <i class="fa-brands fa-youtube"></i> YouTube එකේ නරඹන්න
-            </a>
-        </div>
-    `;
-    fallback.style.position = 'absolute';
-    fallback.style.bottom = '0';
-    fallback.style.left = '0';
-    fallback.style.right = '0';
-    embedArea.appendChild(fallback);
-}
-
-function closeVideoModal() {
-    document.getElementById('videoModal').classList.remove('show');
-    document.getElementById('videoIframe').src = '';
-    const fallback = document.getElementById('videoEmbedArea').querySelector('.yt-error-fallback');
-    if (fallback) fallback.remove();
-    clearTimeout(embedTimeout);
+function openVideo(id) {
+    const v = allVideos.find(x => x.id === id);
+    if (!v) return;
+    const ytId = v.youtube_id || extractYouTubeId(v.video_url);
+    if (ytId) window.open(`https://www.youtube.com/watch?v=${ytId}`, '_blank');
+    else alert('මෙම වීඩියෝවට YouTube ID එකක් නැහැ');
 }
 
 function extractYouTubeId(url) {
@@ -396,11 +241,17 @@ function escapeHtml(str) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('✅ DOMContentLoaded fired');
     loadTheme();
     loadVideos();
 });
 
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideoModal(); });
+window.addEventListener('error', (e) => {
+    console.error('💥 Global error:', e.message);
+    debug(`💥 Error: ${e.message}`);
+});
+
+console.log('✅ videos.html script END');
 </script>
 
 </body>
