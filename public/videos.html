@@ -121,7 +121,6 @@
         }
         .btn-primary:hover { transform: translateY(-4px) scale(1.04); }
 
-        /* VIDEO CARDS */
         .video-card {
             background: white;
             border-radius: 1.5rem;
@@ -537,13 +536,22 @@
         async function loadVideos() {
             const container = document.getElementById('videosContainer');
             try {
+                console.log('📥 Loading videos...');
                 const res = await fetch(`${API_BASE}/videos`);
+                
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
+                }
+                
                 const data = await res.json();
+                console.log('✅ Videos received:', data);
                 
                 allVideos = Array.isArray(data) ? data : (data.videos || []);
+                console.log('✅ Total videos:', allVideos.length);
+                
                 renderVideos(allVideos);
             } catch (err) {
-                console.error('Error loading videos:', err);
+                console.error('❌ Error loading videos:', err);
                 container.innerHTML = `<div class="empty-state text-red-500">දෝෂයක්: ${err.message}</div>`;
             }
         }
@@ -666,9 +674,23 @@
         // INIT
         // ============================================
         document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 Videos page initializing...');
+            
             loadTheme();
-            await loadFilters();
-            await loadVideos();
+            
+            try {
+                await loadFilters();
+            } catch (err) {
+                console.error('❌ Filter load error:', err);
+            }
+            
+            try {
+                await loadVideos();
+            } catch (err) {
+                console.error('❌ Video load error:', err);
+            }
+            
+            console.log('✅ Videos page ready');
         });
     </script>
 
