@@ -4,6 +4,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ const UPLOADS_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH
 
 if (!fs.existsSync(UPLOADS_DIR)) {
     fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    console.log('✅ Created uploads directory:', UPLOADS_DIR);
 }
 
 // ============================================
@@ -26,7 +28,6 @@ const storage = multer.diskStorage({
         cb(null, UPLOADS_DIR);
     },
     filename: (req, file, cb) => {
-        // Generate unique filename
         const uniqueId = crypto.randomBytes(8).toString('hex');
         const timestamp = Date.now();
         const ext = path.extname(file.originalname).toLowerCase();
@@ -37,7 +38,9 @@ const storage = multer.diskStorage({
     }
 });
 
-// File filter
+// ============================================
+// FILE FILTER (General - PDF, docs, images)
+// ============================================
 const fileFilter = (req, file, cb) => {
     const allowedTypes = [
         'application/pdf',
@@ -62,9 +65,26 @@ const upload = multer({
 });
 
 // ============================================
-// AUTH MIDDLEWARE (simple check)
+// THUMBNAIL FILTER (Images only, 5MB max)
 // ============================================
-const jwt = require('jsonwebtoken');
+const thumbnailUpload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        const allowedImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+        if (allowedImageTypes.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('රූප පමණක් අවසරයි (JPG, PNG, WebP)'), false);
+        }
+    },
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 5MB
+    }
+});
+
+// ============================================
+// AUTH MIDDLEWARE
+// ============================================
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 function authMiddleware(req, res, next) {
@@ -84,7 +104,7 @@ function authMiddleware(req, res, next) {
 }
 
 // ============================================
-// UPLOAD ROUTE
+// UPLOAD ROUTE (General)
 // ============================================
 router.post('/', authMiddleware, upload.single('file'), (req, res) => {
     try {
@@ -115,12 +135,43 @@ router.post('/', authMiddleware, upload.single('file'), (req, res) => {
 });
 
 // ============================================
-// ERROR HANDLER for multer
+// THUMBNAIL UPLOAD ROUTE
+// ============================================
+router.post('/thumbnail', authMiddleware, thumbnailUpload.single('file'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ error: 'රූපයක් අවශ්‍යයි' });
+        }
+
+        const fileUrl = `/uploads/${req.file.filename}`;
+        const fullUrl = `${req.protocol}://${req.get('host')}${fileUrl}`;
+
+        console.log('✅ Thumbnail uploaded:', req.file.filename, '(', Math.round(req.file.size / 1024), 'KB )');
+
+        res.json({
+            success: true,
+            file: {
+                filename: req.file.filename,
+                originalname: req.file.originalname,
+                mimetype: req.file.mimetype,
+                size: req.file.size,
+                url: fileUrl,
+                fullUrl: fullUrl
+            }
+        });
+    } catch (err) {
+        console.error('Thumbnail upload error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// ============================================
+// ERROR HANDLER
 // ============================================
 router.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         if (err.code === 'LIMIT_FILE_SIZE') {
-            return res.status(400).json({ error: 'ෆයිල් එක 50MB ට වඩා විශාලයි' });
+            return res.status(400).json({ error: 'ෆයිල් එක අවසර ලද ප්‍රමාණයට වඩා විශාලයි' });
         }
         return res.status(400).json({ error: err.message });
     }

@@ -9,26 +9,20 @@ const DB_PATH = path.join(DB_DIR, 'akuru.db');
 
 let db = null;
 
-// ============================================
-// INITIALIZE DATABASE
-// ============================================
 function initializeDatabase() {
     return new Promise((resolve, reject) => {
         try {
-            // Create database directory if not exists
             if (!fs.existsSync(DB_DIR)) {
                 fs.mkdirSync(DB_DIR, { recursive: true });
                 console.log('✅ Created database directory:', DB_DIR);
             }
 
-            // Open database
             db = new Database(DB_PATH);
             db.pragma('journal_mode = WAL');
             db.pragma('foreign_keys = ON');
 
             console.log('✅ SQLite database connected:', DB_PATH);
 
-            // Create all tables
             db.exec(`
                 CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -77,6 +71,7 @@ function initializeDatabase() {
                     subject_id INTEGER,
                     pdf_file TEXT,
                     image_file TEXT,
+                    thumbnail TEXT,
                     is_published INTEGER DEFAULT 0,
                     created_by INTEGER,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -92,6 +87,7 @@ function initializeDatabase() {
                     year INTEGER,
                     pdf_file TEXT,
                     answer_pdf TEXT,
+                    thumbnail TEXT,
                     is_published INTEGER DEFAULT 0,
                     created_by INTEGER,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -119,6 +115,7 @@ function initializeDatabase() {
                     category TEXT DEFAULT 'අධ්‍යාපනය',
                     author TEXT,
                     image_file TEXT,
+                    thumbnail TEXT,
                     is_published INTEGER DEFAULT 0,
                     created_by INTEGER,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -131,6 +128,7 @@ function initializeDatabase() {
                     grade_id INTEGER,
                     subject_id INTEGER,
                     duration_minutes INTEGER DEFAULT 15,
+                    thumbnail TEXT,
                     is_published INTEGER DEFAULT 0,
                     created_by INTEGER,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -173,49 +171,31 @@ function initializeDatabase() {
                 CREATE INDEX IF NOT EXISTS idx_videos_grade ON videos(grade_id);
             `);
 
-            // ============================================
-            // MIGRATION: Add missing columns to existing tables
-            // ============================================
-            try {
-                // Check if answer_pdf column exists in papers
-                const papersColumns = db.prepare("PRAGMA table_info(papers)").all();
-                const hasAnswerPdf = papersColumns.some(col => col.name === 'answer_pdf');
-                
-                if (!hasAnswerPdf) {
-                    console.log('🔧 Adding answer_pdf column to papers table...');
-                    db.exec('ALTER TABLE papers ADD COLUMN answer_pdf TEXT');
-                    console.log('✅ answer_pdf column added');
-                }
+            // MIGRATION: Add missing columns
+            const migrations = [
+                { table: 'papers', column: 'answer_pdf', type: 'TEXT' },
+                { table: 'papers', column: 'thumbnail', type: 'TEXT' },
+                { table: 'lessons', column: 'content', type: 'TEXT' },
+                { table: 'lessons', column: 'image_file', type: 'TEXT' },
+                { table: 'lessons', column: 'thumbnail', type: 'TEXT' },
+                { table: 'videos', column: 'thumbnail', type: 'TEXT' },
+                { table: 'articles', column: 'image_file', type: 'TEXT' },
+                { table: 'articles', column: 'author', type: 'TEXT' },
+                { table: 'articles', column: 'thumbnail', type: 'TEXT' },
+                { table: 'quizzes', column: 'thumbnail', type: 'TEXT' },
+            ];
 
-                // Add other potentially missing columns
-                const lessonsColumns = db.prepare("PRAGMA table_info(lessons)").all();
-                if (!lessonsColumns.some(col => col.name === 'content')) {
-                    console.log('🔧 Adding content column to lessons table...');
-                    db.exec('ALTER TABLE lessons ADD COLUMN content TEXT');
+            for (const mig of migrations) {
+                try {
+                    const columns = db.prepare(`PRAGMA table_info(${mig.table})`).all();
+                    if (!columns.some(col => col.name === mig.column)) {
+                        console.log(`🔧 Adding ${mig.column} column to ${mig.table}...`);
+                        db.exec(`ALTER TABLE ${mig.table} ADD COLUMN ${mig.column} ${mig.type}`);
+                        console.log(`✅ ${mig.column} added to ${mig.table}`);
+                    }
+                } catch (e) {
+                    console.error(`⚠️ Migration error (${mig.table}.${mig.column}):`, e.message);
                 }
-                if (!lessonsColumns.some(col => col.name === 'image_file')) {
-                    console.log('🔧 Adding image_file column to lessons table...');
-                    db.exec('ALTER TABLE lessons ADD COLUMN image_file TEXT');
-                }
-
-                const videosColumns = db.prepare("PRAGMA table_info(videos)").all();
-                if (!videosColumns.some(col => col.name === 'thumbnail')) {
-                    console.log('🔧 Adding thumbnail column to videos table...');
-                    db.exec('ALTER TABLE videos ADD COLUMN thumbnail TEXT');
-                }
-
-                const articlesColumns = db.prepare("PRAGMA table_info(articles)").all();
-                if (!articlesColumns.some(col => col.name === 'image_file')) {
-                    console.log('🔧 Adding image_file column to articles table...');
-                    db.exec('ALTER TABLE articles ADD COLUMN image_file TEXT');
-                }
-                if (!articlesColumns.some(col => col.name === 'author')) {
-                    console.log('🔧 Adding author column to articles table...');
-                    db.exec('ALTER TABLE articles ADD COLUMN author TEXT');
-                }
-
-            } catch (migrationError) {
-                console.error('⚠️ Migration warning:', migrationError.message);
             }
 
             console.log('✅ All tables created successfully');
@@ -227,9 +207,6 @@ function initializeDatabase() {
     });
 }
 
-// ============================================
-// HELPER FUNCTIONS
-// ============================================
 function dbRun(sql, params = []) {
     return new Promise((resolve, reject) => {
         try {
