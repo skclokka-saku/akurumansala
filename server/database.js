@@ -3,7 +3,8 @@ const path = require('path');
 const fs = require('fs');
 const Database = require('better-sqlite3');
 
-const DB_DIR = path.join(__dirname, 'database');
+const DB_DIR = process.env.RAILWAY_VOLUME_MOUNT_PATH 
+    || path.join(__dirname, 'database');
 const DB_PATH = path.join(DB_DIR, 'akuru.db');
 
 let db = null;
@@ -90,6 +91,7 @@ function initializeDatabase() {
                     paper_type TEXT DEFAULT 'term',
                     year INTEGER,
                     pdf_file TEXT,
+                    answer_pdf TEXT,
                     is_published INTEGER DEFAULT 0,
                     created_by INTEGER,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -170,6 +172,51 @@ function initializeDatabase() {
                 CREATE INDEX IF NOT EXISTS idx_papers_grade ON papers(grade_id);
                 CREATE INDEX IF NOT EXISTS idx_videos_grade ON videos(grade_id);
             `);
+
+            // ============================================
+            // MIGRATION: Add missing columns to existing tables
+            // ============================================
+            try {
+                // Check if answer_pdf column exists in papers
+                const papersColumns = db.prepare("PRAGMA table_info(papers)").all();
+                const hasAnswerPdf = papersColumns.some(col => col.name === 'answer_pdf');
+                
+                if (!hasAnswerPdf) {
+                    console.log('🔧 Adding answer_pdf column to papers table...');
+                    db.exec('ALTER TABLE papers ADD COLUMN answer_pdf TEXT');
+                    console.log('✅ answer_pdf column added');
+                }
+
+                // Add other potentially missing columns
+                const lessonsColumns = db.prepare("PRAGMA table_info(lessons)").all();
+                if (!lessonsColumns.some(col => col.name === 'content')) {
+                    console.log('🔧 Adding content column to lessons table...');
+                    db.exec('ALTER TABLE lessons ADD COLUMN content TEXT');
+                }
+                if (!lessonsColumns.some(col => col.name === 'image_file')) {
+                    console.log('🔧 Adding image_file column to lessons table...');
+                    db.exec('ALTER TABLE lessons ADD COLUMN image_file TEXT');
+                }
+
+                const videosColumns = db.prepare("PRAGMA table_info(videos)").all();
+                if (!videosColumns.some(col => col.name === 'thumbnail')) {
+                    console.log('🔧 Adding thumbnail column to videos table...');
+                    db.exec('ALTER TABLE videos ADD COLUMN thumbnail TEXT');
+                }
+
+                const articlesColumns = db.prepare("PRAGMA table_info(articles)").all();
+                if (!articlesColumns.some(col => col.name === 'image_file')) {
+                    console.log('🔧 Adding image_file column to articles table...');
+                    db.exec('ALTER TABLE articles ADD COLUMN image_file TEXT');
+                }
+                if (!articlesColumns.some(col => col.name === 'author')) {
+                    console.log('🔧 Adding author column to articles table...');
+                    db.exec('ALTER TABLE articles ADD COLUMN author TEXT');
+                }
+
+            } catch (migrationError) {
+                console.error('⚠️ Migration warning:', migrationError.message);
+            }
 
             console.log('✅ All tables created successfully');
             resolve(db);
