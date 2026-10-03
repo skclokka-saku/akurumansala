@@ -1,341 +1,437 @@
 <!DOCTYPE html>
 <html lang="si">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>පාඩම් සම්පත් | අකුරු මංසල</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            navy: '#0F2C59',
-                            navy2: '#1B3A6B',
-                            gold: '#D4A017',
-                            gold2: '#E8B923',
-                            light: '#F8F9FC',
-                        }
-                    },
-                    fontFamily: { sinhala: ['"Noto Serif Sinhala"', 'sans-serif'] }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="අකුරු මංසල - අධ්‍යාපනික සම්පත්">
+<title>සම්පත් | අකුරු මංසල</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+tailwind.config = {
+    darkMode: 'class',
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    navy: '#0F2C59',
+                    navy2: '#1B3A6B',
+                    gold: '#D4A017',
+                    gold2: '#E8B923',
+                    light: '#F8F9FC',
                 }
+            },
+            fontFamily: {
+                sinhala: ['"Noto Serif Sinhala"', 'sans-serif'],
             }
         }
-    </script>
-    <style>
-        body { 
-            font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; 
-            background: #F8F9FC;
-        }
-        body.dark { background: #0a0f1e; color: #e2e8f0; }
+    }
+}
+</script>
 
-        .container-wide {
-            width: 100%;
-            max-width: 1920px;
-            padding-left: 1rem;
-            padding-right: 1rem;
-            margin: 0 auto;
-        }
-        @media (min-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
-        @media (min-width: 1024px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif;
+        overflow-x: hidden;
+        background: #F8F9FC;
+        color: #1e293b;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark { background: #0a0f1e; color: #e2e8f0; }
 
-        .main-nav { 
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
-        }
-        body.dark .main-nav { background: rgba(26, 26, 46, 0.98); }
+    .container-wide {
+        width: 100%;
+        max-width: 1920px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin: 0 auto;
+    }
+    @media (min-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
+    @media (min-width: 1024px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
 
-        .logo-wrap {
-            width: 60px;
-            height: 60px;
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 6px 20px rgba(15, 44, 89, 0.15);
-            border: 2px solid rgba(212, 160, 23, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.3rem;
-            transition: all 0.4s;
-        }
-        .logo-wrap:hover { transform: scale(1.08) rotate(-3deg); }
-        .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    /* HEADER */
+    .main-nav {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
+        border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+    }
+    body.dark .main-nav { background: rgba(26, 26, 46, 0.98); }
 
-        .nav-link {
-            font-weight: 700;
-            color: #0F2C59;
-            font-size: 0.875rem;
-            transition: all 0.3s;
-            padding: 0.6rem 0.9rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            border-radius: 0.65rem;
-        }
-        body.dark .nav-link { color: #cbd5e1; }
-        .nav-link i { font-size: 0.8rem; color: #D4A017; }
-        .nav-link:hover, .nav-link.active { 
-            color: #D4A017; 
-            background: rgba(212, 160, 23, 0.1);
-        }
+    .logo-wrap {
+        width: 70px; height: 70px;
+        background: linear-gradient(135deg, #ffffff, #f8f9fc);
+        border-radius: 1.2rem;
+        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.2);
+        border: 2px solid rgba(212, 160, 23, 0.4);
+        display: flex; align-items: center; justify-content: center;
+        padding: 0.4rem;
+        transition: all 0.5s;
+    }
+    .logo-wrap:hover { transform: scale(1.1) rotate(-5deg); }
+    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
 
-        .theme-toggle {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #D4A017, #E8B923);
-            color: #0F2C59;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.4s;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
-            font-size: 1.05rem;
-        }
-        .theme-toggle:hover { transform: rotate(180deg) scale(1.15); }
+    .nav-link {
+        font-weight: 700; color: #0F2C59; font-size: 1rem;
+        transition: all 0.3s;
+        padding: 0.75rem 1.2rem;
+        text-decoration: none;
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        border-radius: 0.85rem;
+    }
+    body.dark .nav-link { color: #cbd5e1; }
+    .nav-link i { color: #D4A017; }
+    .nav-link:hover, .nav-link.active {
+        color: #D4A017;
+        background: rgba(212, 160, 23, 0.1);
+        transform: translateY(-3px);
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #D4A017, #E8B923);
-            color: #0F2C59;
-            padding: 0.8rem 1.75rem;
-            border-radius: 0.9rem;
-            font-weight: 800;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4);
-            transition: all 0.4s;
-        }
-        .btn-primary:hover { transform: translateY(-4px) scale(1.04); }
+    .theme-toggle {
+        width: 50px; height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: all 0.5s;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
+        font-size: 1.1rem;
+    }
+    .theme-toggle:hover { transform: rotate(180deg) scale(1.15); }
 
-        .lesson-card {
-            background: white;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            cursor: pointer;
-            border-top: 5px solid transparent;
-            border-left: 1px solid rgba(212, 160, 23, 0.1);
-            border-right: 1px solid rgba(212, 160, 23, 0.1);
-            border-bottom: 1px solid rgba(212, 160, 23, 0.1);
-        }
-        body.dark .lesson-card { background: #1a1a2e; }
-        .lesson-card:hover { 
-            transform: translateY(-12px); 
-            box-shadow: 0 30px 60px rgba(15, 44, 89, 0.25);
-            border-top-color: #D4A017;
-        }
+    .btn-primary {
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        padding: 0.85rem 1.75rem;
+        border-radius: 1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        transition: all 0.4s;
+        display: inline-flex; align-items: center; gap: 0.65rem;
+        box-shadow: 0 10px 25px rgba(212, 160, 23, 0.4);
+        cursor: pointer;
+        border: none; text-decoration: none;
+    }
+    .btn-primary:hover { transform: translateY(-5px) scale(1.05); }
 
-        .lesson-icon-wrap {
-            height: 160px;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .lesson-icon-wrap i { 
-            font-size: 4rem; 
-            color: white; 
-            position: relative;
-            z-index: 1;
-            transition: transform 0.5s;
-        }
-        .lesson-card:hover .lesson-icon-wrap i { transform: scale(1.15) rotate(-10deg); }
+    /* PAGE HERO */
+    .page-hero {
+        background: linear-gradient(135deg, #0F2C59 0%, #1B3A6B 100%);
+        color: white;
+        padding: 4rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .page-hero::before {
+        content: '';
+        position: absolute; top: 0; right: 0;
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(212, 160, 23, 0.15), transparent 70%);
+        border-radius: 50%;
+    }
 
-        .lesson-grade-badge {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: rgba(255,255,255,0.95);
-            color: #0F2C59;
-            padding: 0.4rem 1rem;
-            border-radius: 999px;
-            font-weight: 800;
-            font-size: 0.7rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            z-index: 2;
-        }
+    /* FILTERS */
+    .filter-section {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        margin-top: -3rem;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 15px 40px rgba(15, 44, 89, 0.1);
+    }
+    body.dark .filter-section { background: #1a1a2e; }
 
-        .lesson-subject-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: linear-gradient(135deg, #D4A017, #E8B923);
-            color: #0F2C59;
-            padding: 0.4rem 1rem;
-            border-radius: 999px;
-            font-weight: 800;
-            font-size: 0.7rem;
-            box-shadow: 0 4px 15px rgba(212, 160, 23, 0.5);
-            z-index: 2;
-        }
+    .filter-input {
+        width: 100%;
+        padding: 0.9rem 1.25rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 1rem;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: all 0.3s;
+        background: #F8F9FC;
+    }
+    body.dark .filter-input { background: #0a0f1e; border-color: #334155; color: #e2e8f0; }
+    .filter-input:focus { outline: none; border-color: #D4A017; box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15); }
 
-        .filter-input {
-            border: 2px solid #e2e8f0;
-            border-radius: 0.9rem;
-            padding: 0.85rem 1rem;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            width: 100%;
-            font-family: inherit;
-            background: white;
-        }
-        .filter-input:focus {
-            outline: none;
-            border-color: #D4A017;
-            box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15);
-        }
-        body.dark .filter-input { background: #1e293b; color: #e2e8f0; border-color: #334155; }
+    /* TAB BUTTONS */
+    .tab-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 1rem;
+        font-weight: 700;
+        font-size: 0.9rem;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.3s;
+        background: rgba(15, 44, 89, 0.05);
+        color: #0F2C59;
+        display: inline-flex; align-items: center; gap: 0.5rem;
+    }
+    body.dark .tab-btn { background: rgba(255, 255, 255, 0.05); color: #cbd5e1; }
+    .tab-btn:hover { background: rgba(212, 160, 23, 0.15); }
+    .tab-btn.active {
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4);
+    }
 
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            padding: 1rem;
-            overflow-y: auto;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-content {
-            background: white;
-            border-radius: 1.5rem;
-            max-width: 900px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        body.dark .modal-content { background: #1e293b; }
+    /* RESOURCE CARDS */
+    #resourcesContainer {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+        #resourcesContainer { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1024px) {
+        #resourcesContainer { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
 
-        .footer { 
-            background: linear-gradient(180deg, #0F2C59, #0a1a3a); 
-            color: white; 
-            padding-top: 4rem; 
-        }
-        body.dark .footer { background: #05080f; }
-        .footer a { color: rgba(255,255,255,0.75); transition: all 0.3s; font-size: 0.9rem; text-decoration: none; }
-        .footer a:hover { color: #D4A017; padding-left: 6px; }
-        .footer-title {
-            color: white;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            margin-bottom: 1.25rem;
-            position: relative;
-            padding-bottom: 0.6rem;
-        }
-        .footer-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: linear-gradient(90deg, #D4A017, #E8B923);
-            border-radius: 3px;
-        }
-        .social-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 0.85rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s;
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-        }
-        .social-icon i { color: #ffffff !important; }
-        .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); }
-        .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
-        .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
-        .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
-        .social-icon:hover { transform: translateY(-6px) scale(1.15) rotate(-5deg); }
-    </style>
+    .resource-card {
+        background: white;
+        border-radius: 1.25rem;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.08);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        border: 1px solid rgba(212, 160, 23, 0.1);
+    }
+    body.dark .resource-card { background: #1a1a2e; }
+    .resource-card:hover {
+        transform: translateY(-8px) !important;
+        box-shadow: 0 20px 45px rgba(15, 44, 89, 0.2);
+        border-color: rgba(212, 160, 23, 0.3);
+    }
+
+    .resource-header {
+        position: relative;
+        width: 100%;
+        height: 180px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .resource-header i {
+        font-size: 4rem;
+        color: rgba(212, 160, 23, 0.6);
+    }
+
+    .resource-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+    }
+
+    .resource-info {
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: 1;
+    }
+    .resource-info h3 {
+        font-weight: 800;
+        font-size: 1.05rem;
+        color: #0F2C59;
+        line-height: 1.3;
+    }
+    body.dark .resource-info h3 { color: #e2e8f0; }
+    .resource-info p {
+        font-size: 0.85rem;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+    }
+    body.dark .resource-info p { color: #94a3b8; }
+
+    .resource-desc {
+        font-size: 0.9rem;
+        color: #475569;
+        line-height: 1.5;
+        margin-top: 0.5rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    body.dark .resource-desc { color: #cbd5e1; }
+
+    .resource-actions {
+        padding: 1rem 1.25rem;
+        border-top: 1px solid rgba(15, 44, 89, 0.08);
+        display: flex;
+        gap: 0.75rem;
+    }
+    body.dark .resource-actions { border-top-color: rgba(255, 255, 255, 0.08); }
+
+    .btn-view {
+        flex: 1;
+        padding: 0.6rem 1rem;
+        border-radius: 0.75rem;
+        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+        color: white;
+        font-weight: 700;
+        font-size: 0.85rem;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        transition: all 0.3s;
+    }
+    .btn-view:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15, 44, 89, 0.3); }
+
+    /* EMPTY STATE */
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; }
+    .empty-state i { font-size: 4rem; color: #cbd5e1; margin-bottom: 1rem; }
+
+    /* LOADING SPINNER */
+    .loading-spinner { grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; }
+    .spinner {
+        width: 50px; height: 50px;
+        border: 4px solid rgba(212, 160, 23, 0.2);
+        border-top-color: #D4A017;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* FOOTER */
+    .footer {
+        background: linear-gradient(180deg, #0F2C59, #0a1a3a);
+        color: white;
+        padding: 3rem 0 2rem;
+        margin-top: 4rem;
+    }
+    body.dark .footer { background: #05080f; }
+
+    @media (max-width: 768px) {
+        .page-hero { padding: 3rem 0; }
+        .filter-section { margin-top: -2rem; padding: 1rem; }
+        .logo-wrap { width: 55px; height: 55px; }
+        .nav-link { font-size: 0.85rem; padding: 0.5rem 0.75rem; }
+        .resource-header { height: 140px; }
+    }
+</style>
 </head>
-<body class="min-h-screen">
+<body>
 
-    <!-- HEADER -->
-    <header class="main-nav sticky top-0 z-50">
-        <div class="container-wide">
-            <div class="h-20 flex items-center justify-between">
-                <a href="/" class="flex items-center space-x-3">
-                    <div class="logo-wrap">
-                        <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-2xl\'></i>'">
-                    </div>
-                    <div class="hidden sm:block">
-                        <h1 class="text-xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
-                        <p class="text-xs text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
-                    </div>
-                </a>
-
-                <nav class="hidden lg:flex items-center space-x-1">
-                    <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
-                    <a href="/resources.html" class="nav-link active"><i class="fa-solid fa-book"></i>සම්පත්</a>
-                    <a href="/papers.html" class="nav-link"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
-                    <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
-                    <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
-                </nav>
-
-                <div class="flex items-center space-x-3">
-                    <button onclick="toggleTheme()" class="theme-toggle">
-                        <i id="themeIcon" class="fa-solid fa-moon"></i>
-                    </button>
-                    <a href="/login.html" class="hidden md:inline-flex btn-primary" style="padding: 0.6rem 1.25rem;">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <span>Admin</span>
-                    </a>
+<!-- HEADER -->
+<header class="main-nav sticky top-0 z-50">
+    <div class="container-wide">
+        <div class="h-24 flex items-center justify-between">
+            <a href="/" class="flex items-center space-x-4">
+                <div class="logo-wrap">
+                    <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
                 </div>
+                <div class="hidden sm:block">
+                    <h1 class="text-2xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
+                    <p class="text-sm text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
+                </div>
+            </a>
+
+            <nav class="hidden lg:flex items-center space-x-1">
+                <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
+                <a href="/resources.html" class="nav-link active"><i class="fa-solid fa-book-open"></i>සම්පත්</a>
+                <a href="/papers.html" class="nav-link"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
+                <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
+                <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleTheme()" class="theme-toggle">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+                <a href="/login.html" class="hidden md:inline-flex btn-primary">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Admin</span>
+                </a>
+                <button onclick="toggleMobileMenu()" class="lg:hidden w-12 h-12 rounded-xl bg-brand-navy text-white flex items-center justify-center">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
             </div>
         </div>
-    </header>
+    </div>
 
-    <!-- HERO -->
-    <section class="bg-brand-navy text-white py-16 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <i class="fa-solid fa-book absolute text-9xl" style="top: 10%; left: 5%;"></i>
-            <i class="fa-solid fa-graduation-cap absolute text-9xl" style="bottom: 10%; right: 5%;"></i>
-        </div>
-        <div class="container-wide relative z-10">
-            <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-3" data-aos="fade-up">
-                <i class="fa-solid fa-book-open mr-2"></i>Learning Library
-            </p>
-            <h1 id="pageTitle" class="text-4xl md:text-5xl font-black mb-3" data-aos="fade-up" data-aos-delay="100">පාඩම් සම්පත්</h1>
-            <p id="pageSubtitle" class="text-white/70 text-base max-w-2xl" data-aos="fade-up" data-aos-delay="200">
-                1 සිට 13 ශ්‍රේණිය දක්වා පාඩම් සහ සම්පත්
-            </p>
-        </div>
-    </section>
+    <div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t px-4 py-4 space-y-2">
+        <a href="/" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+            <i class="fa-solid fa-home mr-2 text-brand-gold"></i>මුල් පිටුව
+        </a>
+        <a href="/resources.html" class="block px-4 py-3 rounded-lg bg-brand-gold text-brand-navy font-bold">
+            <i class="fa-solid fa-book-open mr-2"></i>සම්පත්
+        </a>
+        <a href="/papers.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+            <i class="fa-solid fa-file-lines mr-2 text-brand-gold"></i>ප්‍රශ්න පත්‍ර
+        </a>
+        <a href="/videos.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+            <i class="fa-solid fa-video mr-2 text-brand-gold"></i>වීඩියෝ
+        </a>
+    </div>
+</header>
 
-    <!-- FILTERS -->
-    <section class="container-wide -mt-6 relative z-10">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 grid grid-cols-1 md:grid-cols-3 gap-3" data-aos="fade-up">
-            <input type="text" id="searchInput" placeholder="පාඩම් සොයන්න..." class="filter-input">
+<!-- HERO -->
+<section class="page-hero">
+    <div class="container-wide relative z-10">
+        <p class="text-brand-gold font-bold text-sm tracking-widest uppercase mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-book-open"></i>
+            LEARNING LIBRARY
+        </p>
+        <h1 class="text-4xl md:text-6xl font-black mb-3">අධ්‍යාපනික සම්පත්</h1>
+        <p class="text-white/80 text-lg">ශ්‍රේණියට සහ විෂයට ගැලපෙන පාඩම් සහ සටහන්</p>
+    </div>
+</section>
+
+<!-- FILTERS -->
+<section class="container-wide -mt-8 relative z-20">
+    <div class="filter-section">
+        <!-- Tabs -->
+        <div class="flex flex-wrap gap-2 mb-4">
+            <button class="tab-btn active" data-type="lesson" onclick="switchTab('lesson')">
+                <i class="fa-solid fa-book"></i>පාඩම්
+            </button>
+            <button class="tab-btn" data-type="article" onclick="switchTab('article')">
+                <i class="fa-solid fa-newspaper"></i>ලිපි
+            </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <input type="text" id="searchInput" placeholder="සොයන්න..." class="filter-input">
             <select id="gradeFilter" class="filter-input">
                 <option value="">සියලු ශ්‍රේණි</option>
             </select>
@@ -343,360 +439,285 @@
                 <option value="">සියලු විෂය</option>
             </select>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- LESSONS -->
-    <main class="container-wide py-8">
-        <div id="lessonsContainer">
-            <div class="text-center py-12">
-                <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
-            </div>
-        </div>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer mt-12">
-        <div class="container-wide">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-white/10">
-                <div class="md:col-span-2">
-                    <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2 shadow-lg">
-                            <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-black">අකුරු මංසල</h3>
-                            <p class="text-xs text-white/70 mt-1">ඉගෙනුමට නව මඟක්</p>
-                        </div>
-                    </div>
-                    <p class="text-white/70 text-sm leading-relaxed mb-6">
-                        ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
-                    </p>
-                    <div class="flex flex-wrap gap-3">
-                        <a href="#" class="social-icon facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon youtube"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#" class="social-icon whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="#" class="social-icon instagram"><i class="fa-brands fa-instagram"></i></a>
-                    </div>
-                </div>
-                <div>
-                    <h4 class="footer-title">ඉක්මන් සබැඳි</h4>
-                    <ul class="space-y-3">
-                        <li><a href="/">මුල් පිටුව</a></li>
-                        <li><a href="/resources.html">සම්පත්</a></li>
-                        <li><a href="/papers.html">ප්‍රශ්න පත්‍ර</a></li>
-                        <li><a href="/videos.html">වීඩියෝ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="footer-title">අප අමතන්න</h4>
-                    <ul class="space-y-3">
-                        <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
-                            <span class="text-white/80 text-sm">කෑගල්ල, ශ්‍රී ලංකාව</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-phone text-brand-gold"></i>
-                            <span class="text-white/80 text-sm">+94 767512666</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-envelope text-brand-gold"></i>
-                            <span class="text-white/80 text-sm">info@akurumansala.lk</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="pt-8 text-center text-xs text-white/60">
-                <p>© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- LESSON MODAL -->
-    <div id="lessonModal" class="modal-overlay" onclick="if(event.target===this) closeModal()">
-        <div class="modal-content">
-            <button onclick="closeModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-600 z-10 shadow-lg">
-                <i class="fa-solid fa-times"></i>
-            </button>
-            <div id="modalBody"></div>
+<!-- RESOURCES -->
+<main class="container-wide py-12">
+    <div id="resourcesContainer">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p class="text-gray-500">සම්පත් load වෙමින්...</p>
         </div>
     </div>
+</main>
 
-    <script>
-        const API_BASE = '/api';
-        let allLessons = [];
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container-wide text-center">
+        <p class="text-white/70">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+    </div>
+</footer>
 
-        // ============================================
-        // THEME
-        // ============================================
-        function toggleTheme() {
-            const body = document.body;
-            const icon = document.getElementById('themeIcon');
-            body.classList.toggle('dark');
-            if (body.classList.contains('dark')) {
-                icon.className = 'fa-solid fa-sun';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                icon.className = 'fa-solid fa-moon';
-                localStorage.setItem('theme', 'light');
-            }
-        }
+<script>
+const API_BASE = '/api';
 
-        function loadTheme() {
-            const saved = localStorage.getItem('theme');
-            if (saved === 'dark') {
-                document.body.classList.add('dark');
-                const icon = document.getElementById('themeIcon');
-                if (icon) icon.className = 'fa-solid fa-sun';
-            }
-        }
+let currentType = 'lesson';
+let allItems = [];
+let filteredItems = [];
 
-        // ============================================
-        // LOAD FILTERS
-        // ============================================
-        async function loadFilters() {
-            try {
-                const [gradesRes, subjectsRes] = await Promise.all([
-                    fetch(`${API_BASE}/grades`),
-                    fetch(`${API_BASE}/subjects`)
-                ]);
-                const grades = await gradesRes.json();
-                const subjects = await subjectsRes.json();
+// ============================================
+// THEME
+// ============================================
+function toggleTheme() {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    document.getElementById('themeIcon').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+}
 
-                const gradeFilter = document.getElementById('gradeFilter');
-                grades.forEach(g => {
-                    const opt = document.createElement('option');
-                    opt.value = g.id;
-                    opt.textContent = g.grade_name;
-                    gradeFilter.appendChild(opt);
-                });
+function loadTheme() {
+    if (localStorage.getItem('theme') === 'dark') {
+        document.body.classList.add('dark');
+        document.getElementById('themeIcon').className = 'fa-solid fa-sun';
+    }
+}
 
-                const subjectFilter = document.getElementById('subjectFilter');
-                subjects.forEach(s => {
-                    const opt = document.createElement('option');
-                    opt.value = s.id;
-                    opt.textContent = s.subject_name;
-                    subjectFilter.appendChild(opt);
-                });
-            } catch (err) {
-                console.error('Filter load error:', err);
-            }
-        }
+function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+}
 
-        // ============================================
-        // LOAD LESSONS
-        // ============================================
-        async function loadLessons() {
-            const container = document.getElementById('lessonsContainer');
-            try {
-                console.log('📥 Loading lessons...');
-                
-                const urlParams = new URLSearchParams(window.location.search);
-                const grades = urlParams.get('grades');
-                const activity = urlParams.get('activity');
-                const special = urlParams.get('special');
-                const gradeId = urlParams.get('grade_id');
-                const subjectId = urlParams.get('subject_id');
+// ============================================
+// SWITCH TAB
+// ============================================
+function switchTab(type) {
+    currentType = type;
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.type === type);
+    });
+    
+    loadResources();
+}
 
-                let apiUrl = `${API_BASE}/resources?type=lesson&limit=200`;
-                if (grades) apiUrl += `&grades=${grades}`;
-                if (activity) apiUrl += `&activity=${activity}`;
-                if (special) apiUrl += `&special=${special}`;
-                if (gradeId) apiUrl += `&grade_id=${gradeId}`;
-                if (subjectId) apiUrl += `&subject_id=${subjectId}`;
+// ============================================
+// LOAD RESOURCES
+// ============================================
+async function loadResources() {
+    const container = document.getElementById('resourcesContainer');
+    container.innerHTML = `
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p class="text-gray-500">Load වෙමින්...</p>
+        </div>
+    `;
+    
+    try {
+        const res = await fetch(`${API_BASE}/resources?type=${currentType}&limit=100`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        
+        const data = await res.json();
+        
+        // Handle different response structures
+        const keyMap = { lesson: 'lessons', paper: 'papers', article: 'articles', video: 'videos' };
+        allItems = data[keyMap[currentType]] || data[currentType + 's'] || data.data || data || [];
+        
+        console.log(`✅ ${currentType}s loaded:`, allItems.length);
+        
+        filteredItems = [...allItems];
+        renderResources();
+        
+    } catch (err) {
+        console.error('❌ Load error:', err);
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-exclamation-triangle" style="color: #ef4444;"></i>
+                <p class="text-red-500 text-lg font-bold">දෝෂයක්: ${err.message}</p>
+            </div>
+        `;
+    }
+}
 
-                console.log('🌐 API URL:', apiUrl);
-
-                const res = await fetch(apiUrl);
-                
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                
-                const data = await res.json();
-                console.log('✅ Lessons received:', data);
-                
-                allLessons = data.lessons || [];
-                console.log('✅ Total lessons:', allLessons.length);
-                
-                updatePageTitle(grades, activity, special);
-                renderLessons(allLessons);
-            } catch (err) {
-                console.error('❌ Error loading lessons:', err);
-                container.innerHTML = `<div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg text-red-500">දෝෂයක්: ${err.message}</div>`;
-            }
-        }
-
-        function updatePageTitle(grades, activity, special) {
-            const titleEl = document.getElementById('pageTitle');
-            const subtitleEl = document.getElementById('pageSubtitle');
-            
-            if (grades) {
-                const gradeNames = {
-                    '1,2,3,4,5': 'ප්‍රාථමික අධ්‍යාපනය (ශ්‍රේණි 1-5)',
-                    '6,7,8,9': 'මධ්‍යම අධ්‍යාපනය (ශ්‍රේණි 6-9)',
-                    '10,11': 'සාමාන්‍ය පෙළ (ශ්‍රේණි 10-11)',
-                    '12,13': 'උසස් පෙළ (ශ්‍රේණි 12-13)'
-                };
-                if (titleEl) titleEl.textContent = gradeNames[grades] || 'පාඩම් සම්පත්';
-                if (subtitleEl) subtitleEl.textContent = 'අදාළ ශ්‍රේණියට අයත් පාඩම් සහ සම්පත්';
-            } else if (activity) {
-                const activityNames = {
-                    'sports': 'ක්‍රීඩා',
-                    'music': 'සංගීතය',
-                    'art': 'චිත්‍ර',
-                    'reading': 'කියවීම',
-                    'science': 'විද්‍යාව',
-                    'dance': 'නර්තනය'
-                };
-                if (titleEl) titleEl.textContent = activityNames[activity] || 'පාඩම් සම්පත්';
-                if (subtitleEl) subtitleEl.textContent = 'අදාළ ක්‍රියාකාරකමට අයත් සම්පත්';
-            } else if (special) {
-                if (titleEl) titleEl.textContent = 'විශේෂ අධ්‍යාපනය';
-                if (subtitleEl) subtitleEl.textContent = 'විශේෂ අවශ්‍යතා ඇති දරුවන්ට ගැලපෙන සම්පත්';
-            }
-        }
-
-        // ============================================
-        // RENDER LESSONS
-        // ============================================
-        function renderLessons(lessons) {
-            const container = document.getElementById('lessonsContainer');
-
-            console.log('🎨 Rendering lessons:', lessons.length);
-
-            if (!lessons || lessons.length === 0) {
-                container.innerHTML = `
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl p-16 text-center shadow-lg">
-                        <i class="fa-solid fa-book-open text-6xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500 text-lg">පාඩම් නොමැත</p>
-                        <p class="text-gray-400 text-sm mt-2">මෙම කාණ්ඩයට අදාළ පාඩම් තවම එකතු කර නැත</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    ${lessons.map(l => `
-                        <div class="lesson-card" onclick="openLesson(${l.id})" data-aos="fade-up">
-                            <div class="lesson-icon-wrap">
-                                <i class="fa-solid fa-book-open"></i>
-                                ${l.grade_name ? `<span class="lesson-grade-badge">${l.grade_name}</span>` : ''}
-                                ${l.subject_name ? `<span class="lesson-subject-badge">${l.subject_name}</span>` : ''}
-                            </div>
-                            <div class="p-5 flex-1 flex flex-col">
-                                <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${l.title}</h3>
-                                <p class="text-xs text-gray-500 mb-3">
-                                    ${l.grade_name || ''} ${l.subject_name ? '• ' + l.subject_name : ''}
-                                </p>
-                                <p class="text-xs text-gray-400 flex-1 line-clamp-2">${l.description ? l.description.substring(0, 100) + '...' : 'විස්තරයක් නොමැත'}</p>
-                                <div class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
-                                    <span class="text-xs text-gray-500"><i class="fa-solid fa-eye mr-1"></i>${l.views || 0}</span>
-                                    <span class="text-brand-gold font-bold text-xs">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            if (window.AOS) AOS.refresh();
-        }
-
-        // ============================================
-        // OPEN LESSON MODAL
-        // ============================================
-        async function openLesson(id) {
-            const modal = document.getElementById('lessonModal');
-            const modalBody = document.getElementById('modalBody');
-
-            modalBody.innerHTML = `<div class="p-12 text-center"><div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-
-            try {
-                const res = await fetch(`${API_BASE}/resources/lesson/${id}`);
-                const lesson = await res.json();
-
-                modalBody.innerHTML = `
-                    <div class="p-8">
-                        <div class="mb-6">
-                            <div class="flex items-center gap-4 mb-4">
-                                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-lg">
-                                    <i class="fa-solid fa-book-open text-2xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-brand-gold font-black uppercase tracking-wider">පාඩම</p>
-                                    <h2 class="text-2xl font-black text-brand-navy dark:text-white">${lesson.title}</h2>
-                                </div>
-                            </div>
-                            <div class="flex flex-wrap gap-2 mb-4">
-                                ${lesson.grade_name ? `<span class="text-xs font-bold bg-brand-navy text-white px-4 py-1.5 rounded-full">${lesson.grade_name}</span>` : ''}
-                                ${lesson.subject_name ? `<span class="text-xs font-bold bg-brand-gold text-brand-navy px-4 py-1.5 rounded-full">${lesson.subject_name}</span>` : ''}
-                            </div>
-                        </div>
-                        <div class="prose max-w-none text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-base">${lesson.description || 'විස්තරයක් නොමැත'}</div>
-                    </div>
-                `;
-            } catch (err) {
-                modalBody.innerHTML = `<div class="p-12 text-center text-red-500">දෝෂයක්: ${err.message}</div>`;
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('lessonModal').classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        // ============================================
-        // FILTERS
-        // ============================================
-        function applyFilters() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const gradeId = document.getElementById('gradeFilter').value;
-            const subjectId = document.getElementById('subjectFilter').value;
-
-            const filtered = allLessons.filter(l => {
-                const matchSearch = !search || (l.title || '').toLowerCase().includes(search);
-                const matchGrade = !gradeId || String(l.grade_id) === gradeId;
-                const matchSubject = !subjectId || String(l.subject_id) === subjectId;
-                return matchSearch && matchGrade && matchSubject;
-            });
-
-            renderLessons(filtered);
-        }
-
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.getElementById('gradeFilter').addEventListener('change', applyFilters);
-        document.getElementById('subjectFilter').addEventListener('change', applyFilters);
-
-        // ============================================
-        // INIT
-        // ============================================
-        document.addEventListener('DOMContentLoaded', async () => {
-            console.log('🚀 Resources page initializing...');
-            
-            loadTheme();
-            
-            try {
-                await loadFilters();
-            } catch (err) {
-                console.error('❌ Filter load error:', err);
-            }
-            
-            try {
-                await loadLessons();
-            } catch (err) {
-                console.error('❌ Lesson load error:', err);
-            }
-            
-            console.log('✅ Resources page ready');
+// ============================================
+// LOAD FILTERS
+// ============================================
+async function loadFilters() {
+    try {
+        const [gradesRes, subjectsRes] = await Promise.all([
+            fetch(`${API_BASE}/grades`),
+            fetch(`${API_BASE}/subjects`)
+        ]);
+        
+        const grades = await gradesRes.json();
+        const subjects = await subjectsRes.json();
+        
+        const gradesArr = Array.isArray(grades) ? grades : (grades.grades || []);
+        const subjectsArr = Array.isArray(subjects) ? subjects : (subjects.subjects || []);
+        
+        const gradeFilter = document.getElementById('gradeFilter');
+        gradesArr.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g.id;
+            opt.textContent = g.grade_name;
+            gradeFilter.appendChild(opt);
         });
-    </script>
+        
+        const subjectFilter = document.getElementById('subjectFilter');
+        subjectsArr.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.subject_name;
+            subjectFilter.appendChild(opt);
+        });
+        
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        gradeFilter.addEventListener('change', applyFilters);
+        subjectFilter.addEventListener('change', applyFilters);
+        
+    } catch (err) {
+        console.error('Filter load error:', err);
+    }
+}
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ duration: 800, once: true, offset: 100 });
-    </script>
-    <script src="/js/ai-chat.js"></script>
+// ============================================
+// APPLY FILTERS
+// ============================================
+function applyFilters() {
+    const search = document.getElementById('searchInput').value.toLowerCase().trim();
+    const gradeId = document.getElementById('gradeFilter').value;
+    const subjectId = document.getElementById('subjectFilter').value;
+    
+    filteredItems = allItems.filter(item => {
+        if (search && !(item.title || '').toLowerCase().includes(search)) return false;
+        if (gradeId && String(item.grade_id) !== gradeId) return false;
+        if (subjectId && String(item.subject_id) !== subjectId) return false;
+        return true;
+    });
+    
+    renderResources();
+}
+
+// ============================================
+// RENDER
+// ============================================
+function renderResources() {
+    const container = document.getElementById('resourcesContainer');
+    
+    if (filteredItems.length === 0) {
+        const typeName = currentType === 'lesson' ? 'පාඩම්' : 'ලිපි';
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-folder-open"></i>
+                <p class="text-gray-500 text-lg font-bold">${typeName} නොමැත</p>
+                <p class="text-gray-400 text-sm mt-2">කරුණාකර පසුව නැවත උත්සාහ කරන්න</p>
+            </div>
+        `;
+        return;
+    }
+    
+    const iconMap = {
+        lesson: 'fa-book-open',
+        article: 'fa-newspaper',
+        paper: 'fa-file-lines'
+    };
+    
+    const badgeMap = {
+        lesson: 'පාඩම',
+        article: 'ලිපිය',
+        paper: 'ප්‍රශ්න පත්‍රය'
+    };
+    
+    container.innerHTML = filteredItems.map(item => `
+        <div class="resource-card">
+            <div class="resource-header">
+                <i class="fa-solid ${iconMap[currentType] || 'fa-book'}"></i>
+                <span class="resource-badge">${badgeMap[currentType] || 'සම්පත'}</span>
+            </div>
+            <div class="resource-info">
+                <h3>${escapeHtml(item.title || 'N/A')}</h3>
+                <p>
+                    ${item.grade_name ? `<span><i class="fa-solid fa-graduation-cap text-brand-gold"></i> ${escapeHtml(item.grade_name)}</span>` : ''}
+                    ${item.subject_name ? `<span><i class="fa-solid fa-book text-brand-gold"></i> ${escapeHtml(item.subject_name)}</span>` : ''}
+                </p>
+                ${item.description ? `<p class="resource-desc">${escapeHtml(item.description)}</p>` : ''}
+                ${item.category ? `<p class="resource-desc"><i class="fa-solid fa-tag text-brand-gold mr-1"></i>${escapeHtml(item.category)}</p>` : ''}
+            </div>
+            <div class="resource-actions">
+                ${item.pdf_file ? `
+                    <a href="${item.pdf_file}" target="_blank" class="btn-view">
+                        <i class="fa-solid fa-file-pdf"></i>PDF බලන්න
+                    </a>
+                ` : item.content ? `
+                    <button onclick="showContent(${item.id})" class="btn-view">
+                        <i class="fa-solid fa-eye"></i>කියවන්න
+                    </button>
+                ` : `
+                    <button class="btn-view" disabled style="opacity: 0.5;">
+                        <i class="fa-solid fa-info-circle"></i>තොරතුරු නොමැත
+                    </button>
+                `}
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============================================
+// SHOW CONTENT MODAL
+// ============================================
+function showContent(itemId) {
+    const item = allItems.find(i => i.id === itemId);
+    if (!item) return;
+    
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+    modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+    
+    modal.innerHTML = `
+        <div class="bg-white dark:bg-gray-900 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+            <div class="sticky top-0 bg-white dark:bg-gray-900 p-4 border-b flex justify-between items-center z-10">
+                <h2 class="text-xl font-black text-brand-navy dark:text-white pr-4">${escapeHtml(item.title)}</h2>
+                <button onclick="this.closest('.fixed').remove()" class="w-10 h-10 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-500 mb-4">
+                    ${item.grade_name ? `<i class="fa-solid fa-graduation-cap mr-1"></i>${escapeHtml(item.grade_name)}` : ''}
+                    ${item.subject_name ? ` • <i class="fa-solid fa-book mr-1"></i>${escapeHtml(item.subject_name)}` : ''}
+                </p>
+                ${item.description ? `<p class="text-gray-600 dark:text-gray-300 mb-4 italic">${escapeHtml(item.description)}</p>` : ''}
+                <div class="prose dark:prose-invert max-w-none text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+                    ${escapeHtml(item.content || 'අන්තර්ගතය නොමැත')}
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// ============================================
+// HELPERS
+// ============================================
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
+    loadFilters();
+    loadResources();
+});
+</script>
+
 </body>
 </html>
