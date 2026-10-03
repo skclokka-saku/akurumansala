@@ -3,411 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="අකුරු මංසල - වීඩියෝ පාඩම්">
 <title>වීඩියෝ පාඩම් | අකුරු මංසල</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <script>
-tailwind.config = {
-    darkMode: 'class',
-    theme: {
-        extend: {
-            colors: {
-                brand: {
-                    navy: '#0F2C59',
-                    navy2: '#1B3A6B',
-                    gold: '#D4A017',
-                    gold2: '#E8B923',
-                    light: '#F8F9FC',
-                }
-            },
-            fontFamily: {
-                sinhala: ['"Noto Serif Sinhala"', 'sans-serif'],
-            }
-        }
-    }
-}
+tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { navy: '#0F2C59', navy2: '#1B3A6B', gold: '#D4A017', gold2: '#E8B923' } } } } }
 </script>
 
 <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-        font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif;
-        overflow-x: hidden;
-        background: #F8F9FC;
-        color: #1e293b;
-        transition: background-color 0.3s, color 0.3s;
-    }
-    body.dark {
-        background: #0a0f1e;
-        color: #e2e8f0;
-    }
+    body { font-family: 'Noto Serif Sinhala', sans-serif; background: #F8F9FC; color: #1e293b; }
+    body.dark { background: #0a0f1e; color: #e2e8f0; }
+    .container-wide { width: 100%; max-width: 1920px; padding: 0 1rem; margin: 0 auto; }
+    @media (min-width: 1024px) { .container-wide { padding: 0 2rem; } }
 
-    .container-wide {
-        width: 100%;
-        max-width: 1920px;
-        padding-left: 1rem;
-        padding-right: 1rem;
-        margin: 0 auto;
-    }
-    @media (min-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
-    @media (min-width: 1024px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
-
-    /* HEADER */
-    .main-nav {
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(20px);
-        box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
-        border-bottom: 1px solid rgba(212, 160, 23, 0.1);
-    }
-    body.dark .main-nav {
-        background: rgba(26, 26, 46, 0.98);
-    }
-
-    .logo-wrap {
-        width: 70px;
-        height: 70px;
-        background: linear-gradient(135deg, #ffffff, #f8f9fc);
-        border-radius: 1.2rem;
-        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.2);
-        border: 2px solid rgba(212, 160, 23, 0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.4rem;
-        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    .logo-wrap:hover {
-        transform: scale(1.1) rotate(-5deg);
-    }
+    .main-nav { background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(15,44,89,0.1); }
+    body.dark .main-nav { background: rgba(26,26,46,0.98); }
+    .logo-wrap { width: 70px; height: 70px; background: white; border-radius: 1.2rem; border: 2px solid rgba(212,160,23,0.4); display: flex; align-items: center; justify-content: center; padding: 0.4rem; }
     .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
-
-    .nav-link {
-        position: relative;
-        font-weight: 700;
-        color: #0F2C59;
-        font-size: 1rem;
-        transition: all 0.3s;
-        padding: 0.75rem 1.2rem;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        border-radius: 0.85rem;
-    }
+    .nav-link { font-weight: 700; color: #0F2C59; padding: 0.75rem 1.2rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 0.85rem; transition: all 0.3s; }
     body.dark .nav-link { color: #cbd5e1; }
     .nav-link i { color: #D4A017; }
-    .nav-link:hover {
-        color: #D4A017;
-        background: rgba(212, 160, 23, 0.1);
-        transform: translateY(-3px);
-    }
-    .nav-link.active {
-        color: #D4A017;
-        background: rgba(212, 160, 23, 0.15);
-    }
-
-    .theme-toggle {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #D4A017, #E8B923);
-        color: #0F2C59;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.5s;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
-        font-size: 1.1rem;
-    }
-    .theme-toggle:hover {
-        transform: rotate(180deg) scale(1.15);
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #D4A017, #E8B923);
-        color: #0F2C59;
-        padding: 0.85rem 1.75rem;
-        border-radius: 1rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        letter-spacing: 1px;
-        transition: all 0.4s;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.65rem;
-        box-shadow: 0 10px 25px rgba(212, 160, 23, 0.4);
-        cursor: pointer;
-        border: none;
-        text-decoration: none;
-    }
-    .btn-primary:hover {
-        transform: translateY(-5px) scale(1.05);
-        box-shadow: 0 20px 45px rgba(212, 160, 23, 0.6);
-    }
-
-    /* HERO */
-    .page-hero {
-        background: linear-gradient(135deg, #0F2C59 0%, #1B3A6B 100%);
-        color: white;
-        padding: 4rem 0;
-        position: relative;
-        overflow: hidden;
-    }
-    .page-hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 400px;
-        height: 400px;
-        background: radial-gradient(circle, rgba(212, 160, 23, 0.15), transparent 70%);
-        border-radius: 50%;
-    }
-
-    /* FILTERS */
-    .filter-section {
-        background: white;
-        border-radius: 1.5rem;
-        padding: 1.5rem;
-        margin-top: -3rem;
-        position: relative;
-        z-index: 10;
-        box-shadow: 0 15px 40px rgba(15, 44, 89, 0.1);
-    }
+    .nav-link:hover, .nav-link.active { color: #D4A017; background: rgba(212,160,23,0.1); }
+    .theme-toggle { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 3px solid rgba(255,255,255,0.3); }
+    .btn-primary { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.85rem 1.75rem; border-radius: 1rem; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.65rem; }
+    .page-hero { background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; padding: 4rem 0; }
+    .filter-section { background: white; border-radius: 1.5rem; padding: 1.5rem; margin-top: -3rem; position: relative; z-index: 10; box-shadow: 0 15px 40px rgba(15,44,89,0.1); }
     body.dark .filter-section { background: #1a1a2e; }
-
-    .filter-input {
-        width: 100%;
-        padding: 0.9rem 1.25rem;
-        border: 2px solid #e5e7eb;
-        border-radius: 1rem;
-        font-size: 1rem;
-        font-family: inherit;
-        transition: all 0.3s;
-        background: #F8F9FC;
-    }
-    body.dark .filter-input {
-        background: #0a0f1e;
-        border-color: #334155;
-        color: #e2e8f0;
-    }
-    .filter-input:focus {
-        outline: none;
-        border-color: #D4A017;
-        box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15);
-    }
-
-    /* VIDEO CARDS — KEY FIX */
-    #videosContainer {
-        display: grid;
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-        gap: 1.5rem;
-    }
-    @media (min-width: 768px) {
-        #videosContainer { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-    @media (min-width: 1024px) {
-        #videosContainer { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    }
-
-    .video-card {
-        background: white;
-        border-radius: 1.25rem;
-        overflow: hidden;
-        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.08);
-        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        opacity: 1 !important;
-        visibility: visible !important;
-        transform: none !important;
-    }
+    .filter-input { width: 100%; padding: 0.9rem 1.25rem; border: 2px solid #e5e7eb; border-radius: 1rem; font-size: 1rem; background: #F8F9FC; }
+    body.dark .filter-input { background: #0a0f1e; border-color: #334155; color: #e2e8f0; }
+    .filter-input:focus { outline: none; border-color: #D4A017; }
+    #videosContainer { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    @media (min-width: 768px) { #videosContainer { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { #videosContainer { grid-template-columns: repeat(3, 1fr); } }
+    .video-card { background: white; border-radius: 1.25rem; overflow: hidden; box-shadow: 0 8px 25px rgba(15,44,89,0.08); cursor: pointer; display: flex; flex-direction: column; border: 1px solid rgba(212,160,23,0.1); transition: all 0.4s; }
     body.dark .video-card { background: #1a1a2e; }
-    .video-card:hover {
-        transform: translateY(-8px) !important;
-        box-shadow: 0 20px 45px rgba(15, 44, 89, 0.2);
-    }
-
-    .video-thumb {
-        position: relative;
-        width: 100%;
-        height: 200px;
-        overflow: hidden;
-        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
-    }
-    .video-thumb img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.6s;
-    }
-    .video-card:hover .video-thumb img {
-        transform: scale(1.1);
-    }
-
-    .video-badge {
-        position: absolute;
-        top: 0.75rem;
-        right: 0.75rem;
-        background: linear-gradient(135deg, #D4A017, #E8B923);
-        color: #0F2C59;
-        padding: 0.35rem 0.85rem;
-        border-radius: 999px;
-        font-weight: 800;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        z-index: 2;
-    }
-
-    .video-play-btn {
-        position: absolute;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(15, 44, 89, 0.3);
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-    .video-card:hover .video-play-btn {
-        opacity: 1;
-    }
-    .video-play-btn::after {
-        content: '\f04b';
-        font-family: 'Font Awesome 6 Free';
-        font-weight: 900;
-        font-size: 2rem;
-        color: white;
-        width: 70px;
-        height: 70px;
-        background: rgba(212, 160, 23, 0.95);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding-left: 5px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-        transition: transform 0.3s;
-    }
-    .video-card:hover .video-play-btn::after {
-        transform: scale(1.1);
-    }
-
-    .video-info {
-        padding: 1.25rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-        flex: 1;
-    }
-    .video-info h3 {
-        font-weight: 800;
-        font-size: 1.05rem;
-        color: #0F2C59;
-        line-height: 1.3;
-    }
+    .video-card:hover { transform: translateY(-8px); box-shadow: 0 20px 45px rgba(15,44,89,0.2); }
+    .video-thumb { position: relative; width: 100%; height: 200px; overflow: hidden; background: linear-gradient(135deg, #0F2C59, #1B3A6B); }
+    .video-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+    .video-card:hover .video-thumb img { transform: scale(1.1); }
+    .video-badge { position: absolute; top: 0.75rem; right: 0.75rem; background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.35rem 0.85rem; border-radius: 999px; font-weight: 800; font-size: 0.7rem; text-transform: uppercase; }
+    .video-play-btn { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(15,44,89,0.3); opacity: 0; transition: opacity 0.3s; }
+    .video-card:hover .video-play-btn { opacity: 1; }
+    .video-play-btn::after { content: '\f04b'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 2rem; color: white; width: 70px; height: 70px; background: rgba(212,160,23,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; padding-left: 5px; }
+    .video-info { padding: 1.25rem; flex: 1; }
+    .video-info h3 { font-weight: 800; font-size: 1.05rem; color: #0F2C59; margin-bottom: 0.5rem; }
     body.dark .video-info h3 { color: #e2e8f0; }
-    .video-info p {
-        font-size: 0.85rem;
-        color: #64748b;
-    }
+    .video-info p { font-size: 0.85rem; color: #64748b; }
     body.dark .video-info p { color: #94a3b8; }
+    .empty-state { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; }
+    .empty-state i { font-size: 4rem; color: #cbd5e1; margin-bottom: 1rem; }
+    .spinner { width: 50px; height: 50px; border: 4px solid rgba(212,160,23,0.2); border-top-color: #D4A017; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .footer { background: linear-gradient(180deg, #0F2C59, #0a1a3a); color: white; padding: 3rem 0 2rem; margin-top: 4rem; }
 
-    /* EMPTY STATE */
-    .empty-state {
-        grid-column: 1 / -1;
-        text-align: center;
-        padding: 4rem 2rem;
-    }
-    .empty-state i {
-        font-size: 4rem;
-        color: #cbd5e1;
-        margin-bottom: 1rem;
-    }
+    /* VIDEO MODAL */
+    .video-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; visibility: hidden; transition: all 0.3s; }
+    .video-modal.show { opacity: 1; visibility: visible; }
+    .video-modal-content { background: white; border-radius: 1.5rem; width: 100%; max-width: 1000px; max-height: 95vh; display: flex; flex-direction: column; overflow: hidden; }
+    body.dark .video-modal-content { background: #1a1a2e; }
+    .video-modal-header { padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; }
+    .video-modal-close { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+    .video-modal-close:hover { background: #ef4444; transform: rotate(90deg); }
+    .video-embed-wrap { position: relative; width: 100%; padding-bottom: 56.25%; background: #000; }
+    .video-embed-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+    .video-modal-body { padding: 1.5rem; overflow-y: auto; }
+    .video-modal-body h2 { font-size: 1.4rem; font-weight: 800; color: #0F2C59; margin-bottom: 0.5rem; }
+    body.dark .video-modal-body h2 { color: #e2e8f0; }
+    .video-modal-body .meta { font-size: 0.9rem; color: #64748b; margin-bottom: 1rem; }
+    .video-modal-body .desc { color: #475569; line-height: 1.7; }
+    body.dark .video-modal-body .desc { color: #cbd5e1; }
 
-    /* LOADING SPINNER */
-    .loading-spinner {
-        grid-column: 1 / -1;
-        text-align: center;
-        padding: 4rem 2rem;
+    /* YOUTUBE ERROR FALLBACK */
+    .yt-error-fallback {
+        position: absolute; inset: 0;
+        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        color: white; padding: 2rem; text-align: center;
     }
-    .spinner {
-        width: 50px;
-        height: 50px;
-        border: 4px solid rgba(212, 160, 23, 0.2);
-        border-top-color: #D4A017;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin: 0 auto 1rem;
-    }
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
+    .yt-error-fallback i { font-size: 3rem; color: #D4A017; margin-bottom: 1rem; }
+    .yt-error-fallback h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .yt-error-fallback p { color: rgba(255,255,255,0.8); margin-bottom: 1.5rem; max-width: 400px; }
+    .yt-error-fallback a { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.75rem 1.5rem; border-radius: 0.75rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
 
-    /* MODAL */
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.85);
-        backdrop-filter: blur(8px);
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s;
-    }
-    .modal-overlay.show {
-        opacity: 1;
-        visibility: visible;
-    }
-    .modal-content {
-        background: white;
-        border-radius: 1.5rem;
-        overflow: hidden;
-        max-width: 900px;
-        width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-        transform: scale(0.9);
-        transition: transform 0.3s;
-    }
-    body.dark .modal-content { background: #1a1a2e; }
-    .modal-overlay.show .modal-content {
-        transform: scale(1);
-    }
+    /* YOUTUBE WATCH BUTTON (in actions) */
+    .yt-actions { padding: 1rem 1.5rem; display: flex; gap: 0.75rem; border-top: 1px solid #e5e7eb; flex-wrap: wrap; }
+    body.dark .yt-actions { border-top-color: #334155; }
+    .yt-action-btn { padding: 0.6rem 1.2rem; border-radius: 0.75rem; font-weight: 700; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border: none; cursor: pointer; }
+    .yt-action-btn.primary { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; }
+    .yt-action-btn.youtube { background: #ff0000; color: white; }
+    .yt-action-btn.close { background: #e5e7eb; color: #475569; margin-left: auto; }
 
-    /* FOOTER */
-    .footer {
-        background: linear-gradient(180deg, #0F2C59, #0a1a3a);
-        color: white;
-        padding: 3rem 0 2rem;
-        margin-top: 4rem;
-    }
-    body.dark .footer { background: #05080f; }
-
-    /* MOBILE */
     @media (max-width: 768px) {
         .page-hero { padding: 3rem 0; }
         .filter-section { margin-top: -2rem; padding: 1rem; }
         .video-thumb { height: 180px; }
-        .logo-wrap { width: 55px; height: 55px; }
-        .nav-link { font-size: 0.85rem; padding: 0.5rem 0.75rem; }
+        .video-modal-content { border-radius: 0; max-height: 100vh; }
     }
 </style>
 </head>
@@ -418,15 +112,12 @@ tailwind.config = {
     <div class="container-wide">
         <div class="h-24 flex items-center justify-between">
             <a href="/" class="flex items-center space-x-4">
-                <div class="logo-wrap">
-                    <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
-                </div>
+                <div class="logo-wrap"><img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'"></div>
                 <div class="hidden sm:block">
                     <h1 class="text-2xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
                     <p class="text-sm text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
                 </div>
             </a>
-
             <nav class="hidden lg:flex items-center space-x-1">
                 <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
                 <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book-open"></i>සම්පත්</a>
@@ -434,46 +125,18 @@ tailwind.config = {
                 <a href="/videos.html" class="nav-link active"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
                 <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
             </nav>
-
             <div class="flex items-center space-x-3">
-                <button onclick="toggleTheme()" class="theme-toggle">
-                    <i id="themeIcon" class="fa-solid fa-moon"></i>
-                </button>
-                <a href="/login.html" class="hidden md:inline-flex btn-primary">
-                    <i class="fa-solid fa-user-shield"></i>
-                    <span>Admin</span>
-                </a>
-                <button onclick="toggleMobileMenu()" class="lg:hidden w-12 h-12 rounded-xl bg-brand-navy text-white flex items-center justify-center">
-                    <i class="fa-solid fa-bars text-xl"></i>
-                </button>
+                <button onclick="toggleTheme()" class="theme-toggle"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
+                <a href="/login.html" class="hidden md:inline-flex btn-primary"><i class="fa-solid fa-user-shield"></i><span>Admin</span></a>
             </div>
         </div>
-    </div>
-
-    <!-- MOBILE MENU -->
-    <div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t px-4 py-4 space-y-2">
-        <a href="/" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
-            <i class="fa-solid fa-home mr-2 text-brand-gold"></i>මුල් පිටුව
-        </a>
-        <a href="/resources.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
-            <i class="fa-solid fa-book-open mr-2 text-brand-gold"></i>සම්පත්
-        </a>
-        <a href="/videos.html" class="block px-4 py-3 rounded-lg bg-brand-gold text-brand-navy font-bold">
-            <i class="fa-solid fa-video mr-2"></i>වීඩියෝ
-        </a>
-        <a href="/papers.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
-            <i class="fa-solid fa-file-lines mr-2 text-brand-gold"></i>ප්‍රශ්න පත්‍ර
-        </a>
     </div>
 </header>
 
 <!-- HERO -->
 <section class="page-hero">
-    <div class="container-wide relative z-10">
-        <p class="text-brand-gold font-bold text-sm tracking-widest uppercase mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-video"></i>
-            VIDEO LIBRARY
-        </p>
+    <div class="container-wide">
+        <p class="text-brand-gold font-bold text-sm tracking-widest uppercase mb-3"><i class="fa-solid fa-video mr-2"></i>VIDEO LIBRARY</p>
         <h1 class="text-4xl md:text-6xl font-black mb-3">වීඩියෝ පාඩම්</h1>
         <p class="text-white/80 text-lg">දරුවන්ට ආකර්ෂණීය වීඩියෝ පාඩම් නරඹන්න</p>
     </div>
@@ -484,12 +147,8 @@ tailwind.config = {
     <div class="filter-section">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input type="text" id="searchInput" placeholder="වීඩියෝ සොයන්න..." class="filter-input">
-            <select id="gradeFilter" class="filter-input">
-                <option value="">සියලු ශ්‍රේණි</option>
-            </select>
-            <select id="subjectFilter" class="filter-input">
-                <option value="">සියලු විෂය</option>
-            </select>
+            <select id="gradeFilter" class="filter-input"><option value="">සියලු ශ්‍රේණි</option></select>
+            <select id="subjectFilter" class="filter-input"><option value="">සියලු විෂය</option></select>
         </div>
     </div>
 </section>
@@ -497,17 +156,25 @@ tailwind.config = {
 <!-- VIDEOS -->
 <main class="container-wide py-12">
     <div id="videosContainer">
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-            <p class="text-gray-500">වීඩියෝ load වෙමින්...</p>
-        </div>
+        <div class="empty-state"><div class="spinner"></div><p>Load වෙමින්...</p></div>
     </div>
 </main>
 
-<!-- MODAL -->
-<div id="videoModal" class="modal-overlay" onclick="if(event.target===this)closeVideoModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <div id="modalBody"></div>
+<!-- VIDEO MODAL -->
+<div id="videoModal" class="video-modal" onclick="if(event.target===this)closeVideoModal()">
+    <div class="video-modal-content" onclick="event.stopPropagation()">
+        <div class="video-modal-header">
+            <h3 id="videoModalTitle"><i class="fa-solid fa-video mr-2"></i>වීඩියෝ</h3>
+            <button class="video-modal-close" onclick="closeVideoModal()"><i class="fa-solid fa-times"></i></button>
+        </div>
+        <div id="videoEmbedArea" class="video-embed-wrap">
+            <iframe id="videoIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div id="videoModalBody" class="video-modal-body"></div>
+        <div class="yt-actions">
+            <a id="ytWatchBtn" href="" target="_blank" class="yt-action-btn youtube"><i class="fa-brands fa-youtube"></i>YouTube එකේ නරඹන්න</a>
+            <button onclick="closeVideoModal()" class="yt-action-btn close"><i class="fa-solid fa-times"></i>වහන්න</button>
+        </div>
     </div>
 </div>
 
@@ -518,195 +185,96 @@ tailwind.config = {
     </div>
 </footer>
 
-<!-- AOS Library -->
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
 <script>
 const API_BASE = '/api';
-
-// ============================================
-// STATE
-// ============================================
 let allVideos = [];
 let filteredVideos = [];
+let embedTimeout = null;
 
-// ============================================
-// THEME
-// ============================================
 function toggleTheme() {
     document.body.classList.toggle('dark');
-    const isDark = document.body.classList.contains('dark');
-    localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    const icon = document.getElementById('themeIcon');
-    icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+    localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+    document.getElementById('themeIcon').className = document.body.classList.contains('dark') ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
 }
-
 function loadTheme() {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark') {
+    if (localStorage.getItem('theme') === 'dark') {
         document.body.classList.add('dark');
         document.getElementById('themeIcon').className = 'fa-solid fa-sun';
     }
 }
 
-// ============================================
-// MOBILE MENU
-// ============================================
-function toggleMobileMenu() {
-    document.getElementById('mobileMenu').classList.toggle('hidden');
-}
-
-// ============================================
-// LOAD VIDEOS
-// ============================================
 async function loadVideos() {
-    const container = document.getElementById('videosContainer');
-    
+    const c = document.getElementById('videosContainer');
+    c.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Load වෙමින්...</p></div>';
     try {
-        // Load videos
         const res = await fetch(`${API_BASE}/videos`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        
         const data = await res.json();
-        allVideos = data.videos || data || [];
+        allVideos = data.videos || data.data || [];
         filteredVideos = [...allVideos];
-        
-        console.log('✅ Videos loaded:', allVideos.length);
-        
-        // Load grades & subjects for filter
         await loadFilters();
-        
-        // Render
         renderVideos();
-        
-        // Init AOS after render
-        if (typeof AOS !== 'undefined') {
-            AOS.init({ duration: 600, once: true, offset: 50 });
-            AOS.refresh();
-        }
-        
     } catch (err) {
-        console.error('❌ Video load error:', err);
-        container.innerHTML = `
-            <div class="empty-state">
-                <i class="fa-solid fa-exclamation-triangle" style="color: #ef4444;"></i>
-                <p class="text-red-500 text-lg font-bold">දෝෂයක්: ${err.message}</p>
-                <p class="text-gray-400 text-sm mt-2">කරුණාකර පසුව නැවත උත්සාහ කරන්න</p>
-            </div>
-        `;
+        c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-exclamation-triangle" style="color:#ef4444"></i><p class="text-red-500">${err.message}</p></div>`;
     }
 }
 
-// ============================================
-// LOAD FILTERS
-// ============================================
 async function loadFilters() {
     try {
-        const [gradesRes, subjectsRes] = await Promise.all([
-            fetch(`${API_BASE}/grades`),
-            fetch(`${API_BASE}/subjects`)
-        ]);
-        
-        const grades = await gradesRes.json();
-        const subjects = await subjectsRes.json();
-        
+        const [g, s] = await Promise.all([fetch(`${API_BASE}/grades`), fetch(`${API_BASE}/subjects`)]);
+        const grades = await g.json();
+        const subjects = await s.json();
         const gradesArr = Array.isArray(grades) ? grades : (grades.grades || []);
         const subjectsArr = Array.isArray(subjects) ? subjects : (subjects.subjects || []);
-        
-        const gradeFilter = document.getElementById('gradeFilter');
-        gradesArr.forEach(g => {
-            const opt = document.createElement('option');
-            opt.value = g.id;
-            opt.textContent = g.grade_name;
-            gradeFilter.appendChild(opt);
+        gradesArr.forEach(gr => {
+            const o = document.createElement('option'); o.value = gr.id; o.textContent = gr.grade_name;
+            document.getElementById('gradeFilter').appendChild(o);
         });
-        
-        const subjectFilter = document.getElementById('subjectFilter');
-        subjectsArr.forEach(s => {
-            const opt = document.createElement('option');
-            opt.value = s.id;
-            opt.textContent = s.subject_name;
-            subjectFilter.appendChild(opt);
+        subjectsArr.forEach(su => {
+            const o = document.createElement('option'); o.value = su.id; o.textContent = su.subject_name;
+            document.getElementById('subjectFilter').appendChild(o);
         });
-        
-        // Add event listeners
         document.getElementById('searchInput').addEventListener('input', applyFilters);
-        gradeFilter.addEventListener('change', applyFilters);
-        subjectFilter.addEventListener('change', applyFilters);
-        
-    } catch (err) {
-        console.error('Filter load error:', err);
-    }
+        document.getElementById('gradeFilter').addEventListener('change', applyFilters);
+        document.getElementById('subjectFilter').addEventListener('change', applyFilters);
+    } catch (err) { console.error(err); }
 }
 
-// ============================================
-// APPLY FILTERS
-// ============================================
 function applyFilters() {
     const search = document.getElementById('searchInput').value.toLowerCase().trim();
     const gradeId = document.getElementById('gradeFilter').value;
     const subjectId = document.getElementById('subjectFilter').value;
-    
     filteredVideos = allVideos.filter(v => {
-        if (search && !v.title.toLowerCase().includes(search)) return false;
+        if (search && !(v.title || '').toLowerCase().includes(search)) return false;
         if (gradeId && String(v.grade_id) !== gradeId) return false;
         if (subjectId && String(v.subject_id) !== subjectId) return false;
         return true;
     });
-    
     renderVideos();
 }
 
-// ============================================
-// RENDER VIDEOS — KEY FUNCTION
-// ============================================
 function renderVideos() {
-    const container = document.getElementById('videosContainer');
-    
+    const c = document.getElementById('videosContainer');
     if (filteredVideos.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state">
-                <i class="fa-solid fa-video-slash"></i>
-                <p class="text-gray-500 text-lg font-bold">වීඩියෝ නොමැත</p>
-                <p class="text-gray-400 text-sm mt-2">කරුණාකර පසුව නැවත උත්සාහ කරන්න</p>
-            </div>
-        `;
+        c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-video-slash"></i><p class="text-gray-500 text-lg font-bold">වීඩියෝ නොමැත</p></div>`;
         return;
     }
-    
-    // ⚠️ CRITICAL: data-aos attribute REMOVED to prevent hiding
-    container.innerHTML = filteredVideos.map(v => {
+    c.innerHTML = filteredVideos.map(v => {
         const youtubeId = v.youtube_id || extractYouTubeId(v.video_url) || '';
-        const thumbnail = youtubeId 
-            ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
-            : '/images/video-placeholder.jpg';
-        
+        const thumbnail = youtubeId ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg` : 'https://via.placeholder.com/400x200/0F2C59/D4A017?text=Video';
         return `
             <div class="video-card" onclick="openVideoModal(${v.id})">
                 <div class="video-thumb">
-                    <img src="${thumbnail}" 
-                         alt="${escapeHtml(v.title)}" 
-                         loading="lazy"
-                         onerror="this.src='https://via.placeholder.com/400x200/0F2C59/D4A017?text=Video'">
+                    <img src="${thumbnail}" alt="${escapeHtml(v.title)}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x200/0F2C59/D4A017?text=Video'">
                     <span class="video-badge">${escapeHtml(v.grade_name || 'Video')}</span>
                     <div class="video-play-btn"></div>
                 </div>
                 <div class="video-info">
                     <h3>${escapeHtml(v.title)}</h3>
-                    <p>
-                        <i class="fa-solid fa-graduation-cap mr-1"></i>
-                        ${escapeHtml(v.grade_name || '')} 
-                        ${v.subject_name ? '• ' + escapeHtml(v.subject_name) : ''}
-                    </p>
+                    <p><i class="fa-solid fa-graduation-cap mr-1"></i>${escapeHtml(v.grade_name || '')} ${v.subject_name ? '• ' + escapeHtml(v.subject_name) : ''}</p>
                 </div>
             </div>
         `;
     }).join('');
-    
-    // Refresh AOS after render
-    if (typeof AOS !== 'undefined') {
-        AOS.refresh();
-    }
 }
 
 // ============================================
@@ -718,57 +286,104 @@ function openVideoModal(videoId) {
     
     const youtubeId = video.youtube_id || extractYouTubeId(video.video_url) || '';
     const modal = document.getElementById('videoModal');
-    const body = document.getElementById('modalBody');
     
-    body.innerHTML = `
-        <div class="relative">
-            <button onclick="closeVideoModal()" 
-                    class="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-white/90 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-white hover:bg-red-500 hover:text-white transition">
-                <i class="fa-solid fa-times"></i>
-            </button>
-            ${youtubeId ? `
-                <div class="aspect-video bg-black">
-                    <iframe width="100%" height="100%" 
-                            src="https://www.youtube.com/embed/${youtubeId}?autoplay=1" 
-                            frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                            allowfullscreen>
-                    </iframe>
-                </div>
-            ` : `
-                <div class="aspect-video bg-gray-100 flex items-center justify-center">
-                    <p class="text-gray-500">වීඩියෝ URL එක වැරදි</p>
-                </div>
-            `}
-            <div class="p-6">
-                <h2 class="text-xl md:text-2xl font-black text-brand-navy dark:text-white mb-2">
-                    ${escapeHtml(video.title)}
-                </h2>
-                <p class="text-sm text-gray-500 mb-3">
-                    <i class="fa-solid fa-graduation-cap mr-1"></i>
-                    ${escapeHtml(video.grade_name || '')} 
-                    ${video.subject_name ? '• ' + escapeHtml(video.subject_name) : ''}
-                </p>
-                ${video.description ? `
-                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        ${escapeHtml(video.description)}
-                    </p>
-                ` : ''}
-            </div>
-        </div>
+    document.getElementById('videoModalTitle').innerHTML = `<i class="fa-solid fa-video mr-2"></i>${escapeHtml(video.title)}`;
+    document.getElementById('videoModalBody').innerHTML = `
+        <h2>${escapeHtml(video.title)}</h2>
+        <p class="meta"><i class="fa-solid fa-graduation-cap mr-1"></i>${escapeHtml(video.grade_name || '')} ${video.subject_name ? '• ' + escapeHtml(video.subject_name) : ''}</p>
+        ${video.description ? `<p class="desc">${escapeHtml(video.description)}</p>` : ''}
     `;
+    
+    const iframe = document.getElementById('videoIframe');
+    const watchBtn = document.getElementById('ytWatchBtn');
+    const embedArea = document.getElementById('videoEmbedArea');
+    
+    if (youtubeId) {
+        // Use youtube-nocookie.com and include origin for better embed support
+        const origin = encodeURIComponent(window.location.origin);
+        iframe.src = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&origin=${origin}`;
+        watchBtn.href = `https://www.youtube.com/watch?v=${youtubeId}`;
+        
+        // Remove any old error fallback
+        const oldFallback = embedArea.querySelector('.yt-error-fallback');
+        if (oldFallback) oldFallback.remove();
+        
+        // Set a timeout — if iframe doesn't load in 5s, show fallback
+        clearTimeout(embedTimeout);
+        embedTimeout = setTimeout(() => {
+            // Check if iframe is still empty / error
+            showEmbedFallback(youtubeId, video.title);
+        }, 5000);
+        
+        // Listen for iframe load
+        iframe.onload = () => {
+            clearTimeout(embedTimeout);
+            console.log('✅ YouTube iframe loaded');
+        };
+        
+    } else {
+        embedArea.innerHTML = `
+            <div class="yt-error-fallback">
+                <i class="fa-solid fa-exclamation-triangle"></i>
+                <h3>වීඩියෝ URL එක වැරදි</h3>
+                <p>මෙම වීඩියෝවට වලංගු YouTube ID එකක් නැහැ.</p>
+            </div>
+        `;
+        watchBtn.style.display = 'none';
+    }
     
     modal.classList.add('show');
 }
 
-function closeVideoModal() {
-    document.getElementById('videoModal').classList.remove('show');
-    document.getElementById('modalBody').innerHTML = '';
+function showEmbedFallback(youtubeId, title) {
+    const embedArea = document.getElementById('videoEmbedArea');
+    const existing = embedArea.querySelector('.yt-error-fallback');
+    if (existing) return;
+    
+    // Check if iframe actually loaded content
+    const iframe = document.getElementById('videoIframe');
+    try {
+        // If cross-origin, this will throw — which means it loaded something
+        iframe.contentWindow.location.href;
+        // Same-origin means it's empty (about:blank)
+    } catch (e) {
+        // Cross-origin — iframe loaded something, might be fine
+        // But error 153 might still show
+    }
+    
+    // Add a visible fallback button
+    const fallback = document.createElement('div');
+    fallback.className = 'yt-error-fallback';
+    fallback.style.background = 'rgba(0,0,0,0.85)';
+    fallback.style.top = 'auto';
+    fallback.style.height = 'auto';
+    fallback.style.padding = '1rem';
+    fallback.innerHTML = `
+        <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;justify-content:center;">
+            <div style="text-align:left;">
+                <p style="margin:0;font-weight:700;color:#D4A017;font-size:0.9rem;"><i class="fa-solid fa-info-circle"></i> වීඩියෝ embed කරන්න බැහැ</p>
+                <p style="margin:0.25rem 0 0;font-size:0.8rem;color:rgba(255,255,255,0.7);">මෙම වීඩියෝව අයිතිකරු embed කිරීම අවහිර කරලා ඇත</p>
+            </div>
+            <a href="https://www.youtube.com/watch?v=${youtubeId}" target="_blank" style="background:#ff0000;color:white;padding:0.5rem 1rem;border-radius:0.5rem;text-decoration:none;font-weight:700;font-size:0.85rem;display:inline-flex;align-items:center;gap:0.4rem;">
+                <i class="fa-brands fa-youtube"></i> YouTube එකේ නරඹන්න
+            </a>
+        </div>
+    `;
+    fallback.style.position = 'absolute';
+    fallback.style.bottom = '0';
+    fallback.style.left = '0';
+    fallback.style.right = '0';
+    embedArea.appendChild(fallback);
 }
 
-// ============================================
-// HELPERS
-// ============================================
+function closeVideoModal() {
+    document.getElementById('videoModal').classList.remove('show');
+    document.getElementById('videoIframe').src = '';
+    const fallback = document.getElementById('videoEmbedArea').querySelector('.yt-error-fallback');
+    if (fallback) fallback.remove();
+    clearTimeout(embedTimeout);
+}
+
 function extractYouTubeId(url) {
     if (!url) return null;
     const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
@@ -777,26 +392,15 @@ function extractYouTubeId(url) {
 
 function escapeHtml(str) {
     if (!str) return '';
-    return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
-// ============================================
-// INIT
-// ============================================
 document.addEventListener('DOMContentLoaded', () => {
     loadTheme();
     loadVideos();
 });
 
-// ESC key to close modal
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeVideoModal();
-});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeVideoModal(); });
 </script>
 
 </body>
