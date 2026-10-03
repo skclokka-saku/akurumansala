@@ -1,361 +1,488 @@
 <!DOCTYPE html>
 <html lang="si">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>වීඩියෝ පාඩම් | අකුරු මංසල</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            navy: '#0F2C59',
-                            navy2: '#1B3A6B',
-                            gold: '#D4A017',
-                            gold2: '#E8B923',
-                            light: '#F8F9FC',
-                        }
-                    },
-                    fontFamily: { sinhala: ['"Noto Serif Sinhala"', 'sans-serif'] }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="අකුරු මංසල - වීඩියෝ පාඩම්">
+<title>වීඩියෝ පාඩම් | අකුරු මංසල</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+tailwind.config = {
+    darkMode: 'class',
+    theme: {
+        extend: {
+            colors: {
+                brand: {
+                    navy: '#0F2C59',
+                    navy2: '#1B3A6B',
+                    gold: '#D4A017',
+                    gold2: '#E8B923',
+                    light: '#F8F9FC',
                 }
+            },
+            fontFamily: {
+                sinhala: ['"Noto Serif Sinhala"', 'sans-serif'],
             }
         }
-    </script>
-    <style>
-        body { 
-            font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif; 
-            background: #F8F9FC;
-        }
-        body.dark { background: #0a0f1e; color: #e2e8f0; }
+    }
+}
+</script>
 
-        .container-wide {
-            width: 100%;
-            max-width: 1920px;
-            padding-left: 1rem;
-            padding-right: 1rem;
-            margin: 0 auto;
-        }
-        @media (min-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
-        @media (min-width: 1024px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+        font-family: 'Noto Serif Sinhala', 'Poppins', sans-serif;
+        overflow-x: hidden;
+        background: #F8F9FC;
+        color: #1e293b;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark {
+        background: #0a0f1e;
+        color: #e2e8f0;
+    }
 
-        .main-nav { 
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
-        }
-        body.dark .main-nav { background: rgba(26, 26, 46, 0.98); }
+    .container-wide {
+        width: 100%;
+        max-width: 1920px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        margin: 0 auto;
+    }
+    @media (min-width: 640px) { .container-wide { padding-left: 1.5rem; padding-right: 1.5rem; } }
+    @media (min-width: 1024px) { .container-wide { padding-left: 2rem; padding-right: 2rem; } }
 
-        .logo-wrap {
-            width: 60px;
-            height: 60px;
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 6px 20px rgba(15, 44, 89, 0.15);
-            border: 2px solid rgba(212, 160, 23, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.3rem;
-            transition: all 0.4s;
-        }
-        .logo-wrap:hover { transform: scale(1.08) rotate(-3deg); }
-        .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    /* HEADER */
+    .main-nav {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        box-shadow: 0 4px 30px rgba(15, 44, 89, 0.1);
+        border-bottom: 1px solid rgba(212, 160, 23, 0.1);
+    }
+    body.dark .main-nav {
+        background: rgba(26, 26, 46, 0.98);
+    }
 
-        .nav-link {
-            font-weight: 700;
-            color: #0F2C59;
-            font-size: 0.875rem;
-            transition: all 0.3s;
-            padding: 0.6rem 0.9rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            border-radius: 0.65rem;
-        }
-        body.dark .nav-link { color: #cbd5e1; }
-        .nav-link i { font-size: 0.8rem; color: #D4A017; }
-        .nav-link:hover, .nav-link.active { 
-            color: #D4A017; 
-            background: rgba(212, 160, 23, 0.1);
-        }
+    .logo-wrap {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #ffffff, #f8f9fc);
+        border-radius: 1.2rem;
+        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.2);
+        border: 2px solid rgba(212, 160, 23, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4rem;
+        transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .logo-wrap:hover {
+        transform: scale(1.1) rotate(-5deg);
+    }
+    .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
 
-        .theme-toggle {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #D4A017, #E8B923);
-            color: #0F2C59;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.4s;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
-            font-size: 1.05rem;
-        }
-        .theme-toggle:hover { transform: rotate(180deg) scale(1.15); }
+    .nav-link {
+        position: relative;
+        font-weight: 700;
+        color: #0F2C59;
+        font-size: 1rem;
+        transition: all 0.3s;
+        padding: 0.75rem 1.2rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border-radius: 0.85rem;
+    }
+    body.dark .nav-link { color: #cbd5e1; }
+    .nav-link i { color: #D4A017; }
+    .nav-link:hover {
+        color: #D4A017;
+        background: rgba(212, 160, 23, 0.1);
+        transform: translateY(-3px);
+    }
+    .nav-link.active {
+        color: #D4A017;
+        background: rgba(212, 160, 23, 0.15);
+    }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #D4A017, #E8B923);
-            color: #0F2C59;
-            padding: 0.8rem 1.75rem;
-            border-radius: 0.9rem;
-            font-weight: 800;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.6rem;
-            box-shadow: 0 8px 20px rgba(212, 160, 23, 0.4);
-            transition: all 0.4s;
-        }
-        .btn-primary:hover { transform: translateY(-4px) scale(1.04); }
+    .theme-toggle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.5s;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 6px 20px rgba(212, 160, 23, 0.4);
+        font-size: 1.1rem;
+    }
+    .theme-toggle:hover {
+        transform: rotate(180deg) scale(1.15);
+    }
 
-        .video-card {
-            background: white;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            cursor: pointer;
-            border: 1px solid rgba(212, 160, 23, 0.1);
-        }
-        body.dark .video-card { background: #1a1a2e; }
-        .video-card:hover { 
-            transform: translateY(-12px); 
-            box-shadow: 0 30px 60px rgba(15, 44, 89, 0.25);
-        }
+    .btn-primary {
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        padding: 0.85rem 1.75rem;
+        border-radius: 1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        transition: all 0.4s;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.65rem;
+        box-shadow: 0 10px 25px rgba(212, 160, 23, 0.4);
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+    }
+    .btn-primary:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 20px 45px rgba(212, 160, 23, 0.6);
+    }
 
-        .video-thumb {
-            position: relative;
-            height: 200px;
-            overflow: hidden;
-            background: linear-gradient(135deg, #0F2C59, #1B3A6B);
-        }
-        .video-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s;
-        }
-        .video-card:hover .video-thumb img { transform: scale(1.15); }
+    /* HERO */
+    .page-hero {
+        background: linear-gradient(135deg, #0F2C59 0%, #1B3A6B 100%);
+        color: white;
+        padding: 4rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .page-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(212, 160, 23, 0.15), transparent 70%);
+        border-radius: 50%;
+    }
 
-        .video-play-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff0000, #cc0000);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.7rem;
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5);
-            transition: all 0.5s;
-        }
-        .video-card:hover .video-play-btn { transform: translate(-50%, -50%) scale(1.2); }
+    /* FILTERS */
+    .filter-section {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        margin-top: -3rem;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 15px 40px rgba(15, 44, 89, 0.1);
+    }
+    body.dark .filter-section { background: #1a1a2e; }
 
-        .video-badge {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: linear-gradient(135deg, #D4A017, #E8B923);
-            color: #0F2C59;
-            padding: 0.4rem 1rem;
-            border-radius: 999px;
-            font-weight: 800;
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            box-shadow: 0 4px 15px rgba(212, 160, 23, 0.5);
-            z-index: 2;
-        }
+    .filter-input {
+        width: 100%;
+        padding: 0.9rem 1.25rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 1rem;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: all 0.3s;
+        background: #F8F9FC;
+    }
+    body.dark .filter-input {
+        background: #0a0f1e;
+        border-color: #334155;
+        color: #e2e8f0;
+    }
+    .filter-input:focus {
+        outline: none;
+        border-color: #D4A017;
+        box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15);
+    }
 
-        .filter-input {
-            border: 2px solid #e2e8f0;
-            border-radius: 0.9rem;
-            padding: 0.85rem 1rem;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-            width: 100%;
-            font-family: inherit;
-            background: white;
-        }
-        .filter-input:focus {
-            outline: none;
-            border-color: #D4A017;
-            box-shadow: 0 0 0 4px rgba(212, 160, 23, 0.15);
-        }
-        body.dark .filter-input { background: #1e293b; color: #e2e8f0; border-color: #334155; }
+    /* VIDEO CARDS — KEY FIX */
+    #videosContainer {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 1.5rem;
+    }
+    @media (min-width: 768px) {
+        #videosContainer { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1024px) {
+        #videosContainer { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
 
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            padding: 1rem;
-            overflow-y: auto;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-content {
-            background: white;
-            border-radius: 1.5rem;
-            max-width: 900px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-        }
-        body.dark .modal-content { background: #1e293b; }
-        .modal-video-wrap {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            background: #000;
-        }
-        .modal-video-wrap iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+    .video-card {
+        background: white;
+        border-radius: 1.25rem;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(15, 44, 89, 0.08);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+    }
+    body.dark .video-card { background: #1a1a2e; }
+    .video-card:hover {
+        transform: translateY(-8px) !important;
+        box-shadow: 0 20px 45px rgba(15, 44, 89, 0.2);
+    }
 
-        .footer { 
-            background: linear-gradient(180deg, #0F2C59, #0a1a3a); 
-            color: white; 
-            padding-top: 4rem; 
-        }
-        body.dark .footer { background: #05080f; }
-        .footer a { color: rgba(255,255,255,0.75); transition: all 0.3s; font-size: 0.9rem; text-decoration: none; }
-        .footer a:hover { color: #D4A017; padding-left: 6px; }
-        .footer-title {
-            color: white;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            margin-bottom: 1.25rem;
-            position: relative;
-            padding-bottom: 0.6rem;
-        }
-        .footer-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: linear-gradient(90deg, #D4A017, #E8B923);
-            border-radius: 3px;
-        }
-        .social-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 0.85rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s;
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.25);
-        }
-        .social-icon i { color: #ffffff !important; }
-        .social-icon.facebook { background: linear-gradient(135deg, #1877f2, #0e5fce); }
-        .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
-        .social-icon.whatsapp { background: linear-gradient(135deg, #25d366, #128c7e); }
-        .social-icon.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b, #8134af); }
-        .social-icon:hover { transform: translateY(-6px) scale(1.15) rotate(-5deg); }
+    .video-thumb {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #0F2C59, #1B3A6B);
+    }
+    .video-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s;
+    }
+    .video-card:hover .video-thumb img {
+        transform: scale(1.1);
+    }
 
-        .empty-state {
-            background: white;
-            border-radius: 1.5rem;
-            padding: 4rem 2rem;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(15, 44, 89, 0.08);
-        }
-        body.dark .empty-state { background: #1a1a2e; }
-    </style>
+    .video-badge {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        background: linear-gradient(135deg, #D4A017, #E8B923);
+        color: #0F2C59;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 2;
+    }
+
+    .video-play-btn {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(15, 44, 89, 0.3);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    .video-card:hover .video-play-btn {
+        opacity: 1;
+    }
+    .video-play-btn::after {
+        content: '\f04b';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        font-size: 2rem;
+        color: white;
+        width: 70px;
+        height: 70px;
+        background: rgba(212, 160, 23, 0.95);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 5px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s;
+    }
+    .video-card:hover .video-play-btn::after {
+        transform: scale(1.1);
+    }
+
+    .video-info {
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: 1;
+    }
+    .video-info h3 {
+        font-weight: 800;
+        font-size: 1.05rem;
+        color: #0F2C59;
+        line-height: 1.3;
+    }
+    body.dark .video-info h3 { color: #e2e8f0; }
+    .video-info p {
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+    body.dark .video-info p { color: #94a3b8; }
+
+    /* EMPTY STATE */
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+    .empty-state i {
+        font-size: 4rem;
+        color: #cbd5e1;
+        margin-bottom: 1rem;
+    }
+
+    /* LOADING SPINNER */
+    .loading-spinner {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem 2rem;
+    }
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid rgba(212, 160, 23, 0.2);
+        border-top-color: #D4A017;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* MODAL */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+    }
+    .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+    .modal-content {
+        background: white;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        max-width: 900px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        transform: scale(0.9);
+        transition: transform 0.3s;
+    }
+    body.dark .modal-content { background: #1a1a2e; }
+    .modal-overlay.show .modal-content {
+        transform: scale(1);
+    }
+
+    /* FOOTER */
+    .footer {
+        background: linear-gradient(180deg, #0F2C59, #0a1a3a);
+        color: white;
+        padding: 3rem 0 2rem;
+        margin-top: 4rem;
+    }
+    body.dark .footer { background: #05080f; }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+        .page-hero { padding: 3rem 0; }
+        .filter-section { margin-top: -2rem; padding: 1rem; }
+        .video-thumb { height: 180px; }
+        .logo-wrap { width: 55px; height: 55px; }
+        .nav-link { font-size: 0.85rem; padding: 0.5rem 0.75rem; }
+    }
+</style>
 </head>
-<body class="min-h-screen">
+<body>
 
-    <!-- HEADER -->
-    <header class="main-nav sticky top-0 z-50">
-        <div class="container-wide">
-            <div class="h-20 flex items-center justify-between">
-                <a href="/" class="flex items-center space-x-3">
-                    <div class="logo-wrap">
-                        <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-2xl\'></i>'">
-                    </div>
-                    <div class="hidden sm:block">
-                        <h1 class="text-xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
-                        <p class="text-xs text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
-                    </div>
-                </a>
-
-                <nav class="hidden lg:flex items-center space-x-1">
-                    <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
-                    <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book"></i>සම්පත්</a>
-                    <a href="/papers.html" class="nav-link"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
-                    <a href="/videos.html" class="nav-link active"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
-                    <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
-                </nav>
-
-                <div class="flex items-center space-x-3">
-                    <button onclick="toggleTheme()" class="theme-toggle">
-                        <i id="themeIcon" class="fa-solid fa-moon"></i>
-                    </button>
-                    <a href="/login.html" class="hidden md:inline-flex btn-primary" style="padding: 0.6rem 1.25rem;">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <span>Admin</span>
-                    </a>
+<!-- HEADER -->
+<header class="main-nav sticky top-0 z-50">
+    <div class="container-wide">
+        <div class="h-24 flex items-center justify-between">
+            <a href="/" class="flex items-center space-x-4">
+                <div class="logo-wrap">
+                    <img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
                 </div>
+                <div class="hidden sm:block">
+                    <h1 class="text-2xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
+                    <p class="text-sm text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
+                </div>
+            </a>
+
+            <nav class="hidden lg:flex items-center space-x-1">
+                <a href="/" class="nav-link"><i class="fa-solid fa-home"></i>මුල් පිටුව</a>
+                <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book-open"></i>සම්පත්</a>
+                <a href="/papers.html" class="nav-link"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
+                <a href="/videos.html" class="nav-link active"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
+                <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleTheme()" class="theme-toggle">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+                <a href="/login.html" class="hidden md:inline-flex btn-primary">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Admin</span>
+                </a>
+                <button onclick="toggleMobileMenu()" class="lg:hidden w-12 h-12 rounded-xl bg-brand-navy text-white flex items-center justify-center">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
             </div>
         </div>
-    </header>
+    </div>
 
-    <!-- HERO -->
-    <section class="bg-brand-navy text-white py-16 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <i class="fa-solid fa-play absolute text-9xl" style="top: 10%; left: 5%;"></i>
-            <i class="fa-solid fa-video absolute text-9xl" style="bottom: 10%; right: 5%;"></i>
-        </div>
-        <div class="container-wide relative z-10">
-            <p class="text-brand-gold text-xs font-black tracking-widest uppercase mb-3" data-aos="fade-up">
-                <i class="fa-solid fa-video mr-2"></i>Video Library
-            </p>
-            <h1 class="text-4xl md:text-5xl font-black mb-3" data-aos="fade-up" data-aos-delay="100">වීඩියෝ පාඩම්</h1>
-            <p class="text-white/70 text-base max-w-2xl" data-aos="fade-up" data-aos-delay="200">
-                දරුවන්ට ආකර්ෂණීය වීඩියෝ පාඩම් නරඹන්න
-            </p>
-        </div>
-    </section>
+    <!-- MOBILE MENU -->
+    <div id="mobileMenu" class="hidden lg:hidden bg-white dark:bg-gray-900 border-t px-4 py-4 space-y-2">
+        <a href="/" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+            <i class="fa-solid fa-home mr-2 text-brand-gold"></i>මුල් පිටුව
+        </a>
+        <a href="/resources.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+            <i class="fa-solid fa-book-open mr-2 text-brand-gold"></i>සම්පත්
+        </a>
+        <a href="/videos.html" class="block px-4 py-3 rounded-lg bg-brand-gold text-brand-navy font-bold">
+            <i class="fa-solid fa-video mr-2"></i>වීඩියෝ
+        </a>
+        <a href="/papers.html" class="block px-4 py-3 rounded-lg text-brand-navy dark:text-white font-semibold">
+            <i class="fa-solid fa-file-lines mr-2 text-brand-gold"></i>ප්‍රශ්න පත්‍ර
+        </a>
+    </div>
+</header>
 
-    <!-- FILTERS -->
-    <section class="container-wide -mt-6 relative z-10">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 grid grid-cols-1 md:grid-cols-3 gap-3" data-aos="fade-up">
+<!-- HERO -->
+<section class="page-hero">
+    <div class="container-wide relative z-10">
+        <p class="text-brand-gold font-bold text-sm tracking-widest uppercase mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-video"></i>
+            VIDEO LIBRARY
+        </p>
+        <h1 class="text-4xl md:text-6xl font-black mb-3">වීඩියෝ පාඩම්</h1>
+        <p class="text-white/80 text-lg">දරුවන්ට ආකර්ෂණීය වීඩියෝ පාඩම් නරඹන්න</p>
+    </div>
+</section>
+
+<!-- FILTERS -->
+<section class="container-wide -mt-8 relative z-20">
+    <div class="filter-section">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <input type="text" id="searchInput" placeholder="වීඩියෝ සොයන්න..." class="filter-input">
             <select id="gradeFilter" class="filter-input">
                 <option value="">සියලු ශ්‍රේණි</option>
@@ -364,344 +491,313 @@
                 <option value="">සියලු විෂය</option>
             </select>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- VIDEOS -->
-    <main class="container-wide py-8">
-        <div id="videosContainer">
-            <div class="text-center py-12">
-                <div class="w-12 h-12 border-4 border-brand-gold border-t-transparent rounded-full animate-spin mx-auto"></div>
-            </div>
-        </div>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer mt-12">
-        <div class="container-wide">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-12 border-b border-white/10">
-                <div class="md:col-span-2">
-                    <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center p-2 shadow-lg">
-                            <img src="/images/logo-icon.jpg" alt="Logo" class="w-full h-full object-contain" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'">
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-black">අකුරු මංසල</h3>
-                            <p class="text-xs text-white/70 mt-1">ඉගෙනුමට නව මඟක්</p>
-                        </div>
-                    </div>
-                    <p class="text-white/70 text-sm leading-relaxed mb-6">
-                        ශ්‍රී ලංකීය දරුවන්ගේ අනාගතය බැබළවීම සඳහා නිර්මාණය කළ අධ්‍යාපනික ලෝකයක්.
-                    </p>
-                    <div class="flex flex-wrap gap-3">
-                        <a href="#" class="social-icon facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon youtube"><i class="fa-brands fa-youtube"></i></a>
-                        <a href="#" class="social-icon whatsapp"><i class="fa-brands fa-whatsapp"></i></a>
-                        <a href="#" class="social-icon instagram"><i class="fa-brands fa-instagram"></i></a>
-                    </div>
-                </div>
-                <div>
-                    <h4 class="footer-title">ඉක්මන් සබැඳි</h4>
-                    <ul class="space-y-3">
-                        <li><a href="/">මුල් පිටුව</a></li>
-                        <li><a href="/resources.html">සම්පත්</a></li>
-                        <li><a href="/papers.html">ප්‍රශ්න පත්‍ර</a></li>
-                        <li><a href="/videos.html">වීඩියෝ</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="footer-title">අප අමතන්න</h4>
-                    <ul class="space-y-3">
-                        <li class="flex items-start space-x-3">
-                            <i class="fa-solid fa-location-dot text-brand-gold mt-1"></i>
-                            <span class="text-white/80 text-sm">කෑගල්ල, ශ්‍රී ලංකාව</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-phone text-brand-gold"></i>
-                            <span class="text-white/80 text-sm">+94 767512666</span>
-                        </li>
-                        <li class="flex items-center space-x-3">
-                            <i class="fa-solid fa-envelope text-brand-gold"></i>
-                            <span class="text-white/80 text-sm">info@akurumansala.lk</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="pt-8 text-center text-xs text-white/60">
-                <p>© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- VIDEO MODAL -->
-    <div id="videoModal" class="modal-overlay" onclick="if(event.target===this) closeVideoModal()">
-        <div class="modal-content">
-            <button onclick="closeVideoModal()" class="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 hover:bg-white flex items-center justify-center text-gray-800 z-10 shadow-lg">
-                <i class="fa-solid fa-times"></i>
-            </button>
-            <div id="modalVideoWrap" class="modal-video-wrap"></div>
-            <div class="p-6">
-                <h2 id="modalVideoTitle" class="text-xl font-black text-brand-navy dark:text-white mb-2"></h2>
-                <p id="modalVideoMeta" class="text-sm text-gray-500 mb-3"></p>
-                <p id="modalVideoDesc" class="text-gray-700 dark:text-gray-300 leading-relaxed"></p>
-            </div>
+<!-- VIDEOS -->
+<main class="container-wide py-12">
+    <div id="videosContainer">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p class="text-gray-500">වීඩියෝ load වෙමින්...</p>
         </div>
     </div>
+</main>
 
-    <script>
-        const API_BASE = '/api';
-        let allVideos = [];
+<!-- MODAL -->
+<div id="videoModal" class="modal-overlay" onclick="if(event.target===this)closeVideoModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div id="modalBody"></div>
+    </div>
+</div>
 
-        // ============================================
-        // THEME
-        // ============================================
-        function toggleTheme() {
-            const body = document.body;
-            const icon = document.getElementById('themeIcon');
-            body.classList.toggle('dark');
-            if (body.classList.contains('dark')) {
-                icon.className = 'fa-solid fa-sun';
-                localStorage.setItem('theme', 'dark');
-            } else {
-                icon.className = 'fa-solid fa-moon';
-                localStorage.setItem('theme', 'light');
-            }
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container-wide text-center">
+        <p class="text-white/70">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+    </div>
+</footer>
+
+<!-- AOS Library -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+const API_BASE = '/api';
+
+// ============================================
+// STATE
+// ============================================
+let allVideos = [];
+let filteredVideos = [];
+
+// ============================================
+// THEME
+// ============================================
+function toggleTheme() {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    const icon = document.getElementById('themeIcon');
+    icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+}
+
+function loadTheme() {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+        document.body.classList.add('dark');
+        document.getElementById('themeIcon').className = 'fa-solid fa-sun';
+    }
+}
+
+// ============================================
+// MOBILE MENU
+// ============================================
+function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+}
+
+// ============================================
+// LOAD VIDEOS
+// ============================================
+async function loadVideos() {
+    const container = document.getElementById('videosContainer');
+    
+    try {
+        // Load videos
+        const res = await fetch(`${API_BASE}/videos`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        
+        const data = await res.json();
+        allVideos = data.videos || data || [];
+        filteredVideos = [...allVideos];
+        
+        console.log('✅ Videos loaded:', allVideos.length);
+        
+        // Load grades & subjects for filter
+        await loadFilters();
+        
+        // Render
+        renderVideos();
+        
+        // Init AOS after render
+        if (typeof AOS !== 'undefined') {
+            AOS.init({ duration: 600, once: true, offset: 50 });
+            AOS.refresh();
         }
+        
+    } catch (err) {
+        console.error('❌ Video load error:', err);
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-exclamation-triangle" style="color: #ef4444;"></i>
+                <p class="text-red-500 text-lg font-bold">දෝෂයක්: ${err.message}</p>
+                <p class="text-gray-400 text-sm mt-2">කරුණාකර පසුව නැවත උත්සාහ කරන්න</p>
+            </div>
+        `;
+    }
+}
 
-        function loadTheme() {
-            const saved = localStorage.getItem('theme');
-            if (saved === 'dark') {
-                document.body.classList.add('dark');
-                const icon = document.getElementById('themeIcon');
-                if (icon) icon.className = 'fa-solid fa-sun';
-            }
-        }
-
-        // ============================================
-        // YOUTUBE ID EXTRACTION
-        // ============================================
-        function getYouTubeId(url) {
-            if (!url) return null;
-            url = url.trim();
-            
-            let match = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
-            if (match) return match[1];
-            
-            match = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
-            if (match) return match[1];
-            
-            match = url.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/);
-            if (match) return match[1];
-            
-            match = url.match(/^([a-zA-Z0-9_-]{11})$/);
-            if (match) return match[1];
-            
-            return null;
-        }
-
-        // ============================================
-        // LOAD FILTERS
-        // ============================================
-        async function loadFilters() {
-            try {
-                const [gradesRes, subjectsRes] = await Promise.all([
-                    fetch(`${API_BASE}/grades`),
-                    fetch(`${API_BASE}/subjects`)
-                ]);
-                const grades = await gradesRes.json();
-                const subjects = await subjectsRes.json();
-
-                const gradeFilter = document.getElementById('gradeFilter');
-                grades.forEach(g => {
-                    const opt = document.createElement('option');
-                    opt.value = g.id;
-                    opt.textContent = g.grade_name;
-                    gradeFilter.appendChild(opt);
-                });
-
-                const subjectFilter = document.getElementById('subjectFilter');
-                subjects.forEach(s => {
-                    const opt = document.createElement('option');
-                    opt.value = s.id;
-                    opt.textContent = s.subject_name;
-                    subjectFilter.appendChild(opt);
-                });
-            } catch (err) {
-                console.error('Filter load error:', err);
-            }
-        }
-
-        // ============================================
-        // LOAD VIDEOS
-        // ============================================
-        async function loadVideos() {
-            const container = document.getElementById('videosContainer');
-            try {
-                console.log('📥 Loading videos from /api/videos...');
-                
-                const res = await fetch(`${API_BASE}/videos`);
-                
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
-                
-                const data = await res.json();
-                console.log('✅ Videos received:', data);
-                
-                // API එකෙන් Array එකක් ලෙස ලැබේ
-                allVideos = Array.isArray(data) ? data : (data.videos || []);
-                console.log('✅ Total videos:', allVideos.length);
-                
-                renderVideos(allVideos);
-            } catch (err) {
-                console.error('❌ Error loading videos:', err);
-                container.innerHTML = `<div class="empty-state text-red-500">දෝෂයක්: ${err.message}</div>`;
-            }
-        }
-
-        // ============================================
-        // RENDER VIDEOS
-        // ============================================
-        function renderVideos(videos) {
-            const container = document.getElementById('videosContainer');
-
-            if (!videos || videos.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fa-solid fa-video text-6xl text-gray-300 mb-4"></i>
-                        <p class="text-gray-500 text-lg">වීඩියෝ නොමැත</p>
-                        <p class="text-gray-400 text-sm mt-2">Admin Panel එකෙන් වීඩියෝ එකතු කරන්න</p>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    ${videos.map(v => {
-                        const videoUrl = v.video_url || v.youtube_url || v.url || '';
-                        const ytId = getYouTubeId(videoUrl);
-                        const thumb = ytId 
-                            ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` 
-                            : 'https://placehold.co/600x400/0F2C59/D4A017?text=Video';
-                        
-                        return `
-                            <div class="video-card" onclick="openVideoModal(${v.id})" data-aos="fade-up">
-                                <div class="video-thumb">
-                                    <img src="${thumb}" alt="${v.title}">
-                                    ${v.subject_name ? `<span class="video-badge">${v.subject_name}</span>` : ''}
-                                    <div class="video-play-btn">
-                                        <i class="fa-solid fa-play"></i>
-                                    </div>
-                                </div>
-                                <div class="p-5 flex-1 flex flex-col">
-                                    <h3 class="font-black text-brand-navy dark:text-white text-base mb-2 line-clamp-2">${v.title}</h3>
-                                    <p class="text-xs text-gray-500 mb-3">
-                                        ${v.grade_name || ''} ${v.subject_name ? '• ' + v.subject_name : ''}
-                                    </p>
-                                    <div class="flex items-center justify-between pt-3 mt-3 border-t border-gray-100 dark:border-gray-700">
-                                        <span class="text-xs text-gray-500"><i class="fa-solid fa-eye mr-1"></i>${v.views || 0}</span>
-                                        <span class="text-brand-gold font-bold text-xs">බලන්න <i class="fa-solid fa-arrow-right ml-1"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-            if (window.AOS) AOS.refresh();
-        }
-
-        // ============================================
-        // OPEN VIDEO MODAL
-        // ============================================
-        async function openVideoModal(id) {
-            const modal = document.getElementById('videoModal');
-            const wrap = document.getElementById('modalVideoWrap');
-            const title = document.getElementById('modalVideoTitle');
-            const meta = document.getElementById('modalVideoMeta');
-            const desc = document.getElementById('modalVideoDesc');
-
-            try {
-                const res = await fetch(`${API_BASE}/videos/${id}`);
-                const video = await res.json();
-
-                const videoUrl = video.video_url || video.youtube_url || video.url || '';
-                const ytId = getYouTubeId(videoUrl);
-                
-                if (ytId) {
-                    wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                } else {
-                    wrap.innerHTML = `<div class="flex items-center justify-center h-full text-white"><p>වීඩියෝව නොමැත</p></div>`;
-                }
-
-                title.textContent = video.title || '';
-                meta.textContent = `${video.grade_name || ''} ${video.subject_name ? '• ' + video.subject_name : ''}`;
-                desc.textContent = video.description || 'විස්තරයක් නොමැත';
-
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            } catch (err) {
-                console.error('Video open error:', err);
-                alert('වීඩියෝව load කිරීමේ දෝෂයක්');
-            }
-        }
-
-        function closeVideoModal() {
-            document.getElementById('videoModal').classList.remove('active');
-            document.getElementById('modalVideoWrap').innerHTML = '';
-            document.body.style.overflow = '';
-        }
-
-        // ============================================
-        // FILTERS
-        // ============================================
-        function applyFilters() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const gradeId = document.getElementById('gradeFilter').value;
-            const subjectId = document.getElementById('subjectFilter').value;
-
-            const filtered = allVideos.filter(v => {
-                const matchSearch = !search || (v.title || '').toLowerCase().includes(search);
-                const matchGrade = !gradeId || String(v.grade_id) === gradeId;
-                const matchSubject = !subjectId || String(v.subject_id) === subjectId;
-                return matchSearch && matchGrade && matchSubject;
-            });
-
-            renderVideos(filtered);
-        }
-
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.getElementById('gradeFilter').addEventListener('change', applyFilters);
-        document.getElementById('subjectFilter').addEventListener('change', applyFilters);
-
-        // ============================================
-        // INIT
-        // ============================================
-        document.addEventListener('DOMContentLoaded', async () => {
-            console.log('🚀 Videos page initializing...');
-            
-            loadTheme();
-            
-            try {
-                await loadFilters();
-            } catch (err) {
-                console.error('❌ Filter load error:', err);
-            }
-            
-            try {
-                await loadVideos();
-            } catch (err) {
-                console.error('❌ Video load error:', err);
-            }
-            
-            console.log('✅ Videos page ready');
+// ============================================
+// LOAD FILTERS
+// ============================================
+async function loadFilters() {
+    try {
+        const [gradesRes, subjectsRes] = await Promise.all([
+            fetch(`${API_BASE}/grades`),
+            fetch(`${API_BASE}/subjects`)
+        ]);
+        
+        const grades = await gradesRes.json();
+        const subjects = await subjectsRes.json();
+        
+        const gradesArr = Array.isArray(grades) ? grades : (grades.grades || []);
+        const subjectsArr = Array.isArray(subjects) ? subjects : (subjects.subjects || []);
+        
+        const gradeFilter = document.getElementById('gradeFilter');
+        gradesArr.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g.id;
+            opt.textContent = g.grade_name;
+            gradeFilter.appendChild(opt);
         });
-    </script>
+        
+        const subjectFilter = document.getElementById('subjectFilter');
+        subjectsArr.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.subject_name;
+            subjectFilter.appendChild(opt);
+        });
+        
+        // Add event listeners
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        gradeFilter.addEventListener('change', applyFilters);
+        subjectFilter.addEventListener('change', applyFilters);
+        
+    } catch (err) {
+        console.error('Filter load error:', err);
+    }
+}
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ duration: 800, once: true, offset: 100 });
-    </script>
-    <script src="/js/ai-chat.js"></script>
+// ============================================
+// APPLY FILTERS
+// ============================================
+function applyFilters() {
+    const search = document.getElementById('searchInput').value.toLowerCase().trim();
+    const gradeId = document.getElementById('gradeFilter').value;
+    const subjectId = document.getElementById('subjectFilter').value;
+    
+    filteredVideos = allVideos.filter(v => {
+        if (search && !v.title.toLowerCase().includes(search)) return false;
+        if (gradeId && String(v.grade_id) !== gradeId) return false;
+        if (subjectId && String(v.subject_id) !== subjectId) return false;
+        return true;
+    });
+    
+    renderVideos();
+}
+
+// ============================================
+// RENDER VIDEOS — KEY FUNCTION
+// ============================================
+function renderVideos() {
+    const container = document.getElementById('videosContainer');
+    
+    if (filteredVideos.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fa-solid fa-video-slash"></i>
+                <p class="text-gray-500 text-lg font-bold">වීඩියෝ නොමැත</p>
+                <p class="text-gray-400 text-sm mt-2">කරුණාකර පසුව නැවත උත්සාහ කරන්න</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // ⚠️ CRITICAL: data-aos attribute REMOVED to prevent hiding
+    container.innerHTML = filteredVideos.map(v => {
+        const youtubeId = v.youtube_id || extractYouTubeId(v.video_url) || '';
+        const thumbnail = youtubeId 
+            ? `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`
+            : '/images/video-placeholder.jpg';
+        
+        return `
+            <div class="video-card" onclick="openVideoModal(${v.id})">
+                <div class="video-thumb">
+                    <img src="${thumbnail}" 
+                         alt="${escapeHtml(v.title)}" 
+                         loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/400x200/0F2C59/D4A017?text=Video'">
+                    <span class="video-badge">${escapeHtml(v.grade_name || 'Video')}</span>
+                    <div class="video-play-btn"></div>
+                </div>
+                <div class="video-info">
+                    <h3>${escapeHtml(v.title)}</h3>
+                    <p>
+                        <i class="fa-solid fa-graduation-cap mr-1"></i>
+                        ${escapeHtml(v.grade_name || '')} 
+                        ${v.subject_name ? '• ' + escapeHtml(v.subject_name) : ''}
+                    </p>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    // Refresh AOS after render
+    if (typeof AOS !== 'undefined') {
+        AOS.refresh();
+    }
+}
+
+// ============================================
+// VIDEO MODAL
+// ============================================
+function openVideoModal(videoId) {
+    const video = allVideos.find(v => v.id === videoId);
+    if (!video) return;
+    
+    const youtubeId = video.youtube_id || extractYouTubeId(video.video_url) || '';
+    const modal = document.getElementById('videoModal');
+    const body = document.getElementById('modalBody');
+    
+    body.innerHTML = `
+        <div class="relative">
+            <button onclick="closeVideoModal()" 
+                    class="absolute top-3 right-3 z-10 w-10 h-10 rounded-full bg-white/90 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-white hover:bg-red-500 hover:text-white transition">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            ${youtubeId ? `
+                <div class="aspect-video bg-black">
+                    <iframe width="100%" height="100%" 
+                            src="https://www.youtube.com/embed/${youtubeId}?autoplay=1" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                </div>
+            ` : `
+                <div class="aspect-video bg-gray-100 flex items-center justify-center">
+                    <p class="text-gray-500">වීඩියෝ URL එක වැරදි</p>
+                </div>
+            `}
+            <div class="p-6">
+                <h2 class="text-xl md:text-2xl font-black text-brand-navy dark:text-white mb-2">
+                    ${escapeHtml(video.title)}
+                </h2>
+                <p class="text-sm text-gray-500 mb-3">
+                    <i class="fa-solid fa-graduation-cap mr-1"></i>
+                    ${escapeHtml(video.grade_name || '')} 
+                    ${video.subject_name ? '• ' + escapeHtml(video.subject_name) : ''}
+                </p>
+                ${video.description ? `
+                    <p class="text-gray-600 dark:text-gray-300 leading-relaxed">
+                        ${escapeHtml(video.description)}
+                    </p>
+                ` : ''}
+            </div>
+        </div>
+    `;
+    
+    modal.classList.add('show');
+}
+
+function closeVideoModal() {
+    document.getElementById('videoModal').classList.remove('show');
+    document.getElementById('modalBody').innerHTML = '';
+}
+
+// ============================================
+// HELPERS
+// ============================================
+function extractYouTubeId(url) {
+    if (!url) return null;
+    const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+    return match ? match[1] : null;
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    loadTheme();
+    loadVideos();
+});
+
+// ESC key to close modal
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeVideoModal();
+});
+</script>
+
 </body>
 </html>
