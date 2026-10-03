@@ -4,44 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ප්‍රශ්න පත්‍ර | අකුරු මංසල</title>
-
 <script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <script>
-tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { navy: '#0F2C59', navy2: '#1B3A6B', gold: '#D4A017', gold2: '#E8B923' } } } } }
+tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { navy: '#0F2C59', gold: '#D4A017' } } } } }
 </script>
-
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Noto Serif Sinhala', sans-serif; background: #F8F9FC; color: #1e293b; }
     body.dark { background: #0a0f1e; color: #e2e8f0; }
     .container-wide { width: 100%; max-width: 1920px; padding: 0 1rem; margin: 0 auto; }
     @media (min-width: 1024px) { .container-wide { padding: 0 2rem; } }
-
     .main-nav { background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(15,44,89,0.1); }
     body.dark .main-nav { background: rgba(26,26,46,0.98); }
     .logo-wrap { width: 70px; height: 70px; background: white; border-radius: 1.2rem; border: 2px solid rgba(212,160,23,0.4); display: flex; align-items: center; justify-content: center; padding: 0.4rem; }
     .logo-wrap img { width: 100%; height: 100%; object-fit: contain; }
-    .nav-link { font-weight: 700; color: #0F2C59; padding: 0.75rem 1.2rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 0.85rem; transition: all 0.3s; }
+    .nav-link { font-weight: 700; color: #0F2C59; padding: 0.75rem 1.2rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; border-radius: 0.85rem; }
     body.dark .nav-link { color: #cbd5e1; }
     .nav-link i { color: #D4A017; }
     .nav-link:hover, .nav-link.active { color: #D4A017; background: rgba(212,160,23,0.1); }
     .theme-toggle { width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 3px solid rgba(255,255,255,0.3); }
-    .btn-primary { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.85rem 1.75rem; border-radius: 1rem; font-weight: 800; text-transform: uppercase; font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.65rem; }
     .page-hero { background: linear-gradient(135deg, #0F2C59, #1B3A6B); color: white; padding: 4rem 0; }
     .filter-section { background: white; border-radius: 1.5rem; padding: 1.5rem; margin-top: -3rem; position: relative; z-index: 10; box-shadow: 0 15px 40px rgba(15,44,89,0.1); }
     body.dark .filter-section { background: #1a1a2e; }
     .filter-input { width: 100%; padding: 0.9rem 1.25rem; border: 2px solid #e5e7eb; border-radius: 1rem; font-size: 1rem; background: #F8F9FC; }
     body.dark .filter-input { background: #0a0f1e; border-color: #334155; color: #e2e8f0; }
-    .filter-input:focus { outline: none; border-color: #D4A017; }
     #papersContainer { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
     @media (min-width: 768px) { #papersContainer { grid-template-columns: repeat(2, 1fr); } }
     @media (min-width: 1024px) { #papersContainer { grid-template-columns: repeat(3, 1fr); } }
-    .paper-card { background: white; border-radius: 1.25rem; overflow: hidden; box-shadow: 0 8px 25px rgba(15,44,89,0.08); display: flex; flex-direction: column; border: 1px solid rgba(212,160,23,0.1); transition: all 0.3s; }
+    .paper-card { background: white; border-radius: 1.25rem; overflow: hidden; box-shadow: 0 8px 25px rgba(15,44,89,0.08); display: flex; flex-direction: column; border: 1px solid rgba(212,160,23,0.1); transition: all 0.4s; }
     body.dark .paper-card { background: #1a1a2e; }
-    .paper-card:hover { transform: translateY(-6px); box-shadow: 0 20px 45px rgba(15,44,89,0.2); }
+    .paper-card:hover { transform: translateY(-8px); box-shadow: 0 20px 45px rgba(15,44,89,0.2); }
     .paper-header { height: 160px; background: linear-gradient(135deg, #ec4899, #be185d); display: flex; align-items: center; justify-content: center; position: relative; }
     .paper-header i { font-size: 3.5rem; color: rgba(255,255,255,0.5); }
     .paper-badge { position: absolute; top: 0.75rem; left: 0.75rem; background: rgba(255,255,255,0.95); color: #0F2C59; padding: 0.35rem 0.85rem; border-radius: 999px; font-weight: 800; font-size: 0.7rem; }
@@ -53,46 +46,36 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
     .paper-actions { padding: 1rem 1.25rem; border-top: 1px solid rgba(15,44,89,0.08); }
     body.dark .paper-actions { border-top-color: rgba(255,255,255,0.08); }
     .btn-download { width: 100%; padding: 0.75rem 1rem; border-radius: 0.75rem; background: linear-gradient(135deg, #ec4899, #be185d); color: white; font-weight: 700; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
+    .btn-download.disabled { background: #94a3b8; cursor: not-allowed; }
     .empty-state { grid-column: 1/-1; text-align: center; padding: 4rem 2rem; }
     .empty-state i { font-size: 4rem; color: #cbd5e1; margin-bottom: 1rem; }
     .spinner { width: 50px; height: 50px; border: 4px solid rgba(212,160,23,0.2); border-top-color: #D4A017; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
+    .debug-info { background: #fef3c7; border: 2px solid #f59e0b; padding: 1rem; border-radius: 0.75rem; margin: 1rem 0; font-family: monospace; font-size: 0.85rem; color: #78350f; }
     .footer { background: linear-gradient(180deg, #0F2C59, #0a1a3a); color: white; padding: 3rem 0 2rem; margin-top: 4rem; }
-
-    /* PDF MODAL */
     .pdf-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; visibility: hidden; transition: all 0.3s; }
     .pdf-modal.show { opacity: 1; visibility: visible; }
     .pdf-modal-content { background: white; border-radius: 1rem; width: 100%; max-width: 1200px; height: 95vh; display: flex; flex-direction: column; overflow: hidden; }
     .pdf-modal-header { padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #ec4899, #be185d); color: white; }
-    .pdf-modal-header h3 { font-weight: 800; font-size: 1.1rem; }
-    .pdf-modal-close { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-    .pdf-modal-close:hover { background: #ef4444; transform: rotate(90deg); }
+    .pdf-modal-close { width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.2); border: none; color: white; cursor: pointer; }
     .pdf-modal-body { flex: 1; background: #525659; }
     .pdf-modal-body iframe { width: 100%; height: 100%; border: none; }
     .pdf-modal-actions { padding: 0.75rem 1.5rem; display: flex; gap: 0.5rem; background: #f8f9fc; border-top: 1px solid #e5e7eb; }
-    body.dark .pdf-modal-actions { background: #0a0f1e; }
     .pdf-action-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; background: #0F2C59; color: white; border: none; cursor: pointer; text-decoration: none; font-weight: 600; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.4rem; }
     .pdf-action-btn.gold { background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; }
     .pdf-action-btn.red { background: #ef4444; }
-
-    @media (max-width: 768px) {
-        .page-hero { padding: 3rem 0; }
-        .filter-section { margin-top: -2rem; padding: 1rem; }
-        .pdf-modal-content { height: 100vh; border-radius: 0; }
-    }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="main-nav sticky top-0 z-50">
     <div class="container-wide">
         <div class="h-24 flex items-center justify-between">
             <a href="/" class="flex items-center space-x-4">
                 <div class="logo-wrap"><img src="/images/logo-icon.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\'fa-solid fa-graduation-cap text-brand-gold text-3xl\'></i>'"></div>
                 <div class="hidden sm:block">
-                    <h1 class="text-2xl font-black text-brand-navy dark:text-white leading-none">අකුරු මංසල</h1>
-                    <p class="text-sm text-brand-gold font-bold mt-1">ඉගෙනුමට නව මඟක්</p>
+                    <h1 class="text-2xl font-black dark:text-white leading-none" style="color:#0F2C59">අකුරු මංසල</h1>
+                    <p class="text-sm font-bold mt-1" style="color:#D4A017">ඉගෙනුමට නව මඟක්</p>
                 </div>
             </a>
             <nav class="hidden lg:flex items-center space-x-1">
@@ -100,52 +83,42 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
                 <a href="/resources.html" class="nav-link"><i class="fa-solid fa-book-open"></i>සම්පත්</a>
                 <a href="/papers.html" class="nav-link active"><i class="fa-solid fa-file-lines"></i>ප්‍රශ්න පත්‍ර</a>
                 <a href="/videos.html" class="nav-link"><i class="fa-solid fa-video"></i>වීඩියෝ</a>
-                <a href="/quizzes.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>ප්‍රශ්නාවලි</a>
             </nav>
             <div class="flex items-center space-x-3">
                 <button onclick="toggleTheme()" class="theme-toggle"><i id="themeIcon" class="fa-solid fa-moon"></i></button>
-                <a href="/login.html" class="hidden md:inline-flex btn-primary"><i class="fa-solid fa-user-shield"></i><span>Admin</span></a>
+                <a href="/login.html" class="hidden md:inline-flex" style="background: linear-gradient(135deg, #D4A017, #E8B923); color: #0F2C59; padding: 0.85rem 1.75rem; border-radius: 1rem; font-weight: 800; text-decoration: none; display: inline-flex; align-items: center; gap: 0.65rem;">
+                    <i class="fa-solid fa-user-shield"></i><span>Admin</span>
+                </a>
             </div>
         </div>
     </div>
 </header>
 
-<!-- HERO -->
 <section class="page-hero">
     <div class="container-wide">
-        <p class="text-brand-gold font-bold text-sm tracking-widest uppercase mb-3"><i class="fa-solid fa-file-lines mr-2"></i>EXAM PAPERS</p>
+        <p style="color:#D4A017; font-weight:700; font-size:0.9rem; letter-spacing:0.2em; margin-bottom:0.75rem;"><i class="fa-solid fa-file-lines mr-2"></i>EXAM PAPERS</p>
         <h1 class="text-4xl md:text-6xl font-black mb-3">ප්‍රශ්න පත්‍ර</h1>
-        <p class="text-white/80 text-lg">ශ්‍රේණියට සහ විෂයට ගැලපෙන ප්‍රශ්න පත්‍ර එකතුවක්</p>
+        <p style="color: rgba(255,255,255,0.8); font-size: 1.1rem;">ශ්‍රේණියට සහ විෂයට ගැලපෙන ප්‍රශ්න පත්‍ර</p>
     </div>
 </section>
 
-<!-- FILTERS -->
 <section class="container-wide -mt-8 relative z-20">
     <div class="filter-section">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div style="display:grid; grid-template-columns: 1fr; gap:1rem;">
             <input type="text" id="searchInput" placeholder="සොයන්න..." class="filter-input">
-            <select id="gradeFilter" class="filter-input"><option value="">සියලු ශ්‍රේණි</option></select>
-            <select id="subjectFilter" class="filter-input"><option value="">සියලු විෂය</option></select>
-            <select id="typeFilter" class="filter-input">
-                <option value="">සියලු වර්ග</option>
-                <option value="term">වාර පරීක්ෂණ</option>
-                <option value="school">පාසල් පරීක්ෂණ</option>
-                <option value="practice">පුහුණු</option>
-                <option value="exam">විභාග</option>
-                <option value="model">ආදර්ශ</option>
-            </select>
         </div>
     </div>
 </section>
 
-<!-- PAPERS -->
 <main class="container-wide py-12">
+    <div id="debugInfo" class="debug-info">
+        <strong>🔍 Debug:</strong> <span id="debugText">Loading...</span>
+    </div>
     <div id="papersContainer">
         <div class="empty-state"><div class="spinner"></div><p>Load වෙමින්...</p></div>
     </div>
 </main>
 
-<!-- PDF MODAL -->
 <div id="pdfModal" class="pdf-modal" onclick="if(event.target===this)closePdfModal()">
     <div class="pdf-modal-content" onclick="event.stopPropagation()">
         <div class="pdf-modal-header">
@@ -155,20 +128,20 @@ tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { nav
         <div class="pdf-modal-body"><iframe id="pdfIframe" src=""></iframe></div>
         <div class="pdf-modal-actions">
             <a id="pdfDownloadBtn" href="" download class="pdf-action-btn gold"><i class="fa-solid fa-download"></i>Download</a>
-            <a id="pdfNewTabBtn" href="" target="_blank" class="pdf-action-btn"><i class="fa-solid fa-external-link-alt"></i>නව Tab එකකින්</a>
-            <button onclick="closePdfModal()" class="pdf-action-btn red ml-auto"><i class="fa-solid fa-times"></i>වහන්න</button>
+            <a id="pdfNewTabBtn" href="" target="_blank" class="pdf-action-btn"><i class="fa-solid fa-external-link-alt"></i>නව Tab</a>
+            <button onclick="closePdfModal()" class="pdf-action-btn red" style="margin-left:auto;"><i class="fa-solid fa-times"></i>වහන්න</button>
         </div>
     </div>
 </div>
 
-<!-- FOOTER -->
 <footer class="footer">
     <div class="container-wide text-center">
-        <p class="text-white/70">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
+        <p style="color: rgba(255,255,255,0.7);">© 2026 අකුරු මංසල · සියලු හිමිකම් ඇවිරිණි</p>
     </div>
 </footer>
 
 <script>
+console.log('🚀 papers.html script START');
 const API_BASE = '/api';
 let allPapers = [];
 let filteredPapers = [];
@@ -184,76 +157,67 @@ function loadTheme() {
         document.getElementById('themeIcon').className = 'fa-solid fa-sun';
     }
 }
+function debug(msg) {
+    console.log('DEBUG:', msg);
+    const el = document.getElementById('debugText');
+    if (el) el.textContent = msg;
+}
+function extractArray(data) {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    const keys = ['papers', 'lessons', 'articles', 'videos', 'data', 'results', 'items'];
+    for (const key of keys) {
+        if (Array.isArray(data[key])) return data[key];
+    }
+    for (const key of Object.keys(data)) {
+        if (Array.isArray(data[key])) return data[key];
+    }
+    return [];
+}
 
 async function loadPapers() {
+    console.log('🔄 loadPapers() called');
     const c = document.getElementById('papersContainer');
     c.innerHTML = '<div class="empty-state"><div class="spinner"></div><p>Load වෙමින්...</p></div>';
+    debug('Fetching /api/resources?type=paper...');
+    
     try {
         const res = await fetch(`${API_BASE}/resources?type=paper&limit=100`);
+        debug(`Response: ${res.status}`);
+        console.log('📡 Response:', res.status);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        
         const data = await res.json();
-        allPapers = data.papers || data.data || [];
+        console.log('📦 Data:', data);
+        console.log('📦 Keys:', Object.keys(data));
+        
+        allPapers = extractArray(data);
+        console.log('✅ Extracted:', allPapers.length);
         filteredPapers = [...allPapers];
+        debug(`✅ Loaded ${allPapers.length} papers`);
         renderPapers();
+        
     } catch (err) {
-        c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-exclamation-triangle" style="color:#ef4444"></i><p class="text-red-500">${err.message}</p></div>`;
+        console.error('❌ Error:', err);
+        debug(`❌ Error: ${err.message}`);
+        c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-exclamation-triangle" style="color:#ef4444"></i><p style="color:#ef4444;font-weight:700;">දෝෂයක්: ${err.message}</p></div>`;
     }
-}
-
-async function loadFilters() {
-    try {
-        const [g, s] = await Promise.all([fetch(`${API_BASE}/grades`), fetch(`${API_BASE}/subjects`)]);
-        const grades = await g.json();
-        const subjects = await s.json();
-        const gradesArr = Array.isArray(grades) ? grades : (grades.grades || []);
-        const subjectsArr = Array.isArray(subjects) ? subjects : (subjects.subjects || []);
-        gradesArr.forEach(gr => {
-            const o = document.createElement('option'); o.value = gr.id; o.textContent = gr.grade_name;
-            document.getElementById('gradeFilter').appendChild(o);
-        });
-        subjectsArr.forEach(su => {
-            const o = document.createElement('option'); o.value = su.id; o.textContent = su.subject_name;
-            document.getElementById('subjectFilter').appendChild(o);
-        });
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.getElementById('gradeFilter').addEventListener('change', applyFilters);
-        document.getElementById('subjectFilter').addEventListener('change', applyFilters);
-        document.getElementById('typeFilter').addEventListener('change', applyFilters);
-    } catch (err) { console.error(err); }
-}
-
-function applyFilters() {
-    const search = document.getElementById('searchInput').value.toLowerCase().trim();
-    const gradeId = document.getElementById('gradeFilter').value;
-    const subjectId = document.getElementById('subjectFilter').value;
-    const type = document.getElementById('typeFilter').value;
-    filteredPapers = allPapers.filter(p => {
-        if (search && !(p.title || '').toLowerCase().includes(search)) return false;
-        if (gradeId && String(p.grade_id) !== gradeId) return false;
-        if (subjectId && String(p.subject_id) !== subjectId) return false;
-        if (type && p.paper_type !== type) return false;
-        return true;
-    });
-    renderPapers();
 }
 
 function renderPapers() {
     const c = document.getElementById('papersContainer');
     if (filteredPapers.length === 0) {
-        c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-folder-open"></i><p class="text-gray-500 text-lg font-bold">ප්‍රශ්න පත්‍ර නොමැත</p></div>`;
+        c.innerHTML = `<div class="empty-state"><i class="fa-solid fa-folder-open"></i><p style="color:#64748b;font-weight:700;">ප්‍රශ්න පත්‍ර නොමැත</p></div>`;
+        debug('⚠️ No papers to render');
         return;
     }
     const typeMap = { term: 'වාර පරීක්ෂණය', school: 'පාසල් පරීක්ෂණය', practice: 'පුහුණු', exam: 'විභාගය', model: 'ආදර්ශ' };
     
     c.innerHTML = filteredPapers.map(p => {
         const hasPdf = p.pdf_file && p.pdf_file.length > 0;
-        const isDataUrl = hasPdf && p.pdf_file.startsWith('data:');
-        
-        let actionBtn = '';
-        if (hasPdf) {
-            actionBtn = `<button onclick="openPdf('${p.id}')" class="btn-download"><i class="fa-solid fa-file-pdf"></i>PDF බලන්න</button>`;
-        } else {
-            actionBtn = `<button class="btn-download" disabled style="background:#94a3b8;cursor:not-allowed"><i class="fa-solid fa-file-pdf"></i>PDF නොමැත</button>`;
-        }
+        const actionBtn = hasPdf 
+            ? `<button onclick="openPdf('${p.id}')" class="btn-download"><i class="fa-solid fa-file-pdf"></i>PDF බලන්න</button>`
+            : `<button class="btn-download disabled" disabled><i class="fa-solid fa-file-pdf"></i>PDF නොමැත</button>`;
         
         return `
             <div class="paper-card">
@@ -264,37 +228,34 @@ function renderPapers() {
                 </div>
                 <div class="paper-info">
                     <h3>${escapeHtml(p.title)}</h3>
-                    <p>${p.grade_name ? `<i class="fa-solid fa-graduation-cap text-brand-gold"></i> ${escapeHtml(p.grade_name)}` : ''} ${p.subject_name ? `• <i class="fa-solid fa-book text-brand-gold"></i> ${escapeHtml(p.subject_name)}` : ''}</p>
+                    <p>${p.grade_name ? `<i class="fa-solid fa-graduation-cap" style="color:#D4A017"></i> ${escapeHtml(p.grade_name)}` : ''} ${p.subject_name ? `• <i class="fa-solid fa-book" style="color:#D4A017"></i> ${escapeHtml(p.subject_name)}` : ''}</p>
                 </div>
                 <div class="paper-actions">${actionBtn}</div>
             </div>
         `;
     }).join('');
+    debug(`✅ Rendered ${filteredPapers.length} papers`);
 }
 
-// ============================================
-// PDF MODAL
-// ============================================
 function openPdf(paperId) {
     const paper = allPapers.find(p => String(p.id) === String(paperId));
     if (!paper || !paper.pdf_file) return;
-    
     const pdfUrl = paper.pdf_file;
     const isDataUrl = pdfUrl.startsWith('data:');
     
+    console.log('📄 Opening PDF:', paper.title);
+    console.log('📄 PDF URL starts with:', pdfUrl.substring(0, 60));
+    console.log('📄 Is Data URL:', isDataUrl);
+    
     if (isDataUrl) {
-        // Data URL — open in new tab with embed
-        console.log('⚠️ Data URL detected - opening in new tab');
+        debug('⚠️ Data URL detected — opening in new tab');
         const newTab = window.open();
         if (newTab) {
             newTab.document.write(`<!DOCTYPE html><html><head><title>${escapeHtml(paper.title)}</title></head><body style="margin:0"><embed src="${pdfUrl}" type="application/pdf" width="100%" height="100%" /></body></html>`);
             newTab.document.close();
-        } else {
-            alert('Browser එක pop-up block කරලා. කරුණාකර pop-up allow කරන්න.');
         }
         return;
     }
-    
     document.getElementById('pdfModalTitle').innerHTML = `<i class="fa-solid fa-file-pdf mr-2"></i>${escapeHtml(paper.title)}`;
     document.getElementById('pdfIframe').src = pdfUrl;
     document.getElementById('pdfDownloadBtn').href = pdfUrl;
@@ -313,12 +274,11 @@ function escapeHtml(str) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('✅ DOMContentLoaded fired');
     loadTheme();
-    loadFilters();
     loadPapers();
 });
-
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePdfModal(); });
+console.log('✅ papers.html script END');
 </script>
 
 </body>
